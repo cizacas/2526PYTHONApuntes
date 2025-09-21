@@ -13,6 +13,7 @@
   - [MODO INTERACTIVO](#modo-interactivo)
   - [UTILIZAR COMENTARIOS](#utilizar-comentarios)
     - [Documentar el código](#documentar-el-código)
+      - [Ejemplo de uso de la función help()](#ejemplo-de-uso-de-la-función-help)
   - [INDENTACIÓN DEL CÓDIGO](#indentación-del-código)
   - [DEFINICIÓN DE VARIABLES](#definición-de-variables)
   - [TIPOS DE DATOS](#tipos-de-datos)
@@ -23,17 +24,6 @@
     - [Formateo de cadenas](#formateo-de-cadenas)
       - [Tipos de formato en strings](#tipos-de-formato-en-strings)
     - [Casting de tipos de datos](#casting-de-tipos-de-datos)
-  - [COLECCIONES](#colecciones)
-    - [Listas](#listas)
-      - [Métodos de listas](#métodos-de-listas)
-      - [Más sobre listas](#más-sobre-listas)
-    - [Tuplas](#tuplas)
-      - [Añadir elementos](#añadir-elementos)
-      - [Métodos de tuplas](#métodos-de-tuplas)
-    - [Conjuntos](#conjuntos)
-      - [Operaciones con conjuntos](#operaciones-con-conjuntos)
-      - [Métodos de conjuntos](#métodos-de-conjuntos)
-    - [Diccionarios](#diccionarios)
   - [OPERADORES](#operadores)
     - [Operadores de asignación](#operadores-de-asignación)
     - [Operadores bit a bit](#operadores-bit-a-bit)
@@ -54,6 +44,17 @@
       - [Uso de range() en for](#uso-de-range-en-for)
       - [Uso de break y continue](#uso-de-break-y-continue)
     - [Uso de la instrucción pass](#uso-de-la-instrucción-pass)
+  - [COLECCIONES](#colecciones)
+    - [Listas](#listas)
+      - [Métodos de listas](#métodos-de-listas)
+      - [Más sobre listas](#más-sobre-listas)
+    - [Tuplas](#tuplas)
+      - [Añadir elementos](#añadir-elementos)
+      - [Métodos de tuplas](#métodos-de-tuplas)
+    - [Conjuntos](#conjuntos)
+      - [Operaciones con conjuntos](#operaciones-con-conjuntos)
+      - [Métodos de conjuntos](#métodos-de-conjuntos)
+    - [Diccionarios](#diccionarios)
 
 ## INTRODUCCIÓN
 `Python` es un lenguaje de programación potente y fácil de aprender. Tiene estructuras de datos de alto nivel eficientes y un simple pero efectivo sistema de programación orientado a objetos. La elegante sintaxis de Python y su tipado dinámico, junto a su naturaleza interpretada lo convierten en un lenguaje ideal para scripting y desarrollo rápido de aplicaciones en muchas áreas, para la mayoría de plataformas.
@@ -276,6 +277,67 @@ def suma(a, b):
     return a + b
 ```
 Los docstrings permiten que herramientas y editores muestren ayuda y documentación automáticamente. No son comentarios normales, sino documentación accesible desde el propio código con **la función help()**.
+
+#### Ejemplo de uso de la función help()
+
+La función `help()` nos permite acceder a la documentación de cualquier objeto en Python:
+
+```python
+# Definimos una función con docstring
+def calcular_area_rectangulo(base, altura):
+    """
+    Calcula el área de un rectángulo.
+    
+    Parámetros:
+    base (float): La base del rectángulo
+    altura (float): La altura del rectángulo
+    
+    Retorna:
+    float: El área del rectángulo (base * altura)
+    """
+    return base * altura
+
+# Usamos help() para ver la documentación
+help(calcular_area_rectangulo)
+```
+
+**Salida:**
+```
+Help on function calcular_area_rectangulo in module __main__:
+
+calcular_area_rectangulo(base, altura)
+    Calcula el área de un rectángulo.
+    
+    Parámetros:
+    base (float): La base del rectángulo
+    altura (float): La altura del rectángulo
+    
+    Retorna:
+    float: El área del rectángulo (base * altura)
+```
+
+**Otros ejemplos de uso de help():**
+
+```python
+# Ayuda sobre tipos de datos
+help(str)           # Información sobre strings
+help(list)          # Información sobre listas
+help(int)           # Información sobre enteros
+
+# Ayuda sobre funciones incorporadas
+help(print)         # Información sobre la función print
+help(len)           # Información sobre la función len
+help(input)         # Información sobre la función input
+
+# Ayuda sobre métodos específicos
+help(str.upper)     # Método upper de strings
+help(list.append)   # Método append de listas
+
+# Ayuda sobre módulos
+import math
+help(math)          # Información sobre el módulo math
+help(math.sqrt)     # Información sobre la función sqrt
+```
 
 La extension de visual studio **Pylint**, nos obliga a documentar el programa
 
@@ -872,6 +934,327 @@ Puedes convertir entre diferentes tipos de datos usando las funciones integradas
 >>> str(12.34)  # convierte un flotante a una cadena
 '12.34'
 ```
+
+## OPERADORES
+Los operadores se utilizan para realizar operaciones con variables y valores.
+
+| Operador | Descripción               | Ejemplo       | Resultado |
+|----------|---------------------------|---------------|-----------|
+| +        | Suma                      | x + y         | 5         |
+| -        | Resta                     | x - y         | -1        |
+| *        | Multiplicación            | x * y         | 6         |
+| /        | División                  | x / y         | 0.66666667|
+| //       | División entera           | x // y        | 0         |
+| %        | Módulo (resto de división) | x % y         | 2         |
+| **       | Exponenciación            | x ** y        | 9         |
+| ==       | Igualdad                  | x == y        | False     |
+| !=       | Desigualdad               | x != y        | True      |
+| >        | Mayor que                 | x > y         | False
+| <        | Menor que                 | x < y         | True      |
+| >=       | Mayor o igual que         | x >= y        | False
+| <=       | Menor o igual que         | x <= y        | True      |
+| and      | Lógico Y                  | x and y       | False     |
+| or       | Lógico O                  | x or y        | True      |
+| not      | Lógico NO                 | not x         | False     |
+| is       | Identidad                 | x is y        | False     |
+| is not   | No identidad              | x is not y    | True      |
+| in       | Pertenencia               | x in y        | True      |
+| not in   | No pertenencia            | x not in y    | False     |
+
+### Operadores de asignación
+
+| Operador | Descripción               | Ejemplo       | Resultado |
+|----------|---------------------------|---------------|-----------|
+| =        | Asignación                | x = 5         | x = 5     |
+| +=       | Suma y asignación         | x += 3        | x = x + 3 |
+| -=       | Resta y asignación        | x -= 2        | x = x - 2 |
+| *=       | Multiplicación y asignación | x *= 4      | x = x * 4 |
+| /=       | División y asignación     | x /= 2        | x = x / 2 |
+| //=      | División entera y asignación | x //= 3    | x = x // 3|
+| %=       | Módulo y asignación       | x %= 2        | x = x % 2 |
+| **=      | Exponenciación y asignación | x **= 2     | x = x ** 2|
+| &=       | AND bit a bit y asignación   | x &= 3    | x = x & 3 |
+| \|=       | OR bit a bit y asignación    | x \|= 3     | x = x \| 3 |
+| ^=       | XOR bit a bit y asignación   | x ^= 3     | x = x ^ 3 |
+| >>=      | Desplazamiento derecha y asignación | x >>= 3 | x = x >> 3|
+| <<=      | Desplazamiento izquierda y asignación | x <<= 3 | x = x << 3|
+| :=       | Asignación por expresión     | print(x := 3) | x = 3 |
+|          |                              |               |print(x)|
+
+### Operadores bit a bit
+Los operadores bit a bit se utilizan para comparar números (en formato binario):
+
+| Operador | Descripción               | Ejemplo       | Resultado |
+|----------|---------------------------|---------------|-----------|
+| &        | AND bit a bit             | x & y         | 0         |
+| \|       | OR bit a bit              | x \| y        | 7         |
+| ^        | XOR bit a bit             | x ^ y         | 7         |
+| ~        | NOT bit a bit             | ~x            | -4        |
+| <<       | Desplazamiento a la izquierda | x << 2        | 20        |
+| >>       | Desplazamiento a la derecha | x >> 2        | 1         |
+
+
+## ENTRADA DE DATOS DEL USUARIO
+
+Python permite la entrada de datos por parte del usuario.
+Esto significa que podemos solicitar información al usuario.
+El siguiente ejemplo solicita su nombre; una vez que lo ingresa, se muestra en pantalla:
+
+```python
+print("Introduce tu nombre:")
+nombre = input()
+print(f"Hola {nombre}")
+```
+La función **input()** permite al usuario ingresar datos. El programa se detiene y espera a que el usuario ingrese algo. Cuando el usuario presiona Enter, la función **input()** devuelve lo que el usuario escribió como una cadena (string).
+Si deseas mostrar un mensaje antes de la entrada, puedes pasarlo como argumento a la función **input()**:
+
+```python
+nombre = input("Introduce tu nombre: ")
+print(f"Hola {nombre}")
+```
+### Entradas múltiples
+Puedes añadir tantas entradas como quieras; Python pausará la ejecución en cada una de ellas, esperando la entrada del usuario:
+
+```python
+nombre = input("Introduce tu nombre: ")
+edad = input("Introduce tu edad: ")
+print(f"Hola {nombre}, tienes {edad} años.")
+```
+### Convertir la entrada a otros tipos de datos
+La función **input()** siempre devuelve una cadena (string). Si necesitas otro tipo de dato, como un número entero o un número decimal, debes convertirlo usando las funciones **int()** o **float()**:
+
+```python
+edad = int(input("Introduce tu edad: "))
+altura = float(input("Introduce tu altura en metros: "))
+print(f"Tienes {edad} años y mides {altura} metros.")
+```
+### Manejo de errores en la entrada
+Es importante manejar posibles errores al convertir la entrada del usuario. Por ejemplo, si el usuario ingresa algo que no puede convertirse a un entero, el programa generará un error. Puedes usar un bloque **try-except** para manejar estos errores:
+
+```python
+try:
+    edad = int(input("Introduce tu edad: "))
+    print(f"Tienes {edad} años.")
+except ValueError:
+    print("Por favor, introduce un número válido para la edad.")
+```
+**Ejemplo completo:**
+
+```python
+try:
+    nombre = input("Introduce tu nombre: ")
+    edad = int(input("Introduce tu edad: "))
+    altura = float(input("Introduce tu altura en metros: "))
+    print(f"Hola {nombre}, tienes {edad} años y mides {altura} metros.")
+except ValueError:
+    print("Por favor, introduce valores válidos.")
+``` 
+
+:computer: Actividad 1
+
+## ESTRUCTURAS DE CONTROL
+
+En las estructuras de control de python es muy importante hablar tanto de la identación como de **encoding**. El encoding no es más que una **directiva que se coloca al inicio de un archivo Python, a fin de indicar al sistema, la codificación de caracteres utilizada en el archivo.**
+El encoding más común es UTF-8, que soporta una amplia gama de caracteres, incluyendo letras acentuadas y símbolos especiales. La línea de código para especificar el encoding UTF-8 es la siguiente:
+
+```python
+# -*- coding: utf-8 -*-
+```
+Esta línea debe colocarse al inicio del archivo Python, antes de cualquier otro código. Es especialmente útil cuando el código contiene caracteres especiales o acentuados, ya que garantiza que estos caracteres se interpreten correctamente.
+La identación es crucial en Python, ya que define la estructura del código y determina qué bloques de código pertenecen a qué estructuras de control. A diferencia de otros lenguajes de programación que utilizan llaves `{}` o palabras clave para delimitar bloques de código, Python utiliza la identación (espacios o tabulaciones) para este propósito. Una identación incorrecta puede llevar a errores de sintaxis o a un comportamiento inesperado del programa.
+
+### Estructuras condicionales
+Nos permiten evaluar si una o más condiciones se cumplen, para decir qué acción vamos a ejecutar. La evaluación de condiciones, solo puede arrojar 1 de 2 resultados: **verdadero o falso** (True o False).
+
+Para evaluar las condiciones se utilizan **operadores relacionales o de comparación** y para unir distintas condiciones **operadores lógicos**.
+
+Las estructuras de control de flujo condicionales mas conocida es el **if**, se define mediante el uso de tres palabras claves reservadas, del lenguaje: **if** (si), **elif** (sino, si) y **else** (sino).
+
+#### Estructura if
+La estructura if evalúa una condición y si esta es verdadera, ejecuta un bloque de código. Si la condición es falsa, el bloque de código se omite.
+
+```python
+# -*- coding: utf-8 -*-
+x = 10
+if x > 0:
+    print("x es un número positivo")
+```
+#### Estructura if-elif
+La estructura if-elif permite evaluar múltiples condiciones. Si la primera condición es falsa, se evalúa la siguiente, y así sucesivamente. Si ninguna condición es verdadera, se puede ejecutar un bloque de código alternativo con else.
+
+```python
+# -*- coding: utf-8 -*-
+x = 10
+if x > 0:
+    print("x es un número positivo")
+elif x == 0:
+    print("x es cero")
+```
+#### Estructura if-elif-else
+La estructura if-elif-else es una extensión de if-elif que incluye un bloque else. Este bloque se ejecuta si ninguna de las condiciones anteriores es verdadera.
+
+```python
+# -*- coding: utf-8 -*-
+x = 10
+if x > 0:
+    print("x es un número positivo")
+elif x == 0:
+    print("x es cero")
+else:
+    print("x es un número negativo")
+```
+En este ejemplo, se verifica si `x` es mayor que 0, igual a 0 o menor que 0, y se imprime un mensaje correspondiente.
+
+#### Anidamiento de estructuras if
+Las estructuras if pueden anidarse dentro de otras estructuras if para evaluar condiciones más complejas.
+
+```python
+# -*- coding: utf-8 -*-
+x = 10
+if x > 0:
+    if x % 2 == 0:
+        print("x es un número positivo y par")
+    else:
+        print("x es un número positivo y impar")
+elif x == 0:
+    print("x es cero")
+else:
+    print("x es un número negativo")
+```
+En este ejemplo, se verifica si `x` es positivo y luego se evalúa si es par o impar.
+
+### Estructura match (Python 3.10+)
+Para la comprobación de un valor con muchas constantes se utiliza la sentencia **match**. Esta estructura recibe una expresión y compara su valor con patrones sucesivos, de forma similar al switch de Java.
+
+```python
+# -*- coding: utf-8 -*-
+valor = 2
+match valor:
+    case 1:
+        print("El valor es uno")
+    case 2:
+        print("El valor es dos")
+    case 3:
+        print("El valor es tres")
+    case _:
+        print("El valor no es uno, dos ni tres")
+```
+En este ejemplo, se verifica el valor de la variable `valor` y se imprime un mensaje correspondiente según el caso que coincida. El caso `_` actúa como un caso por defecto si ninguno de los casos anteriores coincide.
+Se pueden unir varios literales en un case usando `|` equivale a un `o`
+
+```python
+# -*- coding: utf-8 -*-
+valor = 2
+match valor:
+    case 1 | 2 | 3:
+        print("El valor es uno, dos o tres")
+    case _:
+        print("El valor no es uno, dos ni tres")
+```
+En este ejemplo, si `valor` es 1, 2 o 3, se imprimirá el mismo mensaje.
+Sentencias if como condiciones adicionales
+
+Puede añadir sentencias if en la evaluación de casos para realizar una comprobación de condiciones adicional:
+
+```python
+# -*- coding: utf-8 -*-
+valor = 2
+match valor:
+    case x if x < 0:
+        print("El valor es negativo")
+    case x if x == 0:
+        print("El valor es cero")
+    case x if x > 0:
+        print("El valor es positivo")
+```
+En este ejemplo, se utiliza una sentencia if dentro de cada case para evaluar si el valor es negativo, cero o positivo.
+
+:computer: Actividad 2
+
+### Estructuras de control repetitivas
+Las estructuras de control repetitivas permiten ejecutar un bloque de código varias veces, dependiendo de una condición o un rango de valores. Las estructuras más comunes en Python son **while** y **for**.
+
+#### Estructura while
+La estructura while ejecuta un bloque de código mientras una condición sea verdadera. Si la condición es falsa, el bloque de código se omite y el programa continúa con la siguiente instrucción después del bloque while.
+
+```python
+# -*- coding: utf-8 -*-
+contador = 0
+while contador < 5:
+    print("Contador:", contador)
+    contador += 1
+```
+En este ejemplo, el bloque de código dentro del while se ejecuta mientras el valor de `contador` sea menor que 5. En cada iteración, se imprime el valor de `contador` y luego se incrementa en 1.
+
+#### Estructura for
+La estructura for itera sobre una secuencia (como una lista, una tupla, un diccionario, un conjunto o una cadena) y ejecuta un bloque de código para cada elemento en la secuencia.
+
+```python
+# -*- coding: utf-8 -*-
+frutas = ["manzana", "banana", "cereza"]
+for fruta in frutas:
+    print("Fruta:", fruta)
+```
+En este ejemplo, el bloque de código dentro del for se ejecuta para cada elemento en la lista `frutas`. En cada iteración, se imprime el nombre de la fruta actual.
+
+#### Uso de range() en for
+La función `range()` se utiliza comúnmente con la estructura for para generar una secuencia de números. Puedes especificar el inicio, el final y el paso de la secuencia.
+
+```python
+# -*- coding: utf-8 -*-
+for i in range(5):  # Desde 0 hasta 4
+    print("Número:", i)
+for i in range(1, 6):  # Desde 1 hasta 5
+    print("Número:", i)
+for i in range(1, 10, 2):  # Desde 1 hasta 9, con paso de 2
+    print("Número:", i)
+```
+En este ejemplo, se utilizan diferentes variantes de `range()` para generar secuencias de números y se imprime cada número en la secuencia.
+
+#### Uso de break y continue
+Dentro de los bucles, puedes usar las palabras clave `break` y `continue` para controlar el flujo de ejecución.
+- `break` se utiliza para salir completamente del bucle cuando se cumple una condición específica.
+- `continue` se utiliza para saltar el resto del código en la iteración actual y pasar directamente a la siguiente vuelta del bucle.
+Ejemplo:
+
+```python
+# -*- coding: utf-8 -*-
+for i in range(10):
+    if i == 5:
+        break  # Sale del bucle cuando i es igual a 5
+    print("Número:", i)
+# Salida: 0, 1, 2, 3, 4
+for i in range(10):
+    if i % 2 == 0:
+        continue  # Salta los números pares
+    print("Número impar:", i)
+# Salida: 1, 3, 5, 7, 9
+```
+### Uso de la instrucción pass
+La instrucción `pass` se utiliza como un marcador de posición en bloques de código donde se requiere una sintaxis pero no se desea ejecutar ninguna acción. Es útil en situaciones donde el código aún no está implementado o cuando se desea crear una estructura vacía.
+
+```python
+# -*- coding: utf-8 -*-
+x = 10
+if x > 0:
+    pass  # Aquí no se realiza ninguna acción
+else:
+    print("x es un número negativo o cero")
+```
+En este ejemplo, si `x` es mayor que 0, no se realiza ninguna acción debido a la instrucción `pass`. Si `x` no es mayor que 0, se imprime un mensaje indicando que `x` es negativo o cero.
+
+```python
+for numero in range(5):
+    if numero == 3:
+        pass  # No hace nada cuando el número es 3
+    else:
+        print(numero)
+# Salida: 0, 1, 2, 4
+```
+En este ejemplo, cuando el número es 3, la instrucción `pass` se ejecuta y no se realiza ninguna acción. Para los demás números, se imprime el número correspondiente.
+
+:computer: Actividad 3
+
 ## COLECCIONES
 En el lenguaje de programación Python existen cuatro tipos de datos de colección:
 
@@ -1431,319 +1814,7 @@ NameError: name 'mi_diccionario' is not defined
 
 ² Ordenada: A partir de la versión 3.7 de Python, los diccionarios tienen un orden definido. En las versiones anteriores de Python (3.6 y anteriores), los diccionarios no tenían un orden definido.
 
-
-## OPERADORES
-Los operadores se utilizan para realizar operaciones con variables y valores.
-
-| Operador | Descripción               | Ejemplo       | Resultado |
-|----------|---------------------------|---------------|-----------|
-| +        | Suma                      | x + y         | 5         |
-| -        | Resta                     | x - y         | -1        |
-| *        | Multiplicación            | x * y         | 6         |
-| /        | División                  | x / y         | 0.66666667|
-| //       | División entera           | x // y        | 0         |
-| %        | Módulo (resto de división) | x % y         | 2         |
-| **       | Exponenciación            | x ** y        | 9         |
-| ==       | Igualdad                  | x == y        | False     |
-| !=       | Desigualdad               | x != y        | True      |
-| >        | Mayor que                 | x > y         | False
-| <        | Menor que                 | x < y         | True      |
-| >=       | Mayor o igual que         | x >= y        | False
-| <=       | Menor o igual que         | x <= y        | True      |
-| and      | Lógico Y                  | x and y       | False     |
-| or       | Lógico O                  | x or y        | True      |
-| not      | Lógico NO                 | not x         | False     |
-| is       | Identidad                 | x is y        | False     |
-| is not   | No identidad              | x is not y    | True      |
-| in       | Pertenencia               | x in y        | True      |
-| not in   | No pertenencia            | x not in y    | False     |
-
-### Operadores de asignación
-
-| Operador | Descripción               | Ejemplo       | Resultado |
-|----------|---------------------------|---------------|-----------|
-| =        | Asignación                | x = 5         | x = 5     |
-| +=       | Suma y asignación         | x += 3        | x = x + 3 |
-| -=       | Resta y asignación        | x -= 2        | x = x - 2 |
-| *=       | Multiplicación y asignación | x *= 4      | x = x * 4 |
-| /=       | División y asignación     | x /= 2        | x = x / 2 |
-| //=      | División entera y asignación | x //= 3    | x = x // 3|
-| %=       | Módulo y asignación       | x %= 2        | x = x % 2 |
-| **=      | Exponenciación y asignación | x **= 2     | x = x ** 2|
-| &=       | AND bit a bit y asignación   | x &= 3    | x = x & 3 |
-| \|=       | OR bit a bit y asignación    | x \|= 3     | x = x \| 3 |
-| ^=       | XOR bit a bit y asignación   | x ^= 3     | x = x ^ 3 |
-| >>=      | Desplazamiento derecha y asignación | x >>= 3 | x = x >> 3|
-| <<=      | Desplazamiento izquierda y asignación | x <<= 3 | x = x << 3|
-| :=       | Asignación por expresión     | print(x := 3) | x = 3 |
-|          |                              |               |print(x)|
-
-### Operadores bit a bit
-Los operadores bit a bit se utilizan para comparar números (en formato binario):
-
-| Operador | Descripción               | Ejemplo       | Resultado |
-|----------|---------------------------|---------------|-----------|
-| &        | AND bit a bit             | x & y         | 0         |
-| \|       | OR bit a bit              | x \| y        | 7         |
-| ^        | XOR bit a bit             | x ^ y         | 7         |
-| ~        | NOT bit a bit             | ~x            | -4        |
-| <<       | Desplazamiento a la izquierda | x << 2        | 20        |
-| >>       | Desplazamiento a la derecha | x >> 2        | 1         |
-
-## ENTRADA DE DATOS DEL USUARIO
-
-Python permite la entrada de datos por parte del usuario.
-Esto significa que podemos solicitar información al usuario.
-El siguiente ejemplo solicita su nombre; una vez que lo ingresa, se muestra en pantalla:
-
-```python
-print("Introduce tu nombre:")
-nombre = input()
-print(f"Hola {nombre}")
-```
-La función **input()** permite al usuario ingresar datos. El programa se detiene y espera a que el usuario ingrese algo. Cuando el usuario presiona Enter, la función **input()** devuelve lo que el usuario escribió como una cadena (string).
-Si deseas mostrar un mensaje antes de la entrada, puedes pasarlo como argumento a la función **input()**:
-
-```python
-nombre = input("Introduce tu nombre: ")
-print(f"Hola {nombre}")
-```
-### Entradas múltiples
-Puedes añadir tantas entradas como quieras; Python pausará la ejecución en cada una de ellas, esperando la entrada del usuario:
-
-```python
-nombre = input("Introduce tu nombre: ")
-edad = input("Introduce tu edad: ")
-print(f"Hola {nombre}, tienes {edad} años.")
-```
-### Convertir la entrada a otros tipos de datos
-La función **input()** siempre devuelve una cadena (string). Si necesitas otro tipo de dato, como un número entero o un número decimal, debes convertirlo usando las funciones **int()** o **float()**:
-
-```python
-edad = int(input("Introduce tu edad: "))
-altura = float(input("Introduce tu altura en metros: "))
-print(f"Tienes {edad} años y mides {altura} metros.")
-```
-### Manejo de errores en la entrada
-Es importante manejar posibles errores al convertir la entrada del usuario. Por ejemplo, si el usuario ingresa algo que no puede convertirse a un entero, el programa generará un error. Puedes usar un bloque **try-except** para manejar estos errores:
-
-```python
-try:
-    edad = int(input("Introduce tu edad: "))
-    print(f"Tienes {edad} años.")
-except ValueError:
-    print("Por favor, introduce un número válido para la edad.")
-```
-**Ejemplo completo:**
-
-```python
-try:
-    nombre = input("Introduce tu nombre: ")
-    edad = int(input("Introduce tu edad: "))
-    altura = float(input("Introduce tu altura en metros: "))
-    print(f"Hola {nombre}, tienes {edad} años y mides {altura} metros.")
-except ValueError:
-    print("Por favor, introduce valores válidos.")
-``` 
-## ESTRUCTURAS DE CONTROL
-
-En las estructuras de control de python es muy importante hablar tanto de la identación como de **encoding**. El encoding no es más que una **directiva que se coloca al inicio de un archivo Python, a fin de indicar al sistema, la codificación de caracteres utilizada en el archivo.**
-El encoding más común es UTF-8, que soporta una amplia gama de caracteres, incluyendo letras acentuadas y símbolos especiales. La línea de código para especificar el encoding UTF-8 es la siguiente:
-
-```python
-# -*- coding: utf-8 -*-
-```
-Esta línea debe colocarse al inicio del archivo Python, antes de cualquier otro código. Es especialmente útil cuando el código contiene caracteres especiales o acentuados, ya que garantiza que estos caracteres se interpreten correctamente.
-La identación es crucial en Python, ya que define la estructura del código y determina qué bloques de código pertenecen a qué estructuras de control. A diferencia de otros lenguajes de programación que utilizan llaves `{}` o palabras clave para delimitar bloques de código, Python utiliza la identación (espacios o tabulaciones) para este propósito. Una identación incorrecta puede llevar a errores de sintaxis o a un comportamiento inesperado del programa.
-
-### Estructuras condicionales
-Nos permiten evaluar si una o más condiciones se cumplen, para decir qué acción vamos a ejecutar. La evaluación de condiciones, solo puede arrojar 1 de 2 resultados: **verdadero o falso** (True o False).
-
-Para evaluar las condiciones se utilizan **operadores relacionales o de comparación** y para unir distintas condiciones **operadores lógicos**.
-
-Las estructuras de control de flujo condicionales mas conocida es el **if**, se define mediante el uso de tres palabras claves reservadas, del lenguaje: **if** (si), **elif** (sino, si) y **else** (sino).
-
-#### Estructura if
-La estructura if evalúa una condición y si esta es verdadera, ejecuta un bloque de código. Si la condición es falsa, el bloque de código se omite.
-
-```python
-# -*- coding: utf-8 -*-
-x = 10
-if x > 0:
-    print("x es un número positivo")
-```
-#### Estructura if-elif
-La estructura if-elif permite evaluar múltiples condiciones. Si la primera condición es falsa, se evalúa la siguiente, y así sucesivamente. Si ninguna condición es verdadera, se puede ejecutar un bloque de código alternativo con else.
-
-```python
-# -*- coding: utf-8 -*-
-x = 10
-if x > 0:
-    print("x es un número positivo")
-elif x == 0:
-    print("x es cero")
-```
-#### Estructura if-elif-else
-La estructura if-elif-else es una extensión de if-elif que incluye un bloque else. Este bloque se ejecuta si ninguna de las condiciones anteriores es verdadera.
-
-```python
-# -*- coding: utf-8 -*-
-x = 10
-if x > 0:
-    print("x es un número positivo")
-elif x == 0:
-    print("x es cero")
-else:
-    print("x es un número negativo")
-```
-En este ejemplo, se verifica si `x` es mayor que 0, igual a 0 o menor que 0, y se imprime un mensaje correspondiente.
-
-#### Anidamiento de estructuras if
-Las estructuras if pueden anidarse dentro de otras estructuras if para evaluar condiciones más complejas.
-
-```python
-# -*- coding: utf-8 -*-
-x = 10
-if x > 0:
-    if x % 2 == 0:
-        print("x es un número positivo y par")
-    else:
-        print("x es un número positivo y impar")
-elif x == 0:
-    print("x es cero")
-else:
-    print("x es un número negativo")
-```
-En este ejemplo, se verifica si `x` es positivo y luego se evalúa si es par o impar.
-
-### Estructura match (Python 3.10+)
-Para la comprobación de un valor con muchas constantes se utiliza la sentencia **match**. Esta estructura recibe una expresión y compara su valor con patrones sucesivos, de forma similar al switch de Java.
-
-```python
-# -*- coding: utf-8 -*-
-valor = 2
-match valor:
-    case 1:
-        print("El valor es uno")
-    case 2:
-        print("El valor es dos")
-    case 3:
-        print("El valor es tres")
-    case _:
-        print("El valor no es uno, dos ni tres")
-```
-En este ejemplo, se verifica el valor de la variable `valor` y se imprime un mensaje correspondiente según el caso que coincida. El caso `_` actúa como un caso por defecto si ninguno de los casos anteriores coincide.
-Se pueden unir varios literales en un case usando `|` equivale a un `o`
-
-```python
-# -*- coding: utf-8 -*-
-valor = 2
-match valor:
-    case 1 | 2 | 3:
-        print("El valor es uno, dos o tres")
-    case _:
-        print("El valor no es uno, dos ni tres")
-```
-En este ejemplo, si `valor` es 1, 2 o 3, se imprimirá el mismo mensaje.
-Sentencias if como condiciones adicionales
-
-Puede añadir sentencias if en la evaluación de casos para realizar una comprobación de condiciones adicional:
-
-```python
-# -*- coding: utf-8 -*-
-valor = 2
-match valor:
-    case x if x < 0:
-        print("El valor es negativo")
-    case x if x == 0:
-        print("El valor es cero")
-    case x if x > 0:
-        print("El valor es positivo")
-```
-En este ejemplo, se utiliza una sentencia if dentro de cada case para evaluar si el valor es negativo, cero o positivo.
-
-### Estructuras de control repetitivas
-Las estructuras de control repetitivas permiten ejecutar un bloque de código varias veces, dependiendo de una condición o un rango de valores. Las estructuras más comunes en Python son **while** y **for**.
-
-#### Estructura while
-La estructura while ejecuta un bloque de código mientras una condición sea verdadera. Si la condición es falsa, el bloque de código se omite y el programa continúa con la siguiente instrucción después del bloque while.
-
-```python
-# -*- coding: utf-8 -*-
-contador = 0
-while contador < 5:
-    print("Contador:", contador)
-    contador += 1
-```
-En este ejemplo, el bloque de código dentro del while se ejecuta mientras el valor de `contador` sea menor que 5. En cada iteración, se imprime el valor de `contador` y luego se incrementa en 1.
-
-#### Estructura for
-La estructura for itera sobre una secuencia (como una lista, una tupla, un diccionario, un conjunto o una cadena) y ejecuta un bloque de código para cada elemento en la secuencia.
-
-```python
-# -*- coding: utf-8 -*-
-frutas = ["manzana", "banana", "cereza"]
-for fruta in frutas:
-    print("Fruta:", fruta)
-```
-En este ejemplo, el bloque de código dentro del for se ejecuta para cada elemento en la lista `frutas`. En cada iteración, se imprime el nombre de la fruta actual.
-
-#### Uso de range() en for
-La función `range()` se utiliza comúnmente con la estructura for para generar una secuencia de números. Puedes especificar el inicio, el final y el paso de la secuencia.
-
-```python
-# -*- coding: utf-8 -*-
-for i in range(5):  # Desde 0 hasta 4
-    print("Número:", i)
-for i in range(1, 6):  # Desde 1 hasta 5
-    print("Número:", i)
-for i in range(1, 10, 2):  # Desde 1 hasta 9, con paso de 2
-    print("Número:", i)
-```
-En este ejemplo, se utilizan diferentes variantes de `range()` para generar secuencias de números y se imprime cada número en la secuencia.
-
-#### Uso de break y continue
-Dentro de los bucles, puedes usar las palabras clave `break` y `continue` para controlar el flujo de ejecución.
-- `break` se utiliza para salir completamente del bucle cuando se cumple una condición específica.
-- `continue` se utiliza para saltar el resto del código en la iteración actual y pasar directamente a la siguiente vuelta del bucle.
-Ejemplo:
-
-```python
-# -*- coding: utf-8 -*-
-for i in range(10):
-    if i == 5:
-        break  # Sale del bucle cuando i es igual a 5
-    print("Número:", i)
-# Salida: 0, 1, 2, 3, 4
-for i in range(10):
-    if i % 2 == 0:
-        continue  # Salta los números pares
-    print("Número impar:", i)
-# Salida: 1, 3, 5, 7, 9
-```
-### Uso de la instrucción pass
-La instrucción `pass` se utiliza como un marcador de posición en bloques de código donde se requiere una sintaxis pero no se desea ejecutar ninguna acción. Es útil en situaciones donde el código aún no está implementado o cuando se desea crear una estructura vacía.
-
-```python
-# -*- coding: utf-8 -*-
-x = 10
-if x > 0:
-    pass  # Aquí no se realiza ninguna acción
-else:
-    print("x es un número negativo o cero")
-```
-En este ejemplo, si `x` es mayor que 0, no se realiza ninguna acción debido a la instrucción `pass`. Si `x` no es mayor que 0, se imprime un mensaje indicando que `x` es negativo o cero.
-
-```python
-for numero in range(5):
-    if numero == 3:
-        pass  # No hace nada cuando el número es 3
-    else:
-        print(numero)
-# Salida: 0, 1, 2, 4
-```
-En este ejemplo, cuando el número es 3, la instrucción `pass` se ejecuta y no se realiza ninguna acción. Para los demás números, se imprime el número correspondiente.
-
+:computer: Actividad 4
 
 
 
