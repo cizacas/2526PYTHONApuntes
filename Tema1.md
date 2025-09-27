@@ -45,6 +45,7 @@
       - [Uso de break y continue](#uso-de-break-y-continue)
     - [Uso de la instrucción pass](#uso-de-la-instrucción-pass)
   - [COLECCIONES](#colecciones)
+    - [Mutabilidad e inmutabilidad](#mutabilidad-e-inmutabilidad)
     - [Listas](#listas)
       - [Métodos de listas](#métodos-de-listas)
       - [Más sobre listas](#más-sobre-listas)
@@ -1258,10 +1259,52 @@ En este ejemplo, cuando el número es 3, la instrucción `pass` se ejecuta y no 
 ## COLECCIONES
 En el lenguaje de programación Python existen cuatro tipos de datos de colección:
 
-* **Lista**: es una colección ordenada y mutable. Permite elementos duplicados. 
-* **Tupla**: es una colección ordenada e inmutable. Permite elementos duplicados. 
-* **Conjunto**: es una colección no ordenada, inmutable¹ y sin índice. No permite elementos duplicados. 
-* **Diccionario**: es una colección ordenada² y mutable. No permite elementos duplicados. 
+* **Lista**: es una colección ordenada y **mutable**. Permite elementos duplicados. 
+* **Tupla**: es una colección ordenada e **inmutable**. Permite elementos duplicados. 
+* **Conjunto**: es una colección no ordenada, **mutable** y sin índice. No permite elementos duplicados. 
+* **Diccionario**: es una colección ordenada² y **mutable**. No permite claves duplicadas.
+
+² Ordenada: A partir de la versión 3.7 de Python, los diccionarios tienen un orden definido. En las versiones anteriores de Python (3.6 y anteriores), los diccionarios no tenían un orden definido.
+
+### Mutabilidad e inmutabilidad
+🔍 **ACLARACIÓN IMPORTANTE: Mutabilidad del contenedor vs elementos**
+
+**La mutabilidad se refiere al CONTENEDOR, no a los elementos:**
+
+```python
+# EJEMPLOS PARA ENTENDER LA DIFERENCIA:
+
+# 1. LISTA = MUTABLE (siempre puedes cambiar la lista)
+lista_numeros = [1, 2, 3]           # Lista mutable con números inmutables
+lista_listas = [[1, 2], [3, 4]]     # Lista mutable con listas mutables
+
+# Ambas listas son MUTABLES:
+lista_numeros.append(4)              # ✅ Funciona
+lista_listas.append([5, 6])          # ✅ Funciona
+
+# 2. TUPLA = INMUTABLE (nunca puedes cambiar la tupla)
+tupla_numeros = (1, 2, 3)           # Tupla inmutable con números inmutables
+tupla_listas = ([1, 2], [3, 4])     # Tupla inmutable con listas mutables
+
+# La tupla es INMUTABLE:
+# tupla_numeros.append(4)            # ❌ Error - tuplas no tienen append()
+# tupla_listas[0] = [99]             # ❌ Error - no puedes reasignar elementos
+
+# PERO puedes modificar las listas DENTRO de la tupla:
+tupla_listas[0].append(99)          # ✅ Funciona - modificas la lista, no la tupla
+print(tupla_listas)                 # ([1, 2, 99], [3, 4])
+```
+
+**Regla de oro:** La mutabilidad es del TIPO (lista, tupla, conjunto, etc.), no depende del contenido. 
+
+📋 RESUMEN :
+|Tipo	|Ordenado	|Mutable	|Duplicados|	Indexado|
+|-------|-----------|-----------|----------|---------|
+|Lista	|✅ Sí |	✅ Sí	|✅ Sí	|✅ Sí|
+|Tupla	|✅ Sí	|❌ No	|✅ Sí	|✅ Sí|
+|Conjunto	|❌ No	|✅ Sí	|❌ No	|❌ No|
+|Diccionario |✅ Sí*	|✅ Sí	|❌ No (claves)	|✅ Sí (por clave)|
+
 
 ### Listas
 Python tiene varios tipos de datos _compuestos_, utilizados para agrupar otros valores. El más versátil es la _lista_, la cual puede ser escrita como una lista de valores separados por coma (ítems) entre corchetes. Las listas pueden contener ítems de diferentes tipos, pero usualmente los ítems son del mismo tipo.
@@ -1283,7 +1326,7 @@ Al igual que las cadenas (y todas las demás tipos integrados sequence), las lis
 >>> cuadrados[:]
 [1, 4, 9, 16, 25]
 ```
-Las listas también admiten operaciones como concatenación:
+Las listas también admiten operaciones como **concatenación**:
 
 ```python
 >>> cuadrados + [36, 49, 64, 81, 100]  # concatenación de listas
@@ -1307,41 +1350,34 @@ También puedes agregar nuevos elementos al final de la lista, utilizando el mé
 >>> cuadrados
 [36, 4, 9, 16, 25, 49]
 ```
-La asignación simple en Python nunca copia datos. Al asignar una lista a una variable, esta hace referencia a la lista existente. Cualquier cambio que se realice en la lista mediante una variable se reflejará en todas las demás variables que hagan referencia a ella.
+**La asignación simple en Python nunca copia datos**. Al asignar una lista a una variable, esta hace referencia a la lista existente. Cualquier cambio que se realice en la lista mediante una variable se reflejará en todas las demás variables que hagan referencia a ella.
+
 ```python
 >>> lista1 = lista2 = [1, 2, 3]  # ambas variables hacen referencia a la misma lista
 >>> lista1 is lista2  # ambas variables apuntan al mismo objeto
 True
->>> a[0] = 4  # cambia el primer elemento de la lista
->>> b  # el cambio es visible a través de ambas variables
+>>> lista1[0] = 4  # cambia el primer elemento de la lista
+>>> lista2  # el cambio es visible a través de ambas variables
 [4, 2, 3]
->>> a is b  # ambas variables siguen apuntando al mismo objeto
+>>> lista1 is lista2  # ambas variables siguen apuntando al mismo objeto
 True
->>> a = [1, 2, 3]  # ahora a apunta a una nueva lista
->>> a is b  # ahora a y b apuntan a diferentes objetos
+>>> lista1 = [1, 2, 3]  # ahora lista1 apunta a una nueva lista
+>>> lista1 is lista2  # ahora lista1 y lista2 apuntan a diferentes objetos
 False
->>> a
+>>> lista1
 [1, 2, 3]
->>> b
+>>> lista2
 [4, 2, 3]
->>> a[0] = 5  # cambia el primer elemento de la lista a
->>> a
+>>> lista1[0] = 5  # cambia el primer elemento de la lista lista1
+>>> lista1
 [5, 2, 3]
->>> b  # la lista b no se ve afectada
+>>> lista2  # la lista lista2 no se ve afectada
 [4, 2, 3]
->>> a is b  # ambas variables siguen apuntando al mismo objeto
+>>> lista1 is lista2  # ambas variables siguen apuntando al mismo objeto
 False
->>> a = b  # ahora a y b apuntan a la misma lista
->>> a is b
-True
->>> a[0] = 6  # cambia el primer elemento de la lista
->>> a
-[6, 2, 3]
->>> b  # el cambio es visible a través de ambas variables
-[6, 2, 3]
 ```
 
-Todas las operaciones de rebanado retornan una nueva lista que contiene los elementos pedidos. Esto significa que la siguiente rebanada retorna una **shallow copy** (copia superficial) de la lista:
+Todas las operaciones de rebanado retornan una nueva lista que contiene los elementos pedidos. Esto significa que la siguiente rebanada retorna una **shallow copy (copia superficial)** de la lista:
 
 `Una copia superficial`construye un nuevo objeto compuesto y luego (en la medida de lo posible) inserta references en él a los objetos encontrados en el original.
 
@@ -1355,7 +1391,7 @@ True
 >>> cuadrados_copia[0] = 36  # cambia el primer elemento de la copia
 >>> cuadrados_copia
 [36, 4, 9, 16, 25]
->>> cuadrados  # la lista original no se ve afectada
+>>> cuadrados  # la lista original no se ve afectada, porque es una lista con elementos inmutables-numeros
 [1, 4, 9, 16, 25]
 >>> cuadrados_copia is cuadrados  # ambas variables siguen apuntando a diferentes objetos
 False
@@ -1363,6 +1399,7 @@ False
 False
 >>> cuadrados_copia = list(cuadrados)  # otra forma de crear una copia superficial
 ```
+
 También es posible asignar a una rebanada, y esto incluso puede cambiar la longitud de la lista o vaciarla totalmente:
 
 ```python
@@ -1809,10 +1846,6 @@ Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 NameError: name 'mi_diccionario' is not defined
 ```
-
-¹ Inmutable: Los elementos de un conjunto no se pueden modificar, pero puedes añadir o eliminar elementos cuando quieras.
-
-² Ordenada: A partir de la versión 3.7 de Python, los diccionarios tienen un orden definido. En las versiones anteriores de Python (3.6 y anteriores), los diccionarios no tenían un orden definido.
 
 :computer: Actividad 4
 
