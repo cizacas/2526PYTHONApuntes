@@ -1,4 +1,3 @@
-
 # INTRODUCCIÓN A PYTHON: INSTALACIÓN,TIPOS DE DATOS Y ESTRUCTURAS DE CONTROL
 - [INTRODUCCIÓN A PYTHON: INSTALACIÓN,TIPOS DE DATOS Y ESTRUCTURAS DE CONTROL](#introducción-a-python-instalacióntipos-de-datos-y-estructuras-de-control)
   - [INTRODUCCIÓN](#introducción)
