@@ -1,11 +1,11 @@
 # FUNCIONES EN PYTHON
 
 - [FUNCIONES EN PYTHON](#funciones-en-python)
-  - [Definición y creación de funciones con `def`](#definición-y-creación-de-funciones-con-def)
+  - [DEFINICIÓN Y CREACIÓN DE FUNCIONES CON `def`](#definición-y-creación-de-funciones-con-def)
     - [Sintaxis básica](#sintaxis-básica)
     - [Ejemplo básico](#ejemplo-básico)
     - [Convenciones de nomenclatura](#convenciones-de-nomenclatura)
-  - [Parámetros y argumentos](#parámetros-y-argumentos)
+  - [PARÁMETROS Y ARGUMENTOS](#parámetros-y-argumentos)
     - [Definición](#definición)
     - [Tipos de parámetros](#tipos-de-parámetros)
       - [1. Parámetros posicionales](#1-parámetros-posicionales)
@@ -18,21 +18,23 @@
       - [Objetos inmutables (int, str, tuple)](#objetos-inmutables-int-str-tuple)
       - [Objetos mutables (list, dict, set)](#objetos-mutables-list-dict-set)
         - [**Crear copias explícitas cuando sea necesario:**](#crear-copias-explícitas-cuando-sea-necesario)
+  - [VALORES DE RETORNO (`return`)](#valores-de-retorno-return)
+    - [Función sin return](#función-sin-return)
     - [Función con return simple](#función-con-return-simple)
     - [Return múltiple](#return-múltiple)
     - [Return condicional](#return-condicional)
-  - [Ámbito de las variables](#ámbito-de-las-variables)
+  - [ÁMBITO DE LAS VARIABLES](#ámbito-de-las-variables)
     - [Variables locales](#variables-locales)
     - [Variables globales](#variables-globales)
     - [Variables no locales (nonlocal)](#variables-no-locales-nonlocal)
     - [Regla LEGB](#regla-legb)
-  - [Funciones incorporadas](#funciones-incorporadas)
+  - [FUNCIONES INCORPORADAS](#funciones-incorporadas)
     - [Funciones de tipo y conversión](#funciones-de-tipo-y-conversión)
     - [Funciones de secuencias](#funciones-de-secuencias)
     - [Funciones de iteración](#funciones-de-iteración)
     - [Funciones de entrada y salida](#funciones-de-entrada-y-salida)
     - [Funciones matemáticas incorporadas](#funciones-matemáticas-incorporadas)
-  - [Documentación de funciones](#documentación-de-funciones)
+  - [DOCUMENTACIÓN DE FUNCIONES](#documentación-de-funciones)
     - [Docstrings](#docstrings)
       - [Docstring simple](#docstring-simple)
       - [Docstring detallada](#docstring-detallada)
@@ -44,7 +46,7 @@
   - [Ejercicios prácticos](#ejercicios-prácticos)
     - [Ejercicio 1: Calculadora básica](#ejercicio-1-calculadora-básica)
     - [Ejercicio 2: Validador de contraseña](#ejercicio-2-validador-de-contraseña)
-  - [Pruebas unitarias](#pruebas-unitarias)
+  - [PRUEBAS UNITARIAS](#pruebas-unitarias)
     - [¿Qué son las pruebas unitarias?](#qué-son-las-pruebas-unitarias)
     - [Introducción al módulo unittest](#introducción-al-módulo-unittest)
     - [Métodos de verificación (assertions)](#métodos-de-verificación-assertions)
@@ -74,7 +76,7 @@
   - [Resumen](#resumen)
 
 
-## Definición y creación de funciones con `def`
+## DEFINICIÓN Y CREACIÓN DE FUNCIONES CON `def`
 
 Una función es un bloque de código reutilizable que realiza una tarea específica. En Python, las funciones se definen utilizando la palabra clave `def`.
 
@@ -112,7 +114,7 @@ def procesar_datos_usuario():
     pass
 ```
 
-## Parámetros y argumentos
+## PARÁMETROS Y ARGUMENTOS
 
 ### Definición
 
@@ -209,6 +211,7 @@ En Python, todo se pasa por **referencia de objeto**. Esto significa que no se c
 
 ```python
 def modificar_numero(x):
+    # INMUTABLES: Efecto "copia" (pero no es copia real)
     print(f"ID dentro (antes): {id(x)}")  # Mismo ID que fuera
     x = x + 10  # Esto crea un NUEVO objeto, no modifica el original
     print(f"ID dentro (después): {id(x)}")  # ID diferente (nuevo objeto)
@@ -238,6 +241,7 @@ print(f"ID fuera (después): {id(numero)}")  # Mismo ID original
 ```python
 def demostrar_referencias_inmutables():
     # Ejemplo con strings
+    # INMUTABLES: Efecto "copia" (pero no es copia real)
     def modificar_texto(cadena):
         print(f"Cadena recibida ID: {id(cadena)}")
         cadena = cadena + " modificada"  # Nuevo objeto string
@@ -251,6 +255,13 @@ def demostrar_referencias_inmutables():
     print(f"Después de función - Modificado: '{texto_modificado}' ID: {id(texto_modificado)}")
 
 demostrar_referencias_inmutables()
+
+# Salida esperada:
+# Texto original ID: 140712345678123
+# Cadena recibida ID: 140712345678123    <- MISMO ID (misma referencia)
+# Cadena nueva ID: 140712345679456       <- NUEVO ID (nuevo objeto)
+# Después de función - Original: 'Hola' ID: 140712345678123     <- Original sin cambios
+# Después de función - Modificado: 'Hola modificada' ID: 140712345679456  <- Nuevo objeto
 ```
 
 #### Objetos mutables (list, dict, set)
@@ -259,11 +270,13 @@ demostrar_referencias_inmutables()
 
 ```python
 def modificar_lista(lista):
+    # MUTABLES: Modificación directa
     print(f"Lista recibida ID: {id(lista)}")
     lista.append(4)  # Modifica el objeto original directamente
     print(f"Lista después ID: {id(lista)}")  # Mismo ID
     print(f"Dentro de la función: {lista}")
 
+# Ejemplo de uso de la función modificar_lista
 mi_lista = [1, 2, 3]
 print(f"Lista original ID: {id(mi_lista)}")
 modificar_lista(mi_lista)
@@ -277,44 +290,6 @@ print(f"Lista final ID: {id(mi_lista)}")  # Mismo ID original
 # Dentro de la función: [1, 2, 3, 4]
 # Fuera de la función: [1, 2, 3, 4]   <- ¡MODIFICADA!
 # Lista final ID: 2234567891234       <- MISMO ID
-```
-
-**Comparación visual del comportamiento:**
-
-```python
-def ejemplo_completo():
-    # INMUTABLES: Efecto "copia" (pero no es copia real)
-    def probar_inmutable(valor):
-        print(f"  Inmutable - ID recibido: {id(valor)}")
-        valor = valor * 2  # Crea nuevo objeto
-        print(f"  Inmutable - ID después: {id(valor)}")
-        return valor
-    
-    # MUTABLES: Modificación directa
-    def probar_mutable(lista):
-        print(f"  Mutable - ID recibido: {id(lista)}")
-        lista.extend([4, 5])  # Modifica el objeto original
-        print(f"  Mutable - ID después: {id(lista)}")
-        return lista
-    
-    # Prueba con inmutable
-    numero = 10
-    print(f"INMUTABLE - Número original: {numero}, ID: {id(numero)}")
-    numero_modificado = probar_inmutable(numero)
-    print(f"INMUTABLE - Original: {numero}, Modificado: {numero_modificado}")
-    print(f"INMUTABLE - IDs diferentes: {id(numero)} vs {id(numero_modificado)}")
-    
-    print("\n" + "="*50 + "\n")
-    
-    # Prueba con mutable
-    lista = [1, 2, 3]
-    print(f"MUTABLE - Lista original: {lista}, ID: {id(lista)}")
-    lista_modificada = probar_mutable(lista)
-    print(f"MUTABLE - Original: {lista}, Retornada: {lista_modificada}")
-    print(f"MUTABLE - Mismo ID: {id(lista)} == {id(lista_modificada)}")
-    print(f"MUTABLE - Son el mismo objeto: {lista is lista_modificada}")
-
-ejemplo_completo()
 ```
 
 ##### **Crear copias explícitas cuando sea necesario:**
@@ -338,316 +313,111 @@ def no_modificar_original(lista_original):
     print(f"Original: {lista_original}")
     print(f"Copia modificada: {lista_copia}")
 
-def ejemplo_diferencias_copia():
-    """Demuestra la diferencia clave entre copia superficial y profunda."""
-    
-    print("=== COPIA SUPERFICIAL vs PROFUNDA ===\n")
-    
-    # Estructura anidada para demostrar la diferencia
-    lista_anidada = [[1, 2], [3, 4], {"a": 5}]
-    print(f"Lista original: {lista_anidada}")
-    print(f"IDs originales: lista={id(lista_anidada)}, sublista1={id(lista_anidada[0])}, dict={id(lista_anidada[2])}\n")
-    
-    # 1. COPIA SUPERFICIAL (.copy() o copy.copy())
-    print("1. COPIA SUPERFICIAL:")
-    copia_superficial = lista_anidada.copy()  # También: copy.copy(lista_anidada)
-    
-    print(f"   Lista copia: {copia_superficial}")
-    print(f"   IDs copia: lista={id(copia_superficial)}, sublista1={id(copia_superficial[0])}, dict={id(copia_superficial[2])}")
-    print(f"   ¿Misma lista? {lista_anidada is copia_superficial}")  # False
-    print(f"   ¿Misma sublista[0]? {lista_anidada[0] is copia_superficial[0]}")  # True ← PROBLEMA
-    print(f"   ¿Mismo diccionario? {lista_anidada[2] is copia_superficial[2]}")  # True ← PROBLEMA
-    
-    # Modificar la copia superficial
-    copia_superficial[0].append(99)  # Modifica la sublista compartida
-    copia_superficial[2]["b"] = 6    # Modifica el diccionario compartido
-    
-    print(f"\n   Después de modificar copia superficial:")
-    print(f"   Original: {lista_anidada}")  # ¡CAMBIÓ! porque comparten objetos internos
-    print(f"   Copia: {copia_superficial}")
-    
-    print("\n" + "-"*60 + "\n")
-    
-    # 2. COPIA PROFUNDA (copy.deepcopy())
-    print("2. COPIA PROFUNDA:")
-    lista_anidada2 = [[1, 2], [3, 4], {"a": 5}]  # Nueva lista para la prueba
-    copia_profunda = copy.deepcopy(lista_anidada2)
-    
-    print(f"   Lista original: {lista_anidada2}")
-    print(f"   Lista copia: {copia_profunda}")
-    print(f"   IDs original: lista={id(lista_anidada2)}, sublista1={id(lista_anidada2[0])}, dict={id(lista_anidada2[2])}")
-    print(f"   IDs copia: lista={id(copia_profunda)}, sublista1={id(copia_profunda[0])}, dict={id(copia_profunda[2])}")
-    print(f"   ¿Misma lista? {lista_anidada2 is copia_profunda}")  # False
-    print(f"   ¿Misma sublista[0]? {lista_anidada2[0] is copia_profunda[0]}")  # False ← BUENO
-    print(f"   ¿Mismo diccionario? {lista_anidada2[2] is copia_profunda[2]}")  # False ← BUENO
-    
-    # Modificar la copia profunda
-    copia_profunda[0].append(99)  # Solo modifica la copia
-    copia_profunda[2]["b"] = 6    # Solo modifica la copia
-    
-    print(f"\n   Después de modificar copia profunda:")
-    print(f"   Original: {lista_anidada2}")  # ¡NO CAMBIÓ! objetos completamente separados
-    print(f"   Copia: {copia_profunda}")
+# Ejemplo de uso de la función no_modificar_original
+print("=== EJEMPLO: Función no_modificar_original ===")
+mi_lista = [1, 2, 3]
+print(f"Lista antes de llamar la función: {mi_lista}")
+no_modificar_original(mi_lista)
+print(f"Lista después de llamar la función: {mi_lista}")
 
-def comparacion_visual_copias():
-    """Visualización clara de las diferencias."""
-    print("\n=== RESUMEN VISUAL ===")
-    print("""
-    ESTRUCTURA ORIGINAL: [sublista1, sublista2, diccionario]
-                        ↓
-    
-    COPIA SUPERFICIAL (.copy()):
-    ✓ Crea nueva lista principal
-    ✗ Comparte objetos internos (sublistas, diccionarios)
-    
-    Original:  [sublista1] ──┐
-                            ├── Misma sublista en memoria
-    Copia:     [sublista1] ──┘
-    
-    COPIA PROFUNDA (copy.deepcopy()):
-    ✓ Crea nueva lista principal  
-    ✓ Crea copias de todos los objetos internos
-    
-    Original:  [sublista1] ── sublista independiente
-    Copia:     [sublista1'] ── sublista independiente (diferente)
-    """)
+# Salida esperada:
+# Lista antes de llamar la función: [1, 2, 3]
+# Original: [1, 2, 3]
+# Copia modificada: [1, 2, 3, 99]
+# Lista después de llamar la función: [1, 2, 3]  <- ¡No se modificó!
 
-# Ejecutar ejemplos
-ejemplo_diferencias_copia()
-comparacion_visual_copias()
-
-# Ejemplo práctico: cuándo usar cada una
-def cuando_usar_cada_copia():
-    print("\n=== CUÁNDO USAR CADA TIPO ===")
-    
-    # Copia superficial: suficiente para listas simples
-    numeros = [1, 2, 3, 4, 5]
-    numeros_copia = numeros.copy()  # Suficiente, son inmutables
-    numeros_copia.append(6)
-    print(f"Lista simple - Original: {numeros}, Copia: {numeros_copia}")
-    
-    # Copia profunda: necesaria para estructuras complejas
-    matriz = [[1, 2], [3, 4]]
-    matriz_shallow = matriz.copy()
-    matriz_deep = copy.deepcopy(matriz)
-    
-    matriz_shallow[0].append(99)  # Afecta original
-    matriz_deep[0].append(88)     # No afecta original
-    
-    print(f"Matriz - Original: {matriz}")
-    print(f"Matriz - Shallow: {matriz_shallow}")  
-    print(f"Matriz - Deep: {matriz_deep}")
-
-cuando_usar_cada_copia()
-
-### ⚠️ **ACLARACIÓN IMPORTANTE: Mutabilidad vs Tipo de Copia**
-
-**¡NO confundir!** El tipo de copia (superficial/profunda) **NO depende automáticamente** de si los elementos son mutables o inmutables. **Tú decides qué método usar:**
-
-```python
-def aclaracion_mutabilidad_vs_copia():
-    print("=== ACLARACIÓN: MUTABILIDAD vs TIPO DE COPIA ===\n")
-    
-    # CASO 1: Lista con elementos INMUTABLES
-    lista_numeros = [1, 2, 3, 4, 5]  # Números son inmutables
-    
-    # Puedes hacer AMBOS tipos de copia:
-    shallow_numeros = lista_numeros.copy()        # Copia superficial
-    deep_numeros = copy.deepcopy(lista_numeros)   # Copia profunda
-    
-    print("Lista con elementos inmutables:")
-    print(f"Original: {lista_numeros}")
-    print(f"Shallow:  {shallow_numeros}")
-    print(f"Deep:     {deep_numeros}")
-    print(f"¿Son iguales las copias? {shallow_numeros == deep_numeros}")  # True
-    print(f"¿Mismo objeto shallow? {lista_numeros is shallow_numeros}")    # False
-    print(f"¿Mismo objeto deep? {lista_numeros is deep_numeros}")          # False
-    
-    # Para elementos inmutables, AMBAS copias son funcionalmente equivalentes
-    # porque no puedes modificar los elementos internos de ninguna manera
-    
-    print("\n" + "-"*50 + "\n")
-    
-    # CASO 2: Lista con elementos MUTABLES  
-    lista_listas = [[1, 2], [3, 4]]  # Sublistas son mutables
-    
-    # Puedes hacer AMBOS tipos de copia, pero con diferente comportamiento:
-    shallow_listas = lista_listas.copy()        # Copia superficial - COMPARTE sublistas
-    deep_listas = copy.deepcopy(lista_listas)   # Copia profunda - INDEPENDIZA sublistas
-    
-    print("Lista con elementos mutables ANTES de modificar:")
-    print(f"Original: {lista_listas}")
-    print(f"Shallow:  {shallow_listas}")  
-    print(f"Deep:     {deep_listas}")
-    
-    # Modificar para ver la diferencia
-    shallow_listas[0].append(99)  # Afecta también al original
-    deep_listas[0].append(88)     # NO afecta al original
-    
-    print("\nDESPUÉS de modificar:")
-    print(f"Original: {lista_listas}")    # ¡Cambió por shallow!
-    print(f"Shallow:  {shallow_listas}")  # Cambió (comparte con original)
-    print(f"Deep:     {deep_listas}")     # Solo cambió esta copia
-    
-    print("\n" + "="*60 + "\n")
-
-def regla_practica():
-    """Regla práctica para decidir qué tipo de copia usar."""
-    print("🎯 REGLA PRÁCTICA:")
-    print("""
-    ┌─────────────────────────────────────────────────────────┐
-    │  DECIDE TÚ qué tipo de copia usar según tu NECESIDAD:   │
-    ├─────────────────────────────────────────────────────────┤
-    │                                                         │
-    │  🔸 COPIA SUPERFICIAL (.copy()):                       │
-    │     ✓ Lista simple con elementos inmutables             │
-    │     ✓ Quieres compartir objetos internos                │
-    │     ✓ Más rápida y usa menos memoria                    │
-    │                                                         │
-    │  🔸 COPIA PROFUNDA (copy.deepcopy()):                  │
-    │     ✓ Estructuras anidadas complejas                    │ 
-    │     ✓ Necesitas independencia total                     │
-    │     ✓ Vas a modificar objetos internos                  │
-    │                                                         │
-    └─────────────────────────────────────────────────────────┘
-    """)
-    
-    # Ejemplos prácticos
-    print("EJEMPLOS PRÁCTICOS:")
-    
-    # Cuando shallow es suficiente
-    print("\n✅ SHALLOW SUFICIENTE:")
-    coordenadas = [(1, 2), (3, 4), (5, 6)]  # Tuplas son inmutables
-    coord_copia = coordenadas.copy()
-    coord_copia.append((7, 8))  # Solo modifica la lista, no las tuplas
-    print(f"Original: {coordenadas}")
-    print(f"Copia:    {coord_copia}")
-    
-    # Cuando necesitas deep
-    print("\n⚠️  DEEP NECESARIO:")
-    estudiantes = [
-        {"nombre": "Ana", "notas": [8, 9]},
-        {"nombre": "Juan", "notas": [7, 6]}
-    ]
-    
-    est_shallow = estudiantes.copy()
-    est_deep = copy.deepcopy(estudiantes)
-    
-    # Modificar notas
-    est_shallow[0]["notas"].append(10)  # ¡Afecta original!
-    est_deep[0]["notas"].append(5)      # No afecta original
-    
-    print(f"Original: {estudiantes}")
-    print(f"Shallow:  {est_shallow}")
-    print(f"Deep:     {est_deep}")
-
-# Ejecutar aclaraciones
-aclaracion_mutabilidad_vs_copia()
-regla_practica()
-
-### 📋 **RESUMEN: Los DOS tipos de copia en Python**
-
-**✅ CORRECTO: Python maneja DOS tipos principales de copia:**
-
-```python
-def resumen_tipos_copia():
-    """Resumen definitivo de los dos tipos de copia en Python."""
-    
-    print("🐍 PYTHON: DOS TIPOS DE COPIA")
-    print("="*50)
-    
-    lista_ejemplo = [1, [2, 3], {"a": 4}]
-    
-    print(f"📊 Lista original: {lista_ejemplo}")
-    print(f"    ID original: {id(lista_ejemplo)}")
-    print(f"    ID sublista: {id(lista_ejemplo[1])}")
-    print(f"    ID diccionario: {id(lista_ejemplo[2])}")
-    
-    print("\n1️⃣ COPIA SUPERFICIAL (Shallow Copy):")
-    print("   Métodos: .copy(), list(), [:], copy.copy()")
-    
-    copia_superficial = lista_ejemplo.copy()
-    print(f"   Resultado: {copia_superficial}")
-    print(f"   ID nueva lista: {id(copia_superficial)}")
-    print(f"   ID sublista: {id(copia_superficial[1])}")      # ¡MISMO!
-    print(f"   ID diccionario: {id(copia_superficial[2])}")   # ¡MISMO!
-    print("   ⚠️  Comparte objetos internos con el original")
-    
-    print("\n2️⃣ COPIA PROFUNDA (Deep Copy):")
-    print("   Método: copy.deepcopy()")
-    
-    copia_profunda = copy.deepcopy(lista_ejemplo)
-    print(f"   Resultado: {copia_profunda}")
-    print(f"   ID nueva lista: {id(copia_profunda)}")
-    print(f"   ID sublista: {id(copia_profunda[1])}")       # DIFERENTE
-    print(f"   ID diccionario: {id(copia_profunda[2])}")    # DIFERENTE  
-    print("   ✅ Crea objetos completamente independientes")
-
-def tabla_comparativa():
-    """Tabla comparativa de los dos tipos de copia."""
-    
-    print("\n📊 TABLA COMPARATIVA:")
-    print("""
-    ┌────────────────┬─────────────────────┬──────────────────────┐
-    │   ASPECTO      │   COPIA SUPERFICIAL │    COPIA PROFUNDA    │
-    ├────────────────┼─────────────────────┼──────────────────────┤
-    │ Contenedor     │ ✅ Nuevo objeto     │ ✅ Nuevo objeto      │
-    │ Objetos internos│ ❌ Compartidos     │ ✅ Nuevos objetos    │
-    │ Velocidad      │ ⚡ Rápida          │ 🐌 Más lenta        │
-    │ Memoria        │ 💾 Menos uso       │ 🗄️  Más uso          │
-    │ Independencia  │ ⚠️  Parcial        │ ✅ Total             │
-    │ Uso típico     │ 📝 Listas simples  │ 🏗️  Estructuras      │
-    │                │                     │    complejas         │
-    └────────────────┴─────────────────────┴──────────────────────┘
-    """)
-
-def metodos_disponibles():
-    """Muestra todos los métodos disponibles para cada tipo."""
-    
-    print("🔧 MÉTODOS DISPONIBLES:")
-    print("\n🔹 PARA COPIA SUPERFICIAL:")
-    lista = [1, 2, [3, 4]]
-    
-    metodo1 = lista.copy()           # Método .copy()
-    metodo2 = list(lista)            # Constructor list()
-    metodo3 = lista[:]               # Slicing completo
-    metodo4 = copy.copy(lista)       # Función copy.copy()
-    
-    print("   • lista.copy()")
-    print("   • list(lista)")
-    print("   • lista[:]") 
-    print("   • copy.copy(lista)")
-    print("   ➡️ Todos producen el MISMO resultado")
-    
-    print("\n🔹 PARA COPIA PROFUNDA:")
-    metodo5 = copy.deepcopy(lista)   # Único método
-    
-    print("   • copy.deepcopy(lista)")
-    print("   ➡️ Único método disponible")
-    
-    # Verificar que shallow son iguales
-    print(f"\n✅ Verificación - Todas las copias superficiales son iguales:")
-    print(f"   .copy() == list(): {metodo1 == metodo2}")
-    print(f"   .copy() == [:]: {metodo1 == metodo3}")
-    print(f"   .copy() == copy.copy(): {metodo1 == metodo4}")
-    
-    print(f"\n🔍 Pero los objetos internos son los mismos (shallow):")
-    print(f"   Original sublista ID: {id(lista[2])}")
-    print(f"   Shallow sublista ID:  {id(metodo1[2])}")
-    print(f"   Deep sublista ID:     {id(metodo5[2])}")
-    print(f"   Shallow == Original: {lista[2] is metodo1[2]}")  # True
-    print(f"   Deep == Original: {lista[2] is metodo5[2]}")     # False
-
-# Ejecutar resumen completo
-resumen_tipos_copia()
-tabla_comparativa() 
-metodos_disponibles()
-```
 ```
 
----
+```python
+import copy
 
-## Valores de retorno (`return`)
+def no_modificar_original_profundo(matriz_original):
+    # Copia profunda (deep copy)
+    matriz_copia = copy.deepcopy(matriz_original)
+    matriz_copia[0].append(99)  # Modifica la primera sublista de la copia
+    print(f"Original: {matriz_original}")
+    print(f"Copia modificada: {matriz_copia}")
+
+# Ejemplo de uso de la función no_modificar_original_profundo
+print("\n=== EJEMPLO: Función no_modificar_original_profundo ===")
+mi_matriz = [[1, 2], [3, 4]]
+print(f"Matriz antes de llamar la función: {mi_matriz}")
+no_modificar_original_profundo(mi_matriz)
+print(f"Matriz después de llamar la función: {mi_matriz}")
+
+# Salida esperada:
+# Matriz antes de llamar la función: [[1, 2], [3, 4]]
+# Original: [[1, 2], [3, 4]]
+# Copia modificada: [[1, 2, 99], [3, 4]]
+# Matriz después de llamar la función: [[1, 2], [3, 4]]  <- ¡No se modificó!
+
+```
+🎯 Estructura paralela lograda:
+
+|Copia Superficial |Copia Profunda|
+|------------------|--------------|
+|lista.copy() |copy.deepcopy() |
+|Elementos simples ✅|Estructuras anidadas ✅|
+|Lista [1, 2, 3]|Matriz [[1, 2], [3, 4]]|
+|Original no cambia|Original no cambia|
+
+⚠️ Comparación con el problema de copia superficial:
+
+```python
+import copy
+# COMPARACIÓN: Si hubiéramos usado copia superficial con matriz anidada
+def ejemplo_problema_copia_superficial():
+    print("\n=== PROBLEMA: Si usáramos copia superficial con matriz ===")
+    mi_matriz2 = [[1, 2], [3, 4]]
+    matriz_shallow = mi_matriz2.copy()  # Copia superficial
+    matriz_shallow[0].append(99)        # ¡Modifica también el original!    
+    print(f"Original después de shallow: {mi_matriz2}")      # ¡CAMBIÓ!
+    print(f"Copia shallow: {matriz_shallow}")
+
+ejemplo_problema_copia_superficial()
+
+# Salida del problema:
+# Original después de shallow: [[1, 2, 99], [3, 4]]  <- ¡Se modificó sin querer!
+# Copia shallow: [[1, 2, 99], [3, 4]]
+```
+🎯 La diferencia fundamental:
+* **Copia Superficial (.copy())**:
+✅ Crea una nueva lista principal
+❌ Comparte los objetos internos (sublistas, diccionarios)
+🔄 Si modificas una sublista, afecta ambas copias
+* **Copia Profunda (copy.deepcopy())**:
+✅ Crea una nueva lista principal
+✅ Crea copias de todos los objetos internos
+🔒 Modificar una copia no afecta la otra
+
+
+🎯 Cuándo usar cada una:
+**Superficial**: Listas con elementos inmutables (números, strings)
+**Profunda**: Estructuras anidadas (listas de listas, diccionarios complejos)
+
+💡 Regla práctica:
+✅ Usa superficial cuando:
+  * Elementos son inmutables (números, strings, tuplas)
+  * No necesitas modificar objetos internos
+  * Quieres eficiencia
+⚠️ Usa profunda cuando:
+  * Tienes estructuras anidadas complejas
+  * Vas a modificar objetos internos
+  * Necesitas independencia total
+
+📊 TABLA COMPARATIVA:
+
+|ASPECTO |COPIA SUPERFICIAL |COPIA PROFUNDA |
+|-----------|------------------|---------------|
+|Contenedor |✅ Nuevo objeto |✅ Nuevo objeto |
+|Objetos internos|❌ Compartidos |✅ Nuevos objetos |
+|Velocidad |⚡ Rápida |🐌 Más lenta |
+|Memoria |💾 Menos uso |🗄️  Más uso |
+|Independencia |⚠️  Parcial |✅ Total |
+|Uso típico|📝 Listas simples|🏗️  Estructuras complejas|
+
+
+## VALORES DE RETORNO (`return`)
 
 ### Función sin return
 
@@ -699,9 +469,7 @@ def es_par_conciso(numero):
     return numero % 2 == 0
 ```
 
----
-
-## Ámbito de las variables
+## ÁMBITO DE LAS VARIABLES
 
 ### Variables locales
 
@@ -748,6 +516,11 @@ def funcion_externa():
     print(f"Después: {variable_externa}")
 
 funcion_externa()
+# Salida:
+# Antes: Desde función externa
+# Modificada desde función interna
+# Después: Modificada desde función interna
+
 ```
 
 ### Regla LEGB
@@ -775,9 +548,7 @@ funcion_externa()
 print(f"Global: {nombre}")
 ```
 
----
-
-## Funciones incorporadas
+## FUNCIONES INCORPORADAS
 
 Python proporciona muchas funciones incorporadas útiles:
 
@@ -833,7 +604,7 @@ print(list(range(5)))        # [0, 1, 2, 3, 4]
 print(list(range(2, 8)))     # [2, 3, 4, 5, 6, 7]
 print(list(range(0, 10, 2))) # [0, 2, 4, 6, 8]
 
-# enumerate() - Enumerar elementos con índice
+# enumerate() - Enumerar elementos con índice, que es muy útil cuando necesitas tanto el índice como el valor de cada elemento en una lista.
 frutas = ["manzana", "banana", "naranja"]
 for indice, fruta in enumerate(frutas):
     print(f"{indice}: {fruta}")
@@ -877,10 +648,7 @@ print(pow(2, 3, 5))  # 3 (2^3 mod 5)
 print(divmod(17, 5))  # (3, 2)
 ```
 
----
-
-## Documentación de funciones
-
+## DOCUMENTACIÓN DE FUNCIONES
 ### Docstrings
 
 Las docstrings son cadenas de documentación que describen qué hace una función:
@@ -1142,7 +910,7 @@ def validar_contraseña(contraseña: str) -> Dict[str, bool]:
 
 ---
 
-## Pruebas unitarias
+## PRUEBAS UNITARIAS
 
 Las pruebas unitarias son fundamentales para verificar que nuestras funciones funcionan correctamente. Python proporciona el módulo `unittest` incorporado para crear y ejecutar pruebas.
 

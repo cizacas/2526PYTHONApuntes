@@ -1451,7 +1451,7 @@ milista.remove("banana")
 print(milista)
 # Salida: ['manzana', 'cereza']
 ```
-Si hay más de un elemento con el valor especificado, el método remove() elimina la primera aparición:
+Si hay más de un elemento con el valor especificado, **el método remove() elimina la primera aparición**:
 
 ```python
 milista = ["manzana", "banana", "cereza", "banana"]
@@ -1518,7 +1518,9 @@ for i in range(len(milista)):
 ```
 **Comprensión de listas**
 La comprensión de listas ofrece una sintaxis más compacta para crear una nueva lista a partir de los valores de una lista existente.
+
 Ejemplo:Partiendo de una lista de frutas, queremos crear una nueva lista que contenga solo las frutas cuyo nombre incluya la letra "a".
+
 Sin la comprensión de listas, tendríamos que escribir una sentencia for con una condición dentro:
 
 ```python
@@ -1557,7 +1559,8 @@ print(esta_lista)
 ```
 **Copiar una lista**
 No se puede copiar una lista simplemente escribiendo `list2 = list1`, ya que `list2` solo será una referencia a `list1`, y cualquier cambio realizado en `list1` se reflejará automáticamente en `list2`.
-Utilizar **el método copy()**. Para copiar una lista, puede utilizar el método copy() integrado en la clase List.
+
+Utilizar **el método copy()**. Para copiar una lista, que está integrado en la clase List.
 
 ```python
 esta_lista = ["manzana", "banana", "cereza"]
@@ -1741,7 +1744,7 @@ Las tuplas tienen dos métodos integrados para realizar operaciones comunes:
 
 
 ### Conjuntos
-Un conjunto es una colección no ordenada, inmutable¹ y sin índice de elementos únicos. Los conjuntos se definen utilizando llaves `{}` o la función `set()`.
+Un conjunto es una colección no ordenada, mutable y sin índice de elementos únicos. Los conjuntos se definen utilizando llaves `{}` o la función `set()`.
 
 ```python
 >>> mi_conjunto = {1, 2, 3, 4, 5}
@@ -1786,7 +1789,7 @@ Los conjuntos soportan operaciones matemáticas como unión, intersección, dife
 {3, 4}
 >>> A - B  # diferencia
 {1, 2}
->>> A ^ B  # diferencia simétrica
+>>> A ^ B  # diferencia simétrica. Es como la operación "O exclusivo" (XOR) en lógica: devuelve los elementos que están en uno u otro conjunto, pero no en ambos
 {1, 2, 5, 6}
 ```
 #### Métodos de conjuntos
@@ -1810,7 +1813,7 @@ Los conjuntos tienen varios métodos integrados para realizar operaciones comune
 | update()      | Actualiza el conjunto con la unión de sí mismo y otro conjunto     |
 
 ### Diccionarios
-Un diccionario es una colección ordenada² y mutable de pares clave-valor. Los diccionarios se definen utilizando llaves `{}` y los pares clave-valor están separados por comas. Cada clave está separada de su valor por dos puntos `:`.
+Un diccionario es una colección ordenada y mutable de pares clave-valor. Los diccionarios se definen utilizando llaves `{}` y los pares clave-valor están separados por comas. Cada clave está separada de su valor por dos puntos `:`.
 
 ```python
 >>> mi_diccionario = {'nombre': 'Juan', 'edad': 30, 'ciudad': 'Madrid'}
