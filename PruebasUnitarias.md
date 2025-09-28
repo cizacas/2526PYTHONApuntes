@@ -1,5 +1,3 @@
----
-
 ## PRUEBAS UNITARIAS
 
 Las pruebas unitarias son fundamentales para verificar que nuestras funciones funcionan correctamente. Python proporciona el módulo `unittest` incorporado para crear y ejecutar pruebas.
@@ -725,5 +723,3 @@ class CuentaBancaria:
 
 # TODO: Crear pruebas completas para CuentaBancaria
 ```
-
----
