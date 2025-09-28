@@ -1298,12 +1298,12 @@ print(tupla_listas)                 # ([1, 2, 99], [3, 4])
 
 📋 RESUMEN :
 
-|Tipo	|Ordenado	|Mutable	|Duplicados|	Indexado|
+|Tipo|Ordenado|Mutable|Duplicados|Indexado|
 |-------|-----------|-----------|----------|---------|
-|Lista	|✅ Sí |	✅ Sí	|✅ Sí	|✅ Sí|
-|Tupla	|✅ Sí	|❌ No	|✅ Sí	|✅ Sí|
-|Conjunto	|❌ No	|✅ Sí	|❌ No	|❌ No|
-|Diccionario |✅ Sí*	|✅ Sí	|❌ No (claves)	|✅ Sí (por clave)|
+|Lista|✅ Sí|✅ Sí|✅ Sí|✅ Sí|
+|Tupla|✅ Sí|❌ No|✅ Sí|✅ Sí|
+|Conjunto|❌ No|✅ Sí|❌ No|❌ No|
+|Diccionario|✅ Sí*|✅ Sí|❌ No (claves)|✅ Sí (por clave)|
 
 
 ### Listas
