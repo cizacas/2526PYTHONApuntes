@@ -1297,6 +1297,7 @@ print(tupla_listas)                 # ([1, 2, 99], [3, 4])
 **Regla de oro:** La mutabilidad es del TIPO (lista, tupla, conjunto, etc.), no depende del contenido. 
 
 📋 RESUMEN :
+
 |Tipo	|Ordenado	|Mutable	|Duplicados|	Indexado|
 |-------|-----------|-----------|----------|---------|
 |Lista	|✅ Sí |	✅ Sí	|✅ Sí	|✅ Sí|
