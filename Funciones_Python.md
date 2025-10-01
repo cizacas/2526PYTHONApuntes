@@ -41,11 +41,7 @@
       - [Acceder a la documentación](#acceder-a-la-documentación)
     - [Anotaciones de tipo (Type Hints)](#anotaciones-de-tipo-type-hints)
     - [Ejemplos completos](#ejemplos-completos)
-      - [Función con documentación completa](#función-con-documentación-completa)
       - [Función con múltiples características](#función-con-múltiples-características)
-  - [Ejercicios prácticos](#ejercicios-prácticos)
-    - [Ejercicio 1: Calculadora básica](#ejercicio-1-calculadora-básica)
-    - [Ejercicio 2: Validador de contraseña](#ejercicio-2-validador-de-contraseña)
 
 
 ## DEFINICIÓN Y CREACIÓN DE FUNCIONES CON `def`
@@ -716,57 +712,6 @@ def procesar_lista(numeros: List[int]) -> Dict[str, int]:
 
 ### Ejemplos completos
 
-#### Función con documentación completa
-
-```python
-def factorial(n: int) -> int:
-    """
-    Calcula el factorial de un número entero no negativo.
-    
-    El factorial de n (n!) es el producto de todos los enteros 
-    positivos menores o iguales a n.
-    
-    Args:
-        n (int): Número entero no negativo
-    
-    Returns:
-        int: El factorial de n
-    
-    Raises:
-        ValueError: Si n es negativo
-        TypeError: Si n no es un entero
-    
-    Examples:
-        >>> factorial(0)
-        1
-        >>> factorial(5)
-        120
-        >>> factorial(-1)
-        ValueError: El número debe ser no negativo
-    """
-    if not isinstance(n, int):
-        raise TypeError("El argumento debe ser un entero")
-    
-    if n < 0:
-        raise ValueError("El número debe ser no negativo")
-    
-    if n == 0 or n == 1:
-        return 1
-    
-    resultado = 1
-    for i in range(2, n + 1):
-        resultado *= i
-    
-    return resultado
-
-# Ejemplo de uso con manejo de errores
-try:
-    print(factorial(5))  # 120
-    print(factorial(-1)) # Lanza ValueError
-except ValueError as e:
-    print(f"Error: {e}")
-```
-
 #### Función con múltiples características
 
 ```python
@@ -821,61 +766,3 @@ resultado = procesar_datos(datos, "promedio", filtrar_negativos=True)
 print(resultado)
 ```
 
-## Ejercicios prácticos
-
-### Ejercicio 1: Calculadora básica
-
-```python
-def calculadora(a: float, b: float, operacion: str) -> float:
-    """
-    Realiza operaciones matemáticas básicas.
-    
-    Args:
-        a: Primer número
-        b: Segundo número
-        operacion: Tipo de operación ('+', '-', '*', '/')
-    
-    Returns:
-        Resultado de la operación
-    """
-    if operacion == '+':
-        return a + b
-    elif operacion == '-':
-        return a - b
-    elif operacion == '*':
-        return a * b
-    elif operacion == '/':
-        if b == 0:
-            raise ValueError("No se puede dividir por cero")
-        return a / b
-    else:
-        raise ValueError("Operación no válida")
-```
-
-### Ejercicio 2: Validador de contraseña
-
-```python
-def validar_contraseña(contraseña: str) -> Dict[str, bool]:
-    """
-    Valida una contraseña según criterios de seguridad.
-    
-    Args:
-        contraseña: La contraseña a validar
-    
-    Returns:
-        Diccionario con los resultados de validación
-    """
-    import string
-    
-    criterios = {
-        "longitud_minima": len(contraseña) >= 8,
-        "tiene_mayuscula": any(c.isupper() for c in contraseña),
-        "tiene_minuscula": any(c.islower() for c in contraseña),
-        "tiene_numero": any(c.isdigit() for c in contraseña),
-        "tiene_especial": any(c in string.punctuation for c in contraseña)
-    }
-    
-    criterios["es_valida"] = all(criterios.values())
-    
-    return criterios
-```
