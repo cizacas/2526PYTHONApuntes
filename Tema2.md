@@ -40,8 +40,7 @@
       - [Docstring detallada](#docstring-detallada)
       - [Acceder a la documentación](#acceder-a-la-documentación)
     - [Anotaciones de tipo (Type Hints)](#anotaciones-de-tipo-type-hints)
-    - [Ejemplos completos](#ejemplos-completos)
-      - [Función con múltiples características](#función-con-múltiples-características)
+    - [Ejemplo: Función con múltiples características](#ejemplo-función-con-múltiples-características)
 
 
 ## DEFINICIÓN Y CREACIÓN DE FUNCIONES CON `def`
@@ -326,7 +325,7 @@ print(f"Matriz después de llamar la función: {mi_matriz}")
 |------------------|--------------|
 |lista.copy() |copy.deepcopy() |
 |Elementos simples ✅|Estructuras anidadas ✅|
-|Lista [1, 2, 3]|Matriz [[1, 2], [3, 4]]|
+|Lista [1, 2, 3]|Matriz `[[1, 2], [3, 4]]`|
 |Original no cambia|Original no cambia|
 
 ⚠️ Comparación con el problema de copia superficial:
@@ -368,6 +367,7 @@ ejemplo_problema_copia_superficial()
   * Elementos son inmutables (números, strings, tuplas)
   * No necesitas modificar objetos internos
   * Quieres eficiencia
+
 ⚠️ Usa profunda cuando:
   * Tienes estructuras anidadas complejas
   * Vas a modificar objetos internos
@@ -710,9 +710,7 @@ def procesar_lista(numeros: List[int]) -> Dict[str, int]:
     }
 ```
 
-### Ejemplos completos
-
-#### Función con múltiples características
+### Ejemplo: Función con múltiples características
 
 ```python
 def procesar_datos(datos: List[float], 
@@ -765,4 +763,4 @@ datos = [1.5, -2.3, 4.7, -1.2, 3.8, 0.5]
 resultado = procesar_datos(datos, "promedio", filtrar_negativos=True)
 print(resultado)
 ```
-
+:computer: Actividad 1

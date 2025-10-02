@@ -4,7 +4,9 @@ Apuntes de Fundamentos de Python del CFGS de Desarrollo de Aplicaciones Multipla
 
 ## Indice 🚀
 
-[**UNIDAD 1. Introducción a python: Instalación, tipos de datos y estructuras de control**](Tema1.md)
+[**UNIDAD 1. Introducción a Python: Instalación, tipos de datos y estructuras de control**](Tema1.md)
+
+[**UNIDAD 2. Funciones en Python**](Tema2.md)
 
 
 ## Referencias
