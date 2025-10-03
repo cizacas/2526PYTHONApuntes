@@ -1,747 +1,1143 @@
-# MÓDULOS Y PAQUETES CON FUNCIONES EN PYTHON
+# GESTION DE ARCHIVOS EN PYTHON
 
-- [MÓDULOS Y PAQUETES CON FUNCIONES EN PYTHON](#módulos-y-paquetes-con-funciones-en-python)
-  - [¿QUÉ SON LOS MÓDULOS?](#qué-son-los-módulos)
-    - [Definición](#definición)
-    - [Ventajas de usar módulos](#ventajas-de-usar-módulos)
-  - [IMPORTACIÓN DE MÓDULOS](#importación-de-módulos)
-    - [Sintaxis básica de import](#sintaxis-básica-de-import)
-    - [Importar funciones específicas](#importar-funciones-específicas)
-    - [Importar con alias](#importar-con-alias)
-    - [Importar todo (no recomendado)](#importar-todo-no-recomendado)
-    - [Importación condicional](#importación-condicional)
-  - [CREACIÓN DE MÓDULOS PERSONALIZADOS](#creación-de-módulos-personalizados)
-    - [Estructura básica de un módulo](#estructura-básica-de-un-módulo)
-    - [Variables especiales en módulos](#variables-especiales-en-módulos)
-    - [Ejecutar código solo cuando el módulo es el principal](#ejecutar-código-solo-cuando-el-módulo-es-el-principal)
-    - [Documentación de módulos](#documentación-de-módulos)
-  - [PAQUETES (PACKAGES)](#paquetes-packages)
-    - [¿Qué es un paquete?](#qué-es-un-paquete)
-    - [Estructura de directorios](#estructura-de-directorios)
-    - [El archivo __init__.py](#el-archivo-initpy)
-    - [Importación desde paquetes](#importación-desde-paquetes)
-    - [Sub-paquetes](#sub-paquetes)
-  - [ALGUNOS MÓDULOS BÁSICOS](#algunos-módulos-básicos)
-    - [math - Funciones matemáticas básicas](#math---funciones-matemáticas-básicas)
-    - [random - Números aleatorios básicos](#random---números-aleatorios-básicos)
-  - [EJEMPLO DE PROYECTO COMPLETO Ejemplo de proyecto completo con funciones](#ejemplo-de-proyecto-completo-ejemplo-de-proyecto-completo-con-funciones)
+- [GESTION DE ARCHIVOS EN PYTHON](#gestion-de-archivos-en-python)
+  - [INTRODUCCIÓN](#introducción)
+  - [MODOS DE APERTURA DE ARCHIVOS](#modos-de-apertura-de-archivos)
+  - [ABRIR Y CERRAR ARCHIVOS](#abrir-y-cerrar-archivos)
+    - [Método tradicional](#método-tradicional)
+    - [Uso de `with` (Recomendado)](#uso-de-with-recomendado)
+  - [LECTURA DE ARCHIVOS](#lectura-de-archivos)
+    - [Método `read()`](#método-read)
+    - [Método `readline()`](#método-readline)
+      - [Variantes del método `strip()`:](#variantes-del-método-strip)
+      - [También puedes especificar qué caracteres eliminar:](#también-puedes-especificar-qué-caracteres-eliminar)
+    - [Método `readlines()`](#método-readlines)
+    - [Lectura línea por línea con bucle](#lectura-línea-por-línea-con-bucle)
+    - [¿Cómo detecta Python el final de un archivo?](#cómo-detecta-python-el-final-de-un-archivo)
+      - [1. **Los archivos son objetos iterables**](#1-los-archivos-son-objetos-iterables)
+      - [2. **Protocolo de iteración**](#2-protocolo-de-iteración)
+      - [3. **La excepción `StopIteration`**](#3-la-excepción-stopiteration)
+      - [4. **Comparación con otros métodos**](#4-comparación-con-otros-métodos)
+      - [5. **Ventajas de este sistema automático**](#5-ventajas-de-este-sistema-automático)
+      - [6. **Comparación con `readlines()`**](#6-comparación-con-readlines)
+  - [ESCRITURA EN ARCHIVOS](#escritura-en-archivos)
+    - [Método `write()`](#método-write)
+    - [Método `writelines()`](#método-writelines)
+    - [Añadir contenido a un archivo](#añadir-contenido-a-un-archivo)
+  - [MANEJO DE ERRORES](#manejo-de-errores)
+    - [Excepciones comunes](#excepciones-comunes)
+    - [Uso de `try-except`](#uso-de-try-except)
+    - [Múltiples excepciones](#múltiples-excepciones)
+    - [Bloque `finally`](#bloque-finally)
+  - [FORMATOS ESPECÍFICOS DE ARCHIVOS](#formatos-específicos-de-archivos)
+    - [Archivos CSV](#archivos-csv)
+      - [Lectura de archivos CSV](#lectura-de-archivos-csv)
+      - [Escritura de archivos CSV](#escritura-de-archivos-csv)
+        - [Escritura con delimitador personalizado](#escritura-con-delimitador-personalizado)
+      - [CSV con DictReader y DictWriter](#csv-con-dictreader-y-dictwriter)
+    - [Archivos JSON](#archivos-json)
+      - [Lectura de archivos JSON](#lectura-de-archivos-json)
+      - [Escritura de archivos JSON](#escritura-de-archivos-json)
+      - [Manipulación de datos JSON](#manipulación-de-datos-json)
+  - [EJEMPLOS PRÁCTICOS](#ejemplos-prácticos)
+    - [Ejemplo 1: Contador de palabras](#ejemplo-1-contador-de-palabras)
+    - [Ejemplo 2: Registro de logs](#ejemplo-2-registro-de-logs)
+    - [Ejemplo 3: Procesamiento de datos CSV](#ejemplo-3-procesamiento-de-datos-csv)
+    - [Ejemplo 4: Configuración JSON](#ejemplo-4-configuración-json)
+  - [BUENAS PRÁCTICAS](#buenas-prácticas)
 
-## ¿QUÉ SON LOS MÓDULOS?
+## INTRODUCCIÓN
 
-### Definición
+El manejo de archivos es una funcionalidad fundamental en Python que permite leer, escribir y manipular archivos del sistema. Python proporciona funciones incorporadas y bibliotecas especializadas para trabajar con diferentes formatos de archivo.
 
-Un **módulo** en Python es un archivo que contiene código Python: funciones, variables y sentencias ejecutables. Los módulos permiten organizar y reutilizar código de manera eficiente.
+## MODOS DE APERTURA DE ARCHIVOS
 
-### Ventajas de usar módulos
+Python ofrece varios modos para abrir archivos:
 
-- **Reutilización**: Evita duplicar código
-- **Organización**: Mantiene el código ordenado y estructurado
-- **Mantenimiento**: Facilita las actualizaciones y correcciones
-- **Colaboración**: Permite trabajar en equipo de forma más eficiente
-- **Escalabilidad**: Facilita el crecimiento de proyectos grandes
+| Modo | Descripción | Comportamiento |
+|------|-------------|----------------|
+| `'r'` | Lectura (solo lectura) | Abre el archivo para lectura. Error si no existe |
+| `'w'` | Escritura | Crea un archivo nuevo o sobrescribe si existe |
+| `'a'` | Añade | Abre para escritura, añade al final del archivo |
+| `'x'` | Creación exclusiva | Crea un archivo nuevo, error si ya existe |
+| `'r+'` | Lectura y escritura | Abre para lectura y escritura |
+| `'w+'` | Escritura y lectura | Crea/sobrescribe para lectura y escritura |
+| `'a+'` | Añade y lectura | Abre para lectura y añade al final del archivo |
 
-## IMPORTACIÓN DE MÓDULOS
-
-### Sintaxis básica de import
+**Modificadores adicionales:**
+- `'t'`: Modo texto (por defecto)
+- `'b'`: Modo binario (para imágenes, videos, etc.)
 
 ```python
-# Importar un módulo completo
-import math
-print(math.pi)  # 3.141592653589793
-print(math.sqrt(16))  # 4.0
-
-# Importar módulos de la biblioteca estándar
-import os
-import datetime
-import random
-
-# Usar las funciones del módulo
-print(os.getcwd())  # Directorio actual
-print(datetime.date.today())  # Fecha actual
-print(random.randint(1, 10))  # Número aleatorio entre 1 y 10
+# Ejemplos de modos
+archivo_lectura = open('datos.txt', 'r')        # Solo lectura
+archivo_escritura = open('salida.txt', 'w')     # Solo escritura
+archivo_binario = open('imagen.jpg', 'rb')      # Lectura binaria
+archivo_texto = open('documento.txt', 'rt')     # Lectura texto (equivale a 'r')
 ```
 
-### Importar funciones específicas
+## ABRIR Y CERRAR ARCHIVOS
+
+### Método tradicional
 
 ```python
-# Importar funciones específicas
-from math import pi, sqrt, sin, cos
-print(pi)  # 3.141592653589793
-print(sqrt(25))  # 5.0
-print(sin(pi/2))  # 1.0
-
-# Importar múltiples elementos
-from datetime import date, datetime, timedelta
-hoy = date.today()
-ahora = datetime.now()
-mañana = hoy + timedelta(days=1)
+# Apertura manual (requiere cerrar explícitamente)
+archivo = open('ejemplo.txt', 'r')
+contenido = archivo.read()
+print(contenido)
+archivo.close()  # ¡Importante cerrar el archivo!
 ```
 
-### Importar con alias
+### Uso de `with` (Recomendado)
+
+El uso de `with` garantiza que el archivo se cierre automáticamente, incluso si ocurre un error:
 
 ```python
-# Alias para módulos
-import numpy as np  # Convención común
-import pandas as pd  # Convención común
-import matplotlib.pyplot as plt  # Convención común
-
-# Alias para funciones específicas
-from datetime import datetime as dt
-from collections import defaultdict as dd
-
-# Ejemplo de uso
-fecha_actual = dt.now()
-mi_dict = dd(list)
+# Método recomendado con context manager
+with open('ejemplo.txt', 'r') as archivo:
+    contenido = archivo.read()
+    print(contenido)
+# El archivo se cierra automáticamente al salir del bloque
 ```
 
-### Importar todo (no recomendado)
+**Ventajas del `with`:**
+- Cierre automático del archivo
+- Manejo automático de recursos
+- Código más limpio y seguro
+
+## LECTURA DE ARCHIVOS
+
+### Método `read()`
+
+Lee todo el contenido del archivo como una sola cadena:
 
 ```python
-# ⚠️ NO RECOMENDADO: Importar todo
-from math import *
+# Leer todo el archivo
+with open('documento.txt', 'r', encoding='utf-8') as archivo:
+    contenido_completo = archivo.read()
+    print(contenido_completo)
 
-# Problemas:
-# 1. Contamina el espacio de nombres
-# 2. Puede sobrescribir variables existentes
-# 3. Dificulta saber de dónde viene cada función
-# 4. Hace el código menos legible
-
-# ✅ MEJOR: Ser específico
-from math import pi, sqrt, sin, cos
+# Leer un número específico de caracteres
+with open('documento.txt', 'r', encoding='utf-8') as archivo:
+    primeros_100_chars = archivo.read(100)
+    print(primeros_100_chars)
 ```
 
-### Importación condicional
+### Método `readline()`
+
+Lee una línea a la vez:
 
 ```python
-# Importación condicional para compatibilidad
+with open('documento.txt', 'r', encoding='utf-8') as archivo:
+    primera_linea = archivo.readline()
+    segunda_linea = archivo.readline()
+    print("Primera línea:", primera_linea.strip())
+    print("Segunda línea:", segunda_linea.strip())
+```
+El método `strip()` es un método de las cadenas (strings) en Python que **elimina espacios en blanco y caracteres de nueva línea** `(\n)` del **inicio y final** de una cadena.
+Cuando lees una línea de un archivo con `readline()`, la cadena que obtienes incluye el carácter de nueva línea `(\n)` al final.
+
+#### Variantes del método `strip()`:
+
+- **`strip()`**: Elimina espacios y `\n` del inicio Y final
+- **`lstrip()`**: Elimina solo del lado **izquierdo** (left)
+- **`rstrip()`**: Elimina solo del lado **derecho** (right)
+
+#### También puedes especificar qué caracteres eliminar:
+
+```python
+texto = "...Hola mundo..."
+print(texto.strip('.'))  # 'Hola mundo'
+
+texto = "xxxHola mundoxxx"
+print(texto.strip('x'))  # 'Hola mundo'
+```
+
+### Método `readlines()`
+
+Lee todas las líneas y las devuelve como una lista:
+
+```python
+with open('documento.txt', 'r', encoding='utf-8') as archivo:
+    todas_las_lineas = archivo.readlines()
+    for i, linea in enumerate(todas_las_lineas, 1):
+        print(f"Línea {i}: {linea.strip()}")
+```
+Este bucle for utiliza la función `enumerate()`, que es muy útil cuando necesitas tanto el **índice** como el **valor** de cada elemento en una lista.
+Explicación:
+1. `todas_las_lineas`: Es una lista que contiene todas las líneas del archivo
+2. `enumerate(todas_las_lineas, 1)`: Crea pares de (índice, valor) empezando desde 1
+3. `i`, `linea`: Desempaqueta cada par en dos variables separadas
+
+```python
+# Sin enumerate (forma tradicional)
+todas_las_lineas = ["Hola\n", "Mundo\n", "Python\n"]
+for i in range(len(todas_las_lineas)):
+    print(f"Línea {i+1}: {todas_las_lineas[i].strip()}")
+
+# Con enumerate (forma moderna y limpia)
+for i, linea in enumerate(todas_las_lineas, 1):
+    print(f"Línea {i}: {linea.strip()}")
+
+```
+Ventajas:
+
+✅ Más legible 
+✅ Evita errores de índice
+✅ No necesitas calcular range(len(lista))
+✅ Más eficiente
+
+### Lectura línea por línea con bucle
+
+La forma más eficiente para archivos grandes:
+
+```python
+with open('documento.txt', 'r', encoding='utf-8') as archivo:
+    for numero_linea, linea in enumerate(archivo, 1):
+        print(f"Línea {numero_linea}: {linea.strip()}")
+```
+
+**Ejemplo práctico de lectura:**
+
+```python
+def mostrar_archivo_numerado(nombre_archivo):
+    """Muestra el contenido de un archivo con números de línea."""
+    try:
+        with open(nombre_archivo, 'r', encoding='utf-8') as archivo:
+            for num, linea in enumerate(archivo, 1):
+                print(f"{num:3d}: {linea.rstrip()}")
+    except FileNotFoundError:
+        print(f"Error: El archivo '{nombre_archivo}' no existe.")
+
+# Uso
+mostrar_archivo_numerado('mi_documento.txt')
+```
+
+### ¿Cómo detecta Python el final de un archivo?
+
+#### 1. **Los archivos son objetos iterables**
+
+En Python, cuando abres un archivo, se convierte en un **objeto iterable**. Esto significa que puedes usar `for` directamente sobre él:
+
+```python
+with open('archivo.txt', 'r') as archivo:
+    for linea in archivo:  # ¡Python maneja automáticamente el final!
+        print(linea.strip())
+```
+
+#### 2. **Protocolo de iteración**
+
+Python utiliza el **protocolo de iteración** que funciona así internamente:
+
+```python
+# Lo que Python hace internamente (simplificado):
+archivo = open('archivo.txt', 'r')
+iterador = iter(archivo)
+
 try:
-    import numpy as np
-    NUMPY_AVAILABLE = True
-except ImportError:
-    NUMPY_AVAILABLE = False
-    print("NumPy no está disponible")
+    while True:
+        linea = next(iterador)  # Obtiene la siguiente línea
+        print(linea.strip())    # Procesa la línea
+except StopIteration:           # ¡Aquí detecta el final!
+    pass                        # Sale del bucle automáticamente
 
-# Usar la importación condicional
-def procesar_datos(datos):
-    if NUMPY_AVAILABLE:
-        return np.array(datos).mean()
-    else:
-        return sum(datos) / len(datos)
+archivo.close()
 ```
 
-## CREACIÓN DE MÓDULOS PERSONALIZADOS
+#### 3. **La excepción `StopIteration`**
 
-### Estructura básica de un módulo
+Cuando Python llega al final del archivo:
+- El método `next()` lanza una excepción `StopIteration`
+- El bucle `for` **captura automáticamente** esta excepción
+- **Termina el bucle sin error**
 
-**Archivo: `calculadora.py`**
+#### 4. **Comparación con otros métodos**
+
 ```python
-"""
-Módulo de calculadora básica.
+# Método manual (MÁS PROPENSO A ERRORES)
+with open('archivo.txt', 'r') as archivo:
+    while True:
+        linea = archivo.readline()
+        if not linea:  # ¿Cómo sabemos si llegamos al final?
+            break      # Tenemos que verificar manualmente
+        print(linea.strip())
 
-Este módulo proporciona funciones básicas de matemáticas.
-"""
+# Método automático (RECOMENDADO)
+with open('archivo.txt', 'r') as archivo:
+    for linea in archivo:  # Python detecta automáticamente el final
+        print(linea.strip())
+```
 
-__author__ = "Tu Nombre"
-__version__ = "1.0.0"
+#### 5. **Ventajas de este sistema automático**
 
-# Variables del módulo
-PI = 3.141592653589793
+✅ **Sin errores de índice**: No necesitas saber cuántas líneas tiene el archivo
+✅ **Eficiente en memoria**: Lee línea por línea, no todo el archivo de una vez
+✅ **Código limpio**: No necesitas verificar manualmente el final
+✅ **Robusto**: Funciona con archivos de cualquier tamaño
 
-# Funciones del módulo
-def sumar(a, b):
-    """Suma dos números."""
-    return a + b
+#### 6. **Comparación con `readlines()`**
 
-def restar(a, b):
-    """Resta dos números."""
-    return a - b
+```python
+# readlines() - Carga TODO en memoria de una vez
+with open('archivo.txt', 'r') as archivo:
+    todas_las_lineas = archivo.readlines()  # ¡Carga todo!
+    for linea in todas_las_lineas:
+        print(linea.strip())
 
-def multiplicar(a, b):
-    """Multiplica dos números."""
-    return a * b
+# Iteración directa - Lee línea por línea
+with open('archivo.txt', 'r') as archivo:
+    for linea in archivo:  # ¡Solo una línea en memoria!
+        print(linea.strip())
+```
 
-def dividir(a, b):
-    """Divide dos números."""
-    if b == 0:
-        raise ValueError("No se puede dividir por cero")
-    return a / b
+**En resumen**: Python detecta automáticamente el final del archivo usando el protocolo de iteración. Cuando no hay más líneas que leer, se lanza internamente una excepción `StopIteration` que el bucle `for` captura y maneja automáticamente, terminando el bucle sin errores. ¡Es parte de la "magia" de Python que hace el código más simple y robusto!
 
-def area_circulo(radio):
-    """Calcula el área de un círculo."""
-    return PI * radio ** 2
+## ESCRITURA EN ARCHIVOS
 
-# Diccionario para almacenar historial de operaciones
-historial_operaciones = []
+### Método `write()`
 
-def realizar_operacion(a, b, operador):
-    """Realiza una operación y la guarda en el historial."""
-    if operador == '+':
-        resultado = sumar(a, b)
-    elif operador == '-':
-        resultado = restar(a, b)
-    elif operador == '*':
-        resultado = multiplicar(a, b)
-    elif operador == '/':
-        resultado = dividir(a, b)
-    else:
-        raise ValueError("Operador no válido")
+Escribe una cadena en el archivo:
+
+```python
+# Crear un nuevo archivo y escribir contenido
+with open('nuevo_archivo.txt', 'w', encoding='utf-8') as archivo:
+    archivo.write("Hola, mundo!\n")
+    archivo.write("Esta es la segunda línea.\n")
     
-    # Guardar en historial
-    operacion_str = f"{a} {operador} {b} = {resultado}"
-    historial_operaciones.append(operacion_str)
-    return resultado
-
-def mostrar_historial():
-    """Muestra todas las operaciones realizadas."""
-    print("Historial de operaciones:")
-    for operacion in historial_operaciones:
-        print(f"  {operacion}")
-
-# Código que se ejecuta al importar
-print(f"Módulo calculadora v{__version__} cargado")
+# Escribir variables
+nombre = "Python"
+version = 3.9
+with open('info.txt', 'w', encoding='utf-8') as archivo:
+    archivo.write(f"Lenguaje: {nombre}\n")
+    archivo.write(f"Versión: {version}\n")
 ```
 
-**Uso del módulo personalizado:**
-```python
-# Importar el módulo completo
-import calculadora
+### Método `writelines()`
 
-resultado = calculadora.sumar(5, 3)
-print(f"5 + 3 = {resultado}")
-
-# Usar las funciones del módulo
-resultado = calculadora.realizar_operacion(10, 2, '/')
-print(f"10 / 2 = {resultado}")
-
-# Mostrar el historial
-calculadora.mostrar_historial()
-
-# Importar funciones específicas
-from calculadora import sumar, dividir, realizar_operacion
-
-print(sumar(10, 20))
-print(dividir(15, 3))
-print(realizar_operacion(8, 4, '*'))
-```
-
-### Variables especiales en módulos
+Escribe una lista de cadenas:
 
 ```python
-# En el módulo
-print(f"Nombre del módulo: {__name__}")
-print(f"Archivo del módulo: {__file__}")
-print(f"Documentación: {__doc__}")
-
-# Variables especiales disponibles
-__name__      # Nombre del módulo
-__file__      # Ruta del archivo del módulo
-__doc__       # Documentación del módulo
-__package__   # Paquete al que pertenece
-__version__   # Versión (definida por el programador)
-__author__    # Autor (definida por el programador)
-```
-
-### Ejecutar código solo cuando el módulo es el principal
-
-```python
-# En calculadora.py
-def sumar(a, b):
-    return a + b
-
-def main():
-    """Función principal para pruebas."""
-    print("Probando el módulo calculadora:")
-    print(f"2 + 3 = {sumar(2, 3)}")
-    print(f"10 + 5 = {sumar(10, 5)}")
-
-# Este código solo se ejecuta si el archivo se ejecuta directamente
-if __name__ == "__main__":
-    main()
-```
-
-### Documentación de módulos
-
-```python
-"""
-Módulo de utilidades matemáticas avanzadas.
-
-Este módulo proporciona funciones matemáticas útiles para
-cálculos científicos y estadísticos.
-
-Funciones disponibles:
-    - factorial(n): Calcula el factorial de n
-    - fibonacci(n): Calcula el n-ésimo número de Fibonacci
-    - es_primo(n): Verifica si un número es primo
-
-Ejemplo:
-    >>> import matematicas_avanzadas
-    >>> matematicas_avanzadas.factorial(5)
-    120
-"""
-
-def factorial(n):
-    """
-    Calcula el factorial de un número.
-    
-    Args:
-        n (int): Número no negativo
-    
-    Returns:
-        int: Factorial de n
-    
-    Raises:
-        ValueError: Si n es negativo
-    
-    Example:
-        >>> factorial(5)
-        120
-        >>> factorial(0)
-        1
-    """
-    if n < 0:
-        raise ValueError("El factorial no está definido para números negativos")
-    if n == 0:
-        return 1
-    return n * factorial(n - 1)
-```
-
-## PAQUETES (PACKAGES)
-
-### ¿Qué es un paquete?
-
-Un **paquete** es una forma de organizar módulos relacionados en una estructura de directorios. Los paquetes permiten crear jerarquías de módulos usando la notación de punto.
-
-### Estructura de directorios
-
-```
-mi_proyecto/
-│
-├── main.py
-├── utilidades/
-│   ├── __init__.py
-│   ├── matematicas.py
-│   ├── texto.py
-│   └── archivos.py
-│
-├── modelos/
-│   ├── __init__.py
-│   ├── usuario.py
-│   └── producto.py
-│
-└── tests/
-    ├── __init__.py
-    ├── test_matematicas.py
-    └── test_usuario.py
-```
-
-### El archivo __init__.py
-
-El archivo `__init__.py` convierte un directorio en un paquete Python:
-
-**`utilidades/__init__.py`**
-```python
-"""
-Paquete de utilidades para el proyecto.
-
-Contiene módulos para matemáticas, texto y manejo de archivos.
-"""
-
-# Versión del paquete
-__version__ = "1.0.0"
-
-# Importar funciones principales para acceso directo
-from .matematicas import sumar, multiplicar
-from .texto import limpiar_texto, capitalizar_palabras
-
-# Lista de elementos disponibles al usar "from utilidades import *"
-__all__ = [
-    'sumar', 
-    'multiplicar', 
-    'limpiar_texto', 
-    'capitalizar_palabras'
+lineas = [
+    "Primera línea\n",
+    "Segunda línea\n",
+    "Tercera línea\n"
 ]
 
-# Inicialización del paquete
-print(f"Paquete utilidades v{__version__} inicializado")
+with open('multiple_lines.txt', 'w', encoding='utf-8') as archivo:
+    archivo.writelines(lineas)
+
+# También se puede usar con cualquier iterable
+datos = ['apple', 'banana', 'cherry']
+with open('frutas.txt', 'w', encoding='utf-8') as archivo:
+    archivo.writelines(f"{fruta}\n" for fruta in datos)
 ```
 
-**`utilidades/matematicas.py`**
-```python
-"""Módulo de operaciones matemáticas."""
-
-def sumar(a, b):
-    """Suma dos números."""
-    return a + b
-
-def restar(a, b):
-    """Resta dos números."""
-    return a - b
-
-def multiplicar(a, b):
-    """Multiplica dos números."""
-    return a * b
-
-def factorial(n):
-    """Calcula el factorial de n."""
-    if n <= 1:
-        return 1
-    return n * factorial(n - 1)
-```
-
-**`utilidades/texto.py`**
-```python
-"""Módulo para procesamiento de texto."""
-
-def limpiar_texto(texto):
-    """Elimina espacios extra y normaliza el texto."""
-    return " ".join(texto.split())
-
-def capitalizar_palabras(texto):
-    """Capitaliza la primera letra de cada palabra."""
-    return texto.title()
-
-def contar_palabras(texto):
-    """Cuenta el número de palabras en el texto."""
-    return len(texto.split())
-```
-
-### Importación desde paquetes
+### Añadir contenido a un archivo
 
 ```python
-# Importar módulo completo del paquete
-import utilidades.matematicas
-resultado = utilidades.matematicas.sumar(5, 3)
+# Añadir al final del archivo existente
+with open('log.txt', 'a', encoding='utf-8') as archivo:
+    archivo.write("Nueva entrada de log\n")
+    
+# Diferentes formas de importar la librería datetime:
 
-# Importar funciones específicas
-from utilidades.matematicas import sumar, factorial
-print(sumar(10, 20))
-print(factorial(5))
+# 1. Importar solo la clase datetime del módulo datetime
+# from datetime import datetime
 
-# Importar desde el __init__.py del paquete
-from utilidades import sumar, limpiar_texto
+# 2. Importar todo el módulo datetime
+# import datetime
 
-# Importar módulo con alias
-import utilidades.texto as txt
-texto_limpio = txt.limpiar_texto("  hola   mundo  ")
+# 3. Importar el módulo con un alias
+# import datetime as dt
 
-# Importar todo el paquete
-import utilidades
-resultado = utilidades.sumar(5, 3)  # Disponible por __init__.py
+# 4. Importar múltiples clases del módulo datetime
+# from datetime import datetime, date, time
+
+# 5. Importar todo del módulo datetime (no recomendado)
+# from datetime import *
+
+# Ejemplo usando cada forma de importación:
+
+# Forma 1: from datetime import datetime
+def registrar_evento_forma1(evento):
+    from datetime import datetime
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open('eventos.log', 'a', encoding='utf-8') as archivo:
+        archivo.write(f"[{timestamp}] {evento}\n")
+
+# Forma 2: import datetime
+def registrar_evento_forma2(evento):
+    import datetime
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open('eventos.log', 'a', encoding='utf-8') as archivo:
+        archivo.write(f"[{timestamp}] {evento}\n")
+
+# Forma 3: import datetime as dt
+def registrar_evento_forma3(evento):
+    import datetime as dt
+    timestamp = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open('eventos.log', 'a', encoding='utf-8') as archivo:
+        archivo.write(f"[{timestamp}] {evento}\n")
+
+# Uso de las diferentes formas
+registrar_evento_forma1("Aplicación iniciada - Forma 1")
+registrar_evento_forma2("Aplicación iniciada - Forma 2")
+registrar_evento_forma3("Aplicación iniciada - Forma 3")
+
+## Comparación de las diferentes formas de importar datetime:
+
+### 1. `from datetime import datetime`
+**Ventajas:**
+- Más conciso en el código
+- No necesitas prefijo para usar la clase
+- Más legible cuando solo usas datetime
+
+**Desventajas:**
+- Puede crear conflictos de nombres si tienes otra variable llamada `datetime`
+- Menos claro de dónde viene la clase
+
+### 2. `import datetime`
+**Ventajas:**
+- Más explícito sobre el origen del módulo
+- Evita conflictos de nombres
+- Acceso a todas las clases del módulo (datetime, date, time, etc.)
+
+**Desventajas:**
+- Código más largo: `datetime.datetime.now()`
+- Puede ser confuso tener que escribir `datetime.datetime`
+
+### 3. `import datetime as dt`
+**Ventajas:**
+- Más corto que `datetime.datetime`
+- Mantiene la claridad del origen
+- Convención común en la comunidad Python
+
+**Desventajas:**
+- Requiere recordar el alias
+- Sigue siendo más largo que la forma 1
+
+### 4. `from datetime import datetime, date, time`
+**Ventajas:**
+- Importa múltiples clases de una vez
+- Código conciso para cada clase
+
+**Desventajas:**
+- La línea de importación puede volverse muy larga
+- Posibles conflictos de nombres
+
+### 5. `from datetime import *` (NO RECOMENDADO)
+**Por qué NO es recomendado:**
+- Contamina el namespace global
+- Puede sobrescribir funciones existentes
+- Hace el código menos legible
+- Dificulta el debugging
+
+## ✅ RECOMENDACIONES DE USO:
+
+### **FORMA 1**: `from datetime import datetime` 
+**✅ Recomendada cuando:**
+- Solo necesitas la clase `datetime`
+- Escribes código simple o scripts pequeños
+- No hay riesgo de conflictos de nombres
+
+### **FORMA 3**: `import datetime as dt`
+**✅ Recomendada cuando:**
+- Trabajas en proyectos grandes
+- Necesitas claridad sobre el origen del módulo
+- Quieres evitar conflictos de nombres
+- Sigues convenciones de la comunidad Python
+
+### **MENOS RECOMENDADAS:**
+- **Forma 2** (`import datetime`): Muy extensa (`datetime.datetime.now()`)
+- **Forma 4** (`from datetime import datetime, date, time`): Solo si necesitas múltiples clases
+- **Forma 5** (`from datetime import *`): ❌ **NUNCA recomendada**
+
+### **CONCLUSIÓN:**
+En la práctica, **la Forma 1 y la Forma 3 son las más utilizadas** por los desarrolladores Python. La elección entre ellas depende del contexto y preferencias del proyecto.
 ```
 
-### Sub-paquetes
+## MANEJO DE ERRORES
 
-```
-proyecto_web/
-│
-├── main.py
-├── backend/
-│   ├── __init__.py
-│   ├── api/
-│   │   ├── __init__.py
-│   │   ├── usuarios.py
-│   │   └── productos.py
-│   ├── database/
-│   │   ├── __init__.py
-│   │   ├── conexion.py
-│   │   └── modelos.py
-│   └── utils/
-│       ├── __init__.py
-│       └── validadores.py
-│
-└── frontend/
-    ├── __init__.py
-    ├── static/
-    └── templates/
-```
+### Excepciones comunes
+
+| Excepción | Descripción |
+|-----------|-------------|
+| `FileNotFoundError` | El archivo no existe |
+| `PermissionError` | Sin permisos para acceder al archivo |
+| `IsADirectoryError` | Se intentó abrir un directorio como archivo |
+| `UnicodeDecodeError` | Error de codificación al leer |
+| `IOError` | Error general de entrada/salida |
+
+### Uso de `try-except`
 
 ```python
-# Importación de sub-paquetes
-from backend.api.usuarios import obtener_usuario
-from backend.database.conexion import conectar_db
-from backend.utils.validadores import validar_email
-
-# Importación relativa (desde dentro del paquete)
-# En backend/api/usuarios.py
-from ..database.modelos import Usuario  # Subir un nivel
-from ...utils import helper_function    # Subir dos niveles
-from .productos import obtener_producto # Mismo nivel
-```
-
-## ALGUNOS MÓDULOS BÁSICOS
-
-Python incluye algunos módulos básicos que son útiles para empezar a trabajar con importaciones y que hemos utilizado en ejercicios anteriores.
-
-### math - Funciones matemáticas básicas
-
-```python
-import math
-
-# Constantes matemáticas básicas
-print(f"Pi: {math.pi}")
-print(f"e: {math.e}")
-
-# Funciones matemáticas básicas
-print(f"Raíz cuadrada de 16: {math.sqrt(16)}")
-print(f"2 elevado a 3: {math.pow(2, 3)}")
-print(f"Valor absoluto de -5: {abs(-5)}")  # abs() es función incorporada
-
-# Funciones de redondeo
-print(f"Redondear hacia arriba 4.3: {math.ceil(4.3)}")   # 5
-print(f"Redondear hacia abajo 4.7: {math.floor(4.7)}")   # 4
-
-# Importar funciones específicas
-from math import sqrt, pi
-print(f"Área del círculo (radio 3): {pi * sqrt(9)}")
-```
-
-### random - Números aleatorios básicos
-
-```python
-import random
-
-# Número aleatorio entre 0 y 1
-print(f"Número decimal aleatorio: {random.random()}")
-
-# Número entero aleatorio
-print(f"Número entre 1 y 10: {random.randint(1, 10)}")
-
-# Elegir elemento aleatorio de una lista
-colores = ['rojo', 'azul', 'verde', 'amarillo']
-color_elegido = random.choice(colores)
-print(f"Color elegido: {color_elegido}")
-
-# Mezclar una lista
-numeros = [1, 2, 3, 4, 5]
-random.shuffle(numeros)
-print(f"Lista mezclada: {numeros}")
-
-# Usar un alias para el módulo
-import random as rnd
-print(f"Otro número aleatorio: {rnd.randint(1, 100)}")
-```
-
-## EJEMPLO DE PROYECTO COMPLETO Ejemplo de proyecto completo con funciones
-
-**`biblioteca/__init__.py`**
-```python
-"""
-Sistema de gestión de biblioteca.
-
-Un paquete para gestionar libros y operaciones básicas.
-"""
-
-__version__ = "1.0.0"
-__author__ = "Tu Nombre"
-
-# Importar funciones principales
-from .gestion_libros import agregar_libro, buscar_libro, listar_libros
-from .operaciones import calcular_multa, dias_prestamo
-
-print(f"Biblioteca v{__version__} cargada")
-```
-
-**`biblioteca/gestion_libros.py`**
-```python
-"""Funciones para gestionar libros."""
-
-# Base de datos simple con listas y diccionarios
-biblioteca = []
-prestamos = {}
-
-def agregar_libro(id_libro, titulo, autor, categoria):
-    """Agrega un libro a la biblioteca."""
-    # Verificar que no existe ya
-    for libro in biblioteca:
-        if libro['id'] == id_libro:
-            raise ValueError(f"Ya existe un libro con ID {id_libro}")
-    
-    libro = {
-        'id': id_libro,
-        'titulo': titulo,
-        'autor': autor,
-        'categoria': categoria,
-        'disponible': True
-    }
-    
-    biblioteca.append(libro)
-    print(f"Libro agregado: {titulo} por {autor}")
-
-def buscar_libro(id_libro):
-    """Busca un libro por ID."""
-    for libro in biblioteca:
-        if libro['id'] == id_libro:
-            return libro
-    return None
-
-def listar_libros(categoria=None):
-    """Lista todos los libros o por categoría."""
-    if categoria:
-        return [libro for libro in biblioteca if libro['categoria'].lower() == categoria.lower()]
-    return biblioteca
-
-def prestar_libro(id_libro, usuario):
-    """Registra el préstamo de un libro."""
-    libro = buscar_libro(id_libro)
-    if not libro:
-        raise ValueError("Libro no encontrado")
-    
-    if not libro['disponible']:
-        raise ValueError("Libro no disponible")
-    
-    libro['disponible'] = False
-    prestamos[id_libro] = {
-        'usuario': usuario,
-        'fecha_prestamo': None  # Se podría usar datetime cuando lo vean
-    }
-    
-    print(f"Libro '{libro['titulo']}' prestado a {usuario}")
-
-def devolver_libro(id_libro):
-    """Registra la devolución de un libro."""
-    libro = buscar_libro(id_libro)
-    if not libro:
-        raise ValueError("Libro no encontrado")
-    
-    if libro['disponible']:
-        raise ValueError("El libro no estaba prestado")
-    
-    libro['disponible'] = True
-    usuario = prestamos[id_libro]['usuario']
-    del prestamos[id_libro]
-    
-    print(f"Libro '{libro['titulo']}' devuelto por {usuario}")
-```
-
-**`biblioteca/operaciones.py`**
-```python
-"""Funciones para operaciones y cálculos."""
-
-def calcular_multa(dias_retraso, tarifa_diaria=1.0):
-    """Calcula la multa por retraso en devolución."""
-    if dias_retraso <= 0:
-        return 0.0
-    
-    return dias_retraso * tarifa_diaria
-
-def dias_prestamo(fecha_prestamo, fecha_actual):
-    """Calcula los días de préstamo (simulado con números)."""
-    # Para este ejemplo, trabajamos con números simples
-    # En un tema posterior usarían datetime
-    return abs(fecha_actual - fecha_prestamo)
-
-def generar_reporte():
-    """Genera un reporte simple de la biblioteca."""
-    from .gestion_libros import biblioteca, prestamos
-    
-    total_libros = len(biblioteca)
-    libros_disponibles = sum(1 for libro in biblioteca if libro['disponible'])
-    libros_prestados = total_libros - libros_disponibles
-    
-    print("=== REPORTE DE BIBLIOTECA ===")
-    print(f"Total de libros: {total_libros}")
-    print(f"Libros disponibles: {libros_disponibles}")
-    print(f"Libros prestados: {libros_prestados}")
-    
-    if prestamos:
-        print("\nLibros prestados actualmente:")
-        for id_libro, info in prestamos.items():
-            from .gestion_libros import buscar_libro
-            libro = buscar_libro(id_libro)
-            print(f"  - {libro['titulo']} (prestado a {info['usuario']})")
-
-def estadisticas_por_categoria():
-    """Muestra estadísticas por categoría."""
-    from .gestion_libros import biblioteca
-    
-    categorias = {}
-    
-    for libro in biblioteca:
-        categoria = libro['categoria']
-        if categoria not in categorias:
-            categorias[categoria] = {'total': 0, 'disponibles': 0}
-        
-        categorias[categoria]['total'] += 1
-        if libro['disponible']:
-            categorias[categoria]['disponibles'] += 1
-    
-    print("=== ESTADÍSTICAS POR CATEGORÍA ===")
-    for categoria, stats in categorias.items():
-        prestados = stats['total'] - stats['disponibles']
-        print(f"{categoria}:")
-        print(f"  Total: {stats['total']}")
-        print(f"  Disponibles: {stats['disponibles']}")
-        print(f"  Prestados: {prestados}")
-```
-
-**`biblioteca/main.py`**
-```python
-"""Programa principal de la biblioteca."""
-
-from .gestion_libros import (
-    agregar_libro, listar_libros, prestar_libro, 
-    devolver_libro, buscar_libro
-)
-from .operaciones import generar_reporte, estadisticas_por_categoria, calcular_multa
-
-def inicializar_biblioteca():
-    """Carga algunos libros de ejemplo."""
-    libros_ejemplo = [
-        (1, "Aprender Python", "Mark Lutz", "Programación"),
-        (2, "El Quijote", "Cervantes", "Literatura"),
-        (3, "Algoritmos", "Cormen", "Programación"),
-        (4, "Cien años de soledad", "García Márquez", "Literatura"),
-    ]
-    
-    for id_libro, titulo, autor, categoria in libros_ejemplo:
-        agregar_libro(id_libro, titulo, autor, categoria)
-
-def main():
-    """Función principal del programa."""
-    print("=== SISTEMA DE GESTIÓN DE BIBLIOTECA ===")
-    
-    # Inicializar con datos de ejemplo
-    inicializar_biblioteca()
-    
-    # Mostrar todos los libros
-    print("\n--- CATÁLOGO COMPLETO ---")
-    todos_los_libros = listar_libros()
-    for libro in todos_los_libros:
-        estado = "Disponible" if libro['disponible'] else "Prestado"
-        print(f"  {libro['id']} - {libro['titulo']} ({libro['autor']}) - {estado}")
-    
-    # Realizar algunos préstamos
-    print("\n--- REALIZANDO PRÉSTAMOS ---")
+def leer_archivo_seguro(nombre_archivo):
+    """Lee un archivo de forma segura manejando errores."""
     try:
-        prestar_libro(1, "Ana García")
-        prestar_libro(3, "Luis Martín")
-    except ValueError as e:
-        print(f"Error: {e}")
-    
-    # Mostrar estado actualizado
-    print("\n--- ESTADO DESPUÉS DE PRÉSTAMOS ---")
-    generar_reporte()
-    
-    # Mostrar estadísticas por categoría
-    print()
-    estadisticas_por_categoria()
-    
-    # Calcular multa de ejemplo
-    print("\n--- EJEMPLO DE CÁLCULO DE MULTA ---")
-    dias_retraso = 5
-    multa = calcular_multa(dias_retraso, 1.5)
-    print(f"Multa por {dias_retraso} días de retraso: ${multa:.2f}")
+        with open(nombre_archivo, 'r', encoding='utf-8') as archivo:
+            return archivo.read()
+    except FileNotFoundError:
+        print(f"Error: El archivo '{nombre_archivo}' no fue encontrado.")
+        return None
+    except PermissionError:
+        print(f"Error: Sin permisos para leer '{nombre_archivo}'.")
+        return None
+    except UnicodeDecodeError:
+        print(f"Error: Problemas de codificación en '{nombre_archivo}'.")
+        return None
 
-if __name__ == "__main__":
-    main()
+# Uso
+contenido = leer_archivo_seguro('mi_archivo.txt')
+if contenido:
+    print(contenido)
 ```
 
-Este proyecto nos muestras las mejores prácticas:
-- ✅ Estructura clara y organizada
-- ✅ Separación de responsabilidades en diferentes módulos
-- ✅ Documentación completa con docstrings
-- ✅ Uso de funciones para organizar el código
-- ✅ Trabajo con diccionarios y listas para almacenar datos
-- ✅ Manejo de importaciones entre módulos del paquete
+### Múltiples excepciones
 
-:computer: Actividad 1
+```python
+def escribir_archivo_seguro(nombre_archivo, contenido):
+    """Escribe un archivo manejando múltiples errores."""
+    try:
+        with open(nombre_archivo, 'w', encoding='utf-8') as archivo:
+            archivo.write(contenido)
+        print(f"Archivo '{nombre_archivo}' creado exitosamente.")
+        return True
+    except (PermissionError, OSError) as e:
+        print(f"Error al crear el archivo: {e}")
+        return False
+    except Exception as e:
+        print(f"Error inesperado: {e}")
+        return False
+```
+
+### Bloque `finally`
+
+```python
+def procesar_archivo(nombre_archivo):
+    """Ejemplo de uso de finally."""
+    archivo = None
+    try:
+        archivo = open(nombre_archivo, 'r')
+        # Procesar archivo
+        contenido = archivo.read()
+        return contenido
+    except FileNotFoundError:
+        print("Archivo no encontrado")
+        return None
+    finally:
+        # Este bloque SIEMPRE se ejecuta
+        if archivo:
+            archivo.close()
+            print("Archivo cerrado")
+```
+
+## FORMATOS ESPECÍFICOS DE ARCHIVOS
+
+### Archivos CSV
+
+CSV (Comma-Separated Values) es un formato común para datos tabulares.
+Vamos a utilizar la librería estándar de Python `csv`, este módulo viene incluido en Python, es parte del núcleo del lenguaje. 
+* Facilita la lectura y escritura de archivos CSV(Comma Separated Values).
+* Maneja automáticamente aspectos complejos como:
+    * Comillas en los datos
+    * Comas dentro de los campos
+    * Diferentes delimitadores
+    * Saltos de línea en los datos
+
+#### Lectura de archivos CSV
+
+```python
+import csv
+
+# Lectura básica
+def leer_csv_basico(nombre_archivo):
+    """Lee un archivo CSV de forma básica."""
+    with open(nombre_archivo, 'r', encoding='utf-8') as archivo:
+        lector = csv.reader(archivo)
+        for fila in lector:
+            print(fila)
+
+# Ejemplo de uso
+# leer_csv_basico('datos.csv')
+
+# Lectura con cabeceras
+def leer_csv_con_cabeceras(nombre_archivo):
+    """Lee un CSV mostrando cabeceras y datos."""
+    with open(nombre_archivo, 'r', encoding='utf-8') as archivo:
+        lector = csv.reader(archivo)
+        cabeceras = next(lector)  # Primera fila como cabeceras
+        print("Cabeceras:", cabeceras)
+        
+        for i, fila in enumerate(lector, 1):
+            print(f"Fila {i}: {fila}")
+
+# Ejemplo con diferentes delimitadores
+def leer_csv_personalizado(nombre_archivo, delimitador=','):
+    """Lee CSV con delimitador personalizado."""
+    with open(nombre_archivo, 'r', encoding='utf-8') as archivo:
+        lector = csv.reader(archivo, delimiter=delimitador)
+```
+📌 IMPORTANTE: Delimitadores en CSV
+
+**Delimitador por defecto: `,` (coma)**
+El módulo `csv` de Python usa la **coma (`,`)** como delimitador por defecto.
+
+```python
+# Esto es equivalente:
+csv.reader(archivo)
+csv.reader(archivo, delimiter=',')
+```
+
+#### Escritura de archivos CSV
+
+```python
+import csv
+
+# Escritura básica
+def escribir_csv_basico(nombre_archivo, datos):
+    """Escribe datos en formato CSV."""
+    with open(nombre_archivo, 'w', newline='', encoding='utf-8') as archivo:
+        escritor = csv.writer(archivo)
+        escritor.writerows(datos)
+
+# Ejemplo de uso
+datos_ejemplo = [
+    ['Nombre', 'Edad', 'Ciudad'],
+    ['Juan', 25, 'Madrid'],
+    ['Ana', 30, 'Barcelona'],
+    ['Carlos', 22, 'Valencia']
+]
+escribir_csv_basico('personas.csv', datos_ejemplo)
+```
+
+📌 IMPORTANTE: Uso de `newline=''` en archivos CSV
+
+El parámetro `newline=''` es específico y muy importante cuando trabajas con archivos CSV en Python. Su función es:
+
+**¿Qué hace `newline=''`?**
+
+Evita líneas en blanco extra: Sin este parámetro, Python puede agregar líneas vacías adicionales entre las filas del CSV, especialmente en Windows.
+
+Permite al módulo csv controlar los saltos de línea: El módulo csv está diseñado para manejar los saltos de línea por sí mismo, y newline='' le da control total sobre esto.
+
+**¿Por qué es importante?**
+
+* **Compatibilidad multiplataforma**: Funciona correctamente en Windows, macOS y Linux
+* **Formato CSV estándar**: Mantiene el formato CSV limpio y sin líneas vacías inesperadas
+* **Mejores prácticas**: Es la forma recomendada oficialmente por Python
+
+##### Escritura con delimitador personalizado
+
+```python
+def escribir_csv_personalizado(nombre_archivo, datos, delimitador=';'):
+    """Escribe CSV con delimitador personalizado."""
+    with open(nombre_archivo, 'w', newline='', encoding='utf-8') as archivo:
+        escritor = csv.writer(archivo, delimiter=delimitador)
+        escritor.writerows(datos)
+```
+
+#### CSV con DictReader y DictWriter
+
+* **csv.DictReader**: Lee archivos CSV y convierte cada fila en un diccionario, donde las claves son los nombres de las columnas (cabeceras) y los valores son los datos de cada celda.
+
+* **csv.DictWriter**: Escribe archivos CSV desde diccionarios, donde especificas qué claves del diccionario corresponden a qué columnas.
+
+**Principales ventajas de DictReader/DictWriter**:
+
+1. 📌 **Legibilidad**: El código es mucho más claro porque usas nombres de columnas en lugar de índices numéricos.
+2. 🔧 **Mantenibilidad**: Si cambia el orden de las columnas en el CSV, tu código sigue funcionando.
+3. 🚫 **Menos errores**: No hay riesgo de confundir posiciones (¿era la edad la columna 1 o 2?).
+4. 📝 **Autoexplicativo**: fila['nombre'] es más descriptivo que fila[0].
+5. 🔄 **Flexibilidad**: Puedes trabajar directamente con estructuras de datos más complejas.
+
+```python
+import csv
+
+# Lectura como diccionario
+def leer_csv_como_dict(nombre_archivo):
+    """Lee CSV y devuelve lista de diccionarios."""
+    personas = []
+    with open(nombre_archivo, 'r', encoding='utf-8') as archivo:
+        lector = csv.DictReader(archivo)
+        for fila in lector:
+            personas.append(fila)
+    return personas
+
+# Escritura desde diccionarios
+def escribir_csv_desde_dict(nombre_archivo, datos, campos):
+    """
+    Escribe CSV desde lista de diccionarios.
+    
+    Parámetros:
+    - nombre_archivo: string - Nombre del archivo CSV a crear
+    - datos: list - Lista de diccionarios con la información a escribir
+    - campos: list - Lista con los nombres de las columnas (cabeceras del CSV)
+    """
+    with open(nombre_archivo, 'w', newline='', encoding='utf-8') as archivo:
+        # DictWriter necesita saber cuáles son las columnas (fieldnames)
+        escritor = csv.DictWriter(archivo, fieldnames=campos)
+        escritor.writeheader()  # Escribir cabeceras (primera fila)
+        escritor.writerows(datos)  # Escribir todas las filas de datos
+```
+📌 EXPLICACIÓN DE PARÁMETROS:
+
+**`datos`** = Lista de diccionarios con la información
+Es una lista donde cada elemento es un diccionario que representa una fila:
+
+```python
+datos = [
+    {'nombre': 'Laura', 'edad': 28, 'profesion': 'Ingeniera'},    # Fila 1
+    {'nombre': 'Miguel', 'edad': 35, 'profesion': 'Doctor'},      # Fila 2  
+    {'nombre': 'Sofia', 'edad': 24, 'profesion': 'Diseñadora'}   # Fila 3
+]
+```
+
+**`campos`** = Lista de nombres de columnas (cabeceras)
+Es una lista con los nombres que aparecerán como cabeceras del CSV:
+
+```python
+campos = ['nombre', 'edad', 'profesion']
+```
+
+**Resultado final en el CSV:**
+```
+nombre,edad,profesion
+Laura,28,Ingeniera
+Miguel,35,Doctor
+Sofia,24,Diseñadora
+```
+
+### Archivos JSON
+
+JSON (JavaScript Object Notation) es un formato popular para intercambio de datos.
+
+#### Lectura de archivos JSON
+
+```python
+import json
+
+# Lectura básica
+def leer_json(nombre_archivo):
+    """Lee y devuelve datos de un archivo JSON."""
+    try:
+        with open(nombre_archivo, 'r', encoding='utf-8') as archivo:
+            datos = json.load(archivo)
+            return datos
+    except json.JSONDecodeError:
+        print("Error: Formato JSON inválido")
+        return None
+    except FileNotFoundError:
+        print(f"Error: Archivo '{nombre_archivo}' no encontrado")
+        return None
+
+# Ejemplo de uso
+datos = leer_json('configuracion.json')
+if datos:
+    print("Datos cargados:", datos)
+```
+
+#### Escritura de archivos JSON
+
+```python
+import json
+
+# Escritura básica
+def escribir_json(nombre_archivo, datos):
+    """Escribe datos en formato JSON."""
+    try:
+        with open(nombre_archivo, 'w', encoding='utf-8') as archivo:
+            json.dump(datos, archivo, ensure_ascii=False, indent=4)
+        print(f"Archivo JSON '{nombre_archivo}' creado exitosamente.")
+    except Exception as e:
+        print(f"Error al escribir JSON: {e}")
+
+# Ejemplo de uso
+configuracion = {
+    "aplicacion": "Mi App",
+    "version": "1.0.0",
+    "configuracion": {
+        "debug": True,
+        "puerto": 8080,
+        "base_datos": {
+            "host": "localhost",
+            "puerto": 5432,
+            "nombre": "mi_db"
+        }
+    },
+    "usuarios": [
+        {"nombre": "admin", "rol": "administrador"},
+        {"nombre": "usuario1", "rol": "usuario"}
+    ]
+}
+
+escribir_json('config.json', configuracion)
+```
+
+#### Manipulación de datos JSON
+
+```python
+import json
+
+def actualizar_configuracion(archivo, nueva_config):
+    """Actualiza parcialmente un archivo de configuración JSON."""
+    # Leer configuración actual
+    try:
+        with open(archivo, 'r', encoding='utf-8') as f:
+            config_actual = json.load(f)
+    except FileNotFoundError:
+        config_actual = {}
+    
+    # Actualizar con nueva configuración
+    config_actual.update(nueva_config)
+    
+    # Guardar configuración actualizada
+    with open(archivo, 'w', encoding='utf-8') as f:
+        json.dump(config_actual, f, ensure_ascii=False, indent=4)
+
+# Ejemplo de uso
+nueva_configuracion = {
+    "puerto": 9000,
+    "debug": False
+}
+actualizar_configuracion('config.json', nueva_configuracion)
+```
+
+## EJEMPLOS PRÁCTICOS
+
+### Ejemplo 1: Contador de palabras
+
+```python
+def contar_palabras(nombre_archivo):
+    """Cuenta palabras, líneas y caracteres de un archivo."""
+    try:
+        with open(nombre_archivo, 'r', encoding='utf-8') as archivo:
+            contenido = archivo.read()
+            
+        # Contar elementos
+        caracteres = len(contenido)
+        palabras = len(contenido.split())
+        lineas = contenido.count('\n') + 1
+        
+        # Mostrar estadísticas
+        print(f"Estadísticas de '{nombre_archivo}':")
+        print(f"  Caracteres: {caracteres}")
+        print(f"  Palabras: {palabras}")
+        print(f"  Líneas: {lineas}")
+        
+        return {'caracteres': caracteres, 'palabras': palabras, 'lineas': lineas}
+        
+    except FileNotFoundError:
+        print(f"Error: El archivo '{nombre_archivo}' no existe.")
+        return None
+
+# Uso
+estadisticas = contar_palabras('documento.txt')
+```
+
+### Ejemplo 2: Registro de logs
+
+```python
+from datetime import datetime
+import os
+
+class Logger:
+    """Clase para manejar registros de log."""
+    
+    def __init__(self, archivo_log='aplicacion.log'):
+        self.archivo_log = archivo_log
+    
+    def escribir_log(self, nivel, mensaje):
+        """Escribe una entrada de log."""
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        entrada = f"[{timestamp}] {nivel.upper()}: {mensaje}\n"
+        
+        try:
+            with open(self.archivo_log, 'a', encoding='utf-8') as archivo:
+                archivo.write(entrada)
+        except Exception as e:
+            print(f"Error al escribir log: {e}")
+    
+    def info(self, mensaje):
+        """Registra un mensaje informativo."""
+        self.escribir_log('INFO', mensaje)
+    
+    def error(self, mensaje):
+        """Registra un mensaje de error."""
+        self.escribir_log('ERROR', mensaje)
+    
+    def warning(self, mensaje):
+        """Registra un mensaje de advertencia."""
+        self.escribir_log('WARNING', mensaje)
+    
+    def leer_logs(self, ultimas_lineas=10):
+        """Lee las últimas líneas del log."""
+        try:
+            with open(self.archivo_log, 'r', encoding='utf-8') as archivo:
+                lineas = archivo.readlines()
+                return lineas[-ultimas_lineas:]
+        except FileNotFoundError:
+            return []
+
+# Ejemplo de uso
+logger = Logger('mi_app.log')
+logger.info('Aplicación iniciada')
+logger.warning('Memoria baja')
+logger.error('Error de conexión')
+
+# Leer últimos logs
+ultimos_logs = logger.leer_logs(5)
+for log in ultimos_logs:
+    print(log.strip())
+```
+
+### Ejemplo 3: Procesamiento de datos CSV
+
+```python
+import csv
+from collections import defaultdict
+
+def analizar_ventas(archivo_csv):
+    """Analiza datos de ventas desde un archivo CSV."""
+    ventas_por_producto = defaultdict(float)
+    ventas_por_mes = defaultdict(float)
+    total_ventas = 0
+    
+    try:
+        with open(archivo_csv, 'r', encoding='utf-8') as archivo:
+            lector = csv.DictReader(archivo)
+            
+            for fila in lector:
+                producto = fila['producto']
+                mes = fila['mes']
+                venta = float(fila['venta'])
+                
+                ventas_por_producto[producto] += venta
+                ventas_por_mes[mes] += venta
+                total_ventas += venta
+        
+        # Generar reporte
+        with open('reporte_ventas.txt', 'w', encoding='utf-8') as reporte:
+            reporte.write("REPORTE DE VENTAS\n")
+            reporte.write("=" * 50 + "\n\n")
+            
+            reporte.write(f"Total de ventas: ${total_ventas:.2f}\n\n")
+            
+            reporte.write("Ventas por producto:\n")
+            for producto, venta in sorted(ventas_por_producto.items()):
+                reporte.write(f"  {producto}: ${venta:.2f}\n")
+            
+            reporte.write("\nVentas por mes:\n")
+            for mes, venta in sorted(ventas_por_mes.items()):
+                reporte.write(f"  {mes}: ${venta:.2f}\n")
+        
+        print("Reporte generado: reporte_ventas.txt")
+        
+    except FileNotFoundError:
+        print(f"Error: Archivo '{archivo_csv}' no encontrado.")
+    except KeyError as e:
+        print(f"Error: Columna faltante en CSV: {e}")
+    except ValueError as e:
+        print(f"Error: Valor inválido en CSV: {e}")
+
+# Crear archivo de ejemplo
+datos_ventas = [
+    ['producto', 'mes', 'venta'],
+    ['Laptop', 'Enero', '1500.00'],
+    ['Mouse', 'Enero', '25.50'],
+    ['Laptop', 'Febrero', '1800.00'],
+    ['Teclado', 'Febrero', '75.00'],
+    ['Mouse', 'Marzo', '30.00']
+]
+
+with open('ventas.csv', 'w', newline='', encoding='utf-8') as f:
+    escritor = csv.writer(f)
+    escritor.writerows(datos_ventas)
+
+# Analizar ventas
+analizar_ventas('ventas.csv')
+```
+
+### Ejemplo 4: Configuración JSON
+
+```python
+import json
+import os
+
+class ConfiguracionApp:
+    """Maneja la configuración de la aplicación."""
+    
+    def __init__(self, archivo_config='config.json'):
+        self.archivo_config = archivo_config
+        self.config_default = {
+            'app': {
+                'nombre': 'Mi Aplicación',
+                'version': '1.0.0',
+                'debug': False
+            },
+            'base_datos': {
+                'host': 'localhost',
+                'puerto': 5432,
+                'nombre': 'mi_db',
+                'usuario': 'admin'
+            },
+            'servidor': {
+                'puerto': 8080,
+                'host': '0.0.0.0'
+            }
+        }
+        self.config = self.cargar_configuracion()
+    
+    def cargar_configuracion(self):
+        """Carga la configuración desde archivo o crea una por defecto."""
+        if os.path.exists(self.archivo_config):
+            try:
+                with open(self.archivo_config, 'r', encoding='utf-8') as archivo:
+                    return json.load(archivo)
+            except json.JSONDecodeError:
+                print("Error: Archivo de configuración inválido. Usando valores por defecto.")
+                return self.config_default.copy()
+        else:
+            print("Archivo de configuración no encontrado. Creando uno por defecto.")
+            self.guardar_configuracion(self.config_default)
+            return self.config_default.copy()
+    
+    def guardar_configuracion(self, config=None):
+        """Guarda la configuración actual."""
+        if config is None:
+            config = self.config
+        
+        try:
+            with open(self.archivo_config, 'w', encoding='utf-8') as archivo:
+                json.dump(config, archivo, ensure_ascii=False, indent=4)
+            print(f"Configuración guardada en '{self.archivo_config}'")
+        except Exception as e:
+            print(f"Error al guardar configuración: {e}")
+    
+    def obtener(self, clave, valor_defecto=None):
+        """Obtiene un valor de configuración usando notación de punto."""
+        claves = clave.split('.')
+        valor = self.config
+        
+        try:
+            for k in claves:
+                valor = valor[k]
+            return valor
+        except KeyError:
+            return valor_defecto
+    
+    def establecer(self, clave, valor):
+        """Establece un valor de configuración usando notación de punto."""
+        claves = clave.split('.')
+        config_ref = self.config
+        
+        # Navegar hasta el penúltimo nivel
+        for k in claves[:-1]:
+            if k not in config_ref:
+                config_ref[k] = {}
+            config_ref = config_ref[k]
+        
+        # Establecer el valor
+        config_ref[claves[-1]] = valor
+        self.guardar_configuracion()
+
+# Ejemplo de uso
+config = ConfiguracionApp()
+
+# Obtener valores
+print("Nombre de la app:", config.obtener('app.nombre'))
+print("Puerto del servidor:", config.obtener('servidor.puerto'))
+
+# Cambiar valores
+config.establecer('app.debug', True)
+config.establecer('servidor.puerto', 9000)
+
+# Obtener valor con defecto
+timeout = config.obtener('servidor.timeout', 30)
+print("Timeout:", timeout)
+```
+
+## BUENAS PRÁCTICAS
+
+1. **Siempre usar `with` para manejar archivos:**
+   ```python
+   # ✅ Correcto
+   with open('archivo.txt', 'r') as f:
+       contenido = f.read()
+   
+   # ❌ Incorrecto (puede dejar archivos abiertos)
+   f = open('archivo.txt', 'r')
+   contenido = f.read()
+   # f.close() # Podría no ejecutarse si hay error
+   ```
+
+2. **Especificar la codificación explícitamente:**
+   ```python
+   with open('archivo.txt', 'r', encoding='utf-8') as f:
+       contenido = f.read()
+   ```
+
+3. **Manejar errores apropiadamente:**
+   ```python
+   try:
+       with open('archivo.txt', 'r', encoding='utf-8') as f:
+           contenido = f.read()
+   except FileNotFoundError:
+       print("Archivo no encontrado")
+   except PermissionError:
+       print("Sin permisos para leer el archivo")
+   ```
+
+4. **Para archivos grandes, procesar línea por línea:**
+   ```python
+   # ✅ Eficiente en memoria
+   with open('archivo_grande.txt', 'r') as f:
+       for linea in f:
+           procesar(linea)
+   
+   # ❌ Carga todo en memoria
+   with open('archivo_grande.txt', 'r') as f:
+       lineas = f.readlines()
+       for linea in lineas:
+           procesar(linea)
+   ```
+
+5. **Usar rutas absolutas o relativas consistentes:**
+   ```python
+   import os
+   
+   # Ruta relativa al directorio del script
+   ruta_archivo = os.path.join(os.path.dirname(__file__), 'datos', 'archivo.txt')
+   ```
+
+6. **Para CSV, usar `newline=''` en modo escritura:**
+   ```python
+   with open('datos.csv', 'w', newline='', encoding='utf-8') as f:
+       writer = csv.writer(f)
+       writer.writerows(datos)
+   ```
+
+7. **Para JSON, usar `ensure_ascii=False` para caracteres Unicode:**
+   ```python
+   with open('datos.json', 'w', encoding='utf-8') as f:
+       json.dump(datos, f, ensure_ascii=False, indent=4)
+   ```
+
+8. **Validar datos antes de procesarlos:**
+   ```python
+   def procesar_csv_seguro(archivo):
+       required_columns = ['nombre', 'edad', 'email']
+       
+       with open(archivo, 'r', encoding='utf-8') as f:
+           reader = csv.DictReader(f)
+           
+           # Validar columnas
+           if not all(col in reader.fieldnames for col in required_columns):
+               raise ValueError("Columnas requeridas faltantes")
+           
+           for row in reader:
+               # Validar datos de la fila
+               if not row['email'] or '@' not in row['email']:
+                   continue  # Saltar fila inválida
+               
+               procesar_fila(row)
+   ```
