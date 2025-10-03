@@ -1,6 +1,19 @@
 # FUNCIONES EN PYTHON
 
-- [FUNCIONES EN PYTHON](#funciones-en-python)
+- [FUNCIONE  - [DOCUMENTACIÓN DE FUNCIONES](#documentación-de-funciones)
+    - [Docstrings](#docstrings)
+      - [Docstring simple](#docstring-simple)
+      - [Docstring detallada](#docstring-detallada)
+      - [Acceder a la documentación](#acceder-a-la-documentación)
+    - [Anotaciones de tipo (Type Hints)](#anotaciones-de-tipo-type-hints)
+    - [Ejemplo: Función con múltiples características](#ejemplo-función-con-múltiples-características)
+  - [INTRODUCCIÓN A LAS PRUEBAS UNITARIAS](#introducción-a-las-pruebas-unitarias)
+    - [¿Qué son las pruebas unitarias?](#qué-son-las-pruebas-unitarias)
+    - [Verificación manual vs. automática](#verificación-manual-vs-automática)
+    - [Pruebas básicas con assert](#pruebas-básicas-con-assert)
+    - [Organizar las pruebas](#organizar-las-pruebas)
+    - [Casos de prueba típicos](#casos-de-prueba-típicos)
+    - [Ejemplo completo: Probando una calculadora](#ejemplo-completo-probando-una-calculadora)THON](#funciones-en-python)
   - [DEFINICIÓN Y CREACIÓN DE FUNCIONES CON `def`](#definición-y-creación-de-funciones-con-def)
     - [Sintaxis básica](#sintaxis-básica)
     - [Ejemplo básico](#ejemplo-básico)
@@ -764,3 +777,402 @@ resultado = procesar_datos(datos, "promedio", filtrar_negativos=True)
 print(resultado)
 ```
 :computer: Actividad 1
+
+## INTRODUCCIÓN A LAS PRUEBAS UNITARIAS
+
+### ¿Qué son las pruebas unitarias?
+
+Las **pruebas unitarias** son pequeños programas que verifican que nuestras funciones funcionen correctamente. Son como "exámenes" para nuestro código que nos ayudan a:
+
+- **Detectar errores** antes de que los usuarios los encuentren
+- **Verificar** que las funciones hacen lo que esperamos
+- **Facilitar cambios** sin romper el código existente
+- **Documentar** cómo se espera que funcione cada función
+
+### Verificación manual vs. automática
+
+#### Verificación manual (lo que hemos hecho hasta ahora)
+
+```python
+def sumar(a, b):
+    """Suma dos números."""
+    return a + b
+
+# Probar manualmente
+print(sumar(2, 3))  # Esperamos 5
+print(sumar(-1, 1))  # Esperamos 0
+print(sumar(0, 0))   # Esperamos 0
+```
+
+**Problemas de la verificación manual:**
+- Hay que ejecutar y revisar cada resultado
+- Es fácil olvidar probar casos importantes
+- No se puede repetir automáticamente
+- Toma mucho tiempo cuando hay muchas funciones
+
+#### Verificación automática (pruebas unitarias)
+
+```python
+def sumar(a, b):
+    """Suma dos números."""
+    return a + b
+
+def probar_sumar():
+    """Prueba automática de la función sumar."""
+    # Caso 1: números positivos
+    resultado = sumar(2, 3)
+    assert resultado == 5, f"Esperaba 5, pero obtuve {resultado}"
+    
+    # Caso 2: números con signo
+    resultado = sumar(-1, 1)
+    assert resultado == 0, f"Esperaba 0, pero obtuve {resultado}"
+    
+    # Caso 3: ceros
+    resultado = sumar(0, 0)
+    assert resultado == 0, f"Esperaba 0, pero obtuve {resultado}"
+    
+    print("✅ Todas las pruebas de sumar() pasaron correctamente")
+
+# Ejecutar las pruebas
+probar_sumar()
+```
+
+### Pruebas básicas con assert
+
+La palabra clave `assert` es fundamental para las pruebas. Funciona así:
+
+```python
+# Sintaxis básica
+assert condicion, "mensaje de error si falla"
+
+# Ejemplos
+assert 2 + 2 == 4, "La suma básica falló"
+assert "python" == "python", "Las cadenas deberían ser iguales"
+assert len([1, 2, 3]) == 3, "La lista debería tener 3 elementos"
+
+# Si la condición es False, se lanza una excepción
+try:
+    assert 2 + 2 == 5, "Esto va a fallar"
+except AssertionError as e:
+    print(f"Error en la prueba: {e}")
+```
+
+#### Tipos comunes de verificaciones con assert
+
+```python
+def ejemplos_de_assert():
+    """Ejemplos de verificaciones comunes en pruebas."""
+    
+    # Verificar igualdad
+    assert 2 + 3 == 5
+    assert "hola".upper() == "HOLA"
+    
+    # Verificar desigualdad
+    assert 3 != 4
+    assert "python" != "java"
+    
+    # Verificar mayor/menor
+    assert 5 > 3
+    assert 2 < 10
+    assert 5 >= 5
+    assert 3 <= 3
+    
+    # Verificar tipos
+    assert isinstance(42, int)
+    assert isinstance("texto", str)
+    assert isinstance([1, 2, 3], list)
+    
+    # Verificar pertenencia
+    assert 3 in [1, 2, 3, 4]
+    assert "a" in "palabra"
+    
+    # Verificar longitud
+    assert len("python") == 6
+    assert len([1, 2, 3]) == 3
+    
+    # Verificar valores booleanos
+    assert True
+    assert not False
+    assert bool([1, 2, 3])  # Lista no vacía es True
+    assert not bool([])     # Lista vacía es False
+
+ejemplos_de_assert()
+print("✅ Todas las verificaciones pasaron")
+```
+
+### Organizar las pruebas
+
+Es importante organizar las pruebas de forma clara y sistemática:
+
+```python
+def calcular_area_rectangulo(base, altura):
+    """Calcula el área de un rectángulo."""
+    if base < 0 or altura < 0:
+        raise ValueError("Base y altura deben ser positivas")
+    return base * altura
+
+def calcular_perimetro_rectangulo(base, altura):
+    """Calcula el perímetro de un rectángulo."""
+    if base < 0 or altura < 0:
+        raise ValueError("Base y altura deben ser positivas")
+    return 2 * (base + altura)
+
+def probar_area_rectangulo():
+    """Pruebas para la función calcular_area_rectangulo."""
+    print("Probando calcular_area_rectangulo...")
+    
+    # Caso normal
+    assert calcular_area_rectangulo(5, 3) == 15
+    
+    # Caso con ceros
+    assert calcular_area_rectangulo(0, 5) == 0
+    assert calcular_area_rectangulo(4, 0) == 0
+    
+    # Caso con decimales
+    assert calcular_area_rectangulo(2.5, 4) == 10.0
+    
+    # Caso de error (valores negativos)
+    try:
+        calcular_area_rectangulo(-1, 5)
+        assert False, "Debería haber lanzado ValueError"
+    except ValueError:
+        pass  # Es lo esperado
+    
+    print("  ✅ Todas las pruebas de área pasaron")
+
+def probar_perimetro_rectangulo():
+    """Pruebas para la función calcular_perimetro_rectangulo."""
+    print("Probando calcular_perimetro_rectangulo...")
+    
+    # Caso normal
+    assert calcular_perimetro_rectangulo(5, 3) == 16
+    
+    # Caso cuadrado
+    assert calcular_perimetro_rectangulo(4, 4) == 16
+    
+    # Caso con decimales
+    assert calcular_perimetro_rectangulo(2.5, 1.5) == 8.0
+    
+    print("  ✅ Todas las pruebas de perímetro pasaron")
+
+def ejecutar_todas_las_pruebas():
+    """Ejecuta todas las pruebas del módulo."""
+    print("🧪 Ejecutando pruebas unitarias...")
+    print("-" * 40)
+    
+    probar_area_rectangulo()
+    probar_perimetro_rectangulo()
+    
+    print("-" * 40)
+    print("🎉 ¡Todas las pruebas pasaron exitosamente!")
+
+# Ejecutar las pruebas
+ejecutar_todas_las_pruebas()
+```
+
+### Casos de prueba típicos
+
+Para cada función, deberíamos probar:
+
+#### 1. Casos normales (happy path)
+```python
+def dividir(a, b):
+    """Divide dos números."""
+    if b == 0:
+        raise ValueError("No se puede dividir por cero")
+    return a / b
+
+def probar_casos_normales():
+    """Probar casos típicos de uso."""
+    assert dividir(10, 2) == 5.0
+    assert dividir(9, 3) == 3.0
+    assert dividir(1, 4) == 0.25
+```
+
+#### 2. Casos límite (edge cases)
+```python
+def probar_casos_limite():
+    """Probar casos en los límites."""
+    assert dividir(0, 1) == 0.0    # Dividendo cero
+    assert dividir(1, 1) == 1.0    # Números iguales
+    assert dividir(-10, 2) == -5.0  # Números negativos
+    assert dividir(10, -2) == -5.0  # Divisor negativo
+```
+
+#### 3. Casos de error
+```python
+def probar_casos_error():
+    """Probar casos que deben producir errores."""
+    try:
+        dividir(5, 0)
+        assert False, "Debería haber lanzado ValueError"
+    except ValueError as e:
+        assert "No se puede dividir por cero" in str(e)
+```
+
+### Ejemplo completo: Probando una calculadora
+
+```python
+def sumar(a, b):
+    """Suma dos números."""
+    return a + b
+
+def restar(a, b):
+    """Resta dos números."""
+    return a - b
+
+def multiplicar(a, b):
+    """Multiplica dos números."""
+    return a * b
+
+def dividir(a, b):
+    """Divide dos números."""
+    if b == 0:
+        raise ValueError("No se puede dividir por cero")
+    return a / b
+
+def potencia(base, exponente):
+    """Calcula base elevado a exponente."""
+    if exponente < 0:
+        raise ValueError("Exponente debe ser positivo")
+    return base ** exponente
+
+def es_par(numero):
+    """Verifica si un número es par."""
+    return numero % 2 == 0
+
+# PRUEBAS UNITARIAS
+
+def probar_operaciones_basicas():
+    """Prueba las operaciones matemáticas básicas."""
+    print("Probando operaciones básicas...")
+    
+    # Sumar
+    assert sumar(2, 3) == 5
+    assert sumar(-1, 1) == 0
+    assert sumar(0, 0) == 0
+    
+    # Restar
+    assert restar(5, 3) == 2
+    assert restar(3, 5) == -2
+    assert restar(0, 0) == 0
+    
+    # Multiplicar
+    assert multiplicar(4, 3) == 12
+    assert multiplicar(-2, 3) == -6
+    assert multiplicar(0, 100) == 0
+    
+    print("  ✅ Operaciones básicas correctas")
+
+def probar_division():
+    """Prueba la función de división."""
+    print("Probando división...")
+    
+    # Casos normales
+    assert dividir(10, 2) == 5.0
+    assert dividir(7, 2) == 3.5
+    assert dividir(-10, 2) == -5.0
+    
+    # Casos límite
+    assert dividir(0, 5) == 0.0
+    assert dividir(1, 1) == 1.0
+    
+    # Caso de error
+    try:
+        dividir(5, 0)
+        assert False, "Debería lanzar ValueError por división por cero"
+    except ValueError as e:
+        assert "No se puede dividir por cero" in str(e)
+    
+    print("  ✅ División funciona correctamente")
+
+def probar_potencia():
+    """Prueba la función de potencia."""
+    print("Probando potencia...")
+    
+    # Casos normales
+    assert potencia(2, 3) == 8
+    assert potencia(5, 2) == 25
+    assert potencia(10, 0) == 1
+    assert potencia(0, 5) == 0
+    
+    # Caso de error
+    try:
+        potencia(2, -1)
+        assert False, "Debería lanzar ValueError por exponente negativo"
+    except ValueError:
+        pass  # Es lo esperado
+    
+    print("  ✅ Potencia funciona correctamente")
+
+def probar_es_par():
+    """Prueba la función es_par."""
+    print("Probando es_par...")
+    
+    # Números pares
+    assert es_par(2) == True
+    assert es_par(0) == True
+    assert es_par(-4) == True
+    assert es_par(100) == True
+    
+    # Números impares
+    assert es_par(1) == False
+    assert es_par(3) == False
+    assert es_par(-5) == False
+    assert es_par(99) == False
+    
+    print("  ✅ es_par funciona correctamente")
+
+def ejecutar_suite_completa():
+    """Ejecuta todas las pruebas de la calculadora."""
+    print("🧪 SUITE DE PRUEBAS - CALCULADORA")
+    print("=" * 50)
+    
+    # Ejecutar todas las pruebas
+    probar_operaciones_basicas()
+    probar_division()
+    probar_potencia()
+    probar_es_par()
+    
+    print("=" * 50)
+    print("🎉 ¡TODAS LAS PRUEBAS PASARON EXITOSAMENTE!")
+    print("   Tu calculadora funciona correctamente.")
+
+# Ejecutar las pruebas
+if __name__ == "__main__":
+    ejecutar_suite_completa()
+```
+
+#### Estructura recomendada para pruebas
+
+```python
+def probar_mi_funcion():
+    """
+    Template para crear pruebas unitarias.
+    
+    1. Casos normales (funcionamiento típico)
+    2. Casos límite (valores extremos)
+    3. Casos de error (situaciones inválidas)
+    """
+    print("Probando mi_funcion...")
+    
+    # 1. CASOS NORMALES
+    # assert mi_funcion(entrada_normal) == resultado_esperado
+    
+    # 2. CASOS LÍMITE
+    # assert mi_funcion(entrada_limite) == resultado_limite
+    
+    # 3. CASOS DE ERROR
+    # try:
+    #     mi_funcion(entrada_invalida)
+    #     assert False, "Debería haber dado error"
+    # except TipoDeError:
+    #     pass  # Es lo esperado
+    
+    print("  ✅ mi_funcion funciona correctamente")
+```
+
+Las pruebas unitarias son una herramienta fundamental para escribir código correcto. En temas posteriores veremos herramientas más avanzadas como `pytest`, pero con `assert` ya podemos verificar que nuestras funciones funcionen correctamente.
+
+:computer: Actividad 2
+
