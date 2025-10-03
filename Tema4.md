@@ -52,6 +52,24 @@
       - [El método `__repr__()`](#el-método-__repr__)
       - [Otros métodos especiales importantes](#otros-métodos-especiales-importantes)
       - [Ejemplo completo con métodos especiales](#ejemplo-completo-con-métodos-especiales)
+      - [Importar clases desde módulos](#importar-clases-desde-módulos)
+    - [Creación y estructura de paquetes](#creación-y-estructura-de-paquetes)
+      - [¿Qué es un paquete?](#qué-es-un-paquete)
+      - [El archivo `__init__.py`](#el-archivo-__init__py)
+      - [Estructura de directorios](#estructura-de-directorios)
+    - [Importación avanzada de clases](#importación-avanzada-de-clases)
+      - [Diferentes formas de importar](#diferentes-formas-de-importar)
+      - [Alias y nombres personalizados](#alias-y-nombres-personalizados)
+      - [Importación condicional](#importación-condicional)
+    - [Buenas prácticas y organización](#buenas-prácticas-y-organización)
+      - [Convenciones de nomenclatura](#convenciones-de-nomenclatura)
+      - [Organización por funcionalidad](#organización-por-funcionalidad)
+      - [Evitar importaciones circulares](#evitar-importaciones-circulares)
+      - [Ejemplo completo de proyecto estructurado](#ejemplo-completo-de-proyecto-estructurado)
+  - [PRUEBAS UNITARIAS PARA CLASES](#pruebas-unitarias-para-clases)
+    - [Importancia de probar clases](#importancia-de-probar-clases)
+    - [Configuración de pruebas con `unittest`](#configuración-de-pruebas-con-unittest)
+      - [Estructura básica de pruebas para clases](#estructura-básica-de-pruebas-para-clases)
       - [Métodos `setUp()` y `tearDown()`](#métodos-setup-y-teardown)
     - [Pruebas de atributos y métodos](#pruebas-de-atributos-y-métodos)
       - [Probar inicialización de objetos](#probar-inicialización-de-objetos)
@@ -1582,6 +1600,656 @@ with Vector(2, 3) as v:
 print("\n=== MÉTODOS ADICIONALES ===")
 print(f"Magnitud de v1: {v1.magnitud()}")
 print(f"Producto punto v1·v2: {v1.producto_punto(v2)}")
+
+---
+
+## MÓDULOS Y PAQUETES EN POO
+
+A medida que nuestros programas orientados a objetos crecen, es fundamental saber cómo organizar las clases de manera eficiente. Los **módulos** y **paquetes** nos permiten estructurar el código de forma modular, reutilizable y mantenible.
+
+### Organización de clases en módulos
+
+#### ¿Por qué usar módulos?
+
+Los módulos ofrecen varios beneficios importantes:
+
+- **Reutilización**: Las clases pueden usarse en múltiples programas
+- **Organización**: Código más limpio y estructurado
+- **Mantenimiento**: Fácil localizar y modificar código específico
+- **Colaboración**: Diferentes desarrolladores pueden trabajar en módulos separados
+- **Namespace**: Evita conflictos de nombres entre clases
+
+#### Crear un módulo con clases
+
+Un **módulo** es simplemente un archivo `.py` que contiene definiciones de clases, funciones y variables.
+
+**Ejemplo: Archivo `vehiculos.py`**
+
+```python
+# vehiculos.py
+"""
+Módulo que contiene clases relacionadas con vehículos
+"""
+
+class Vehiculo:
+    """Clase base para todos los vehículos"""
+    
+    def __init__(self, marca, modelo, año):
+        self.marca = marca
+        self.modelo = modelo
+        self.año = año
+        self.velocidad = 0
+    
+    def acelerar(self, incremento=10):
+        """Aumenta la velocidad del vehículo"""
+        self.velocidad += incremento
+        return f"{self.marca} {self.modelo} acelera a {self.velocidad} km/h"
+    
+    def frenar(self, decremento=10):
+        """Reduce la velocidad del vehículo"""
+        self.velocidad = max(0, self.velocidad - decremento)
+        return f"{self.marca} {self.modelo} frena a {self.velocidad} km/h"
+    
+    def __str__(self):
+        return f"{self.marca} {self.modelo} ({self.año})"
+
+
+class Coche(Vehiculo):
+    """Clase que representa un coche"""
+    
+    def __init__(self, marca, modelo, año, puertas=4):
+        super().__init__(marca, modelo, año)
+        self.puertas = puertas
+        self.maletero_abierto = False
+    
+    def abrir_maletero(self):
+        """Abre el maletero del coche"""
+        self.maletero_abierto = True
+        return f"Maletero de {self} abierto"
+    
+    def cerrar_maletero(self):
+        """Cierra el maletero del coche"""
+        self.maletero_abierto = False
+        return f"Maletero de {self} cerrado"
+
+
+class Motocicleta(Vehiculo):
+    """Clase que representa una motocicleta"""
+    
+    def __init__(self, marca, modelo, año, cilindrada):
+        super().__init__(marca, modelo, año)
+        self.cilindrada = cilindrada
+        self.caballito = False
+    
+    def hacer_caballito(self):
+        """Hace un caballito con la motocicleta"""
+        if self.velocidad > 0:
+            self.caballito = True
+            return f"¡{self} haciendo caballito!"
+        return "Necesitas velocidad para hacer caballito"
+    
+    def parar_caballito(self):
+        """Para el caballito"""
+        self.caballito = False
+        return f"{self} vuelve a las dos ruedas"
+
+
+# Variables del módulo
+VEHICULOS_CREADOS = 0
+
+def crear_vehiculo(tipo, marca, modelo, año, **kwargs):
+    """Función factory para crear vehículos"""
+    global VEHICULOS_CREADOS
+    VEHICULOS_CREADOS += 1
+    
+    if tipo.lower() == 'coche':
+        return Coche(marca, modelo, año, kwargs.get('puertas', 4))
+    elif tipo.lower() == 'motocicleta':
+        return Motocicleta(marca, modelo, año, kwargs.get('cilindrada', 125))
+    else:
+        return Vehiculo(marca, modelo, año)
+```
+
+#### Importar clases desde módulos
+
+**Archivo principal: `main.py`**
+
+```python
+# main.py
+
+# 1. Importar todo el módulo
+import vehiculos
+
+# Usar clases con notación de punto
+mi_coche = vehiculos.Coche("Toyota", "Corolla", 2023)
+print(mi_coche.acelerar())
+
+# 2. Importar clases específicas
+from vehiculos import Coche, Motocicleta, crear_vehiculo
+
+# Usar clases directamente
+mi_moto = Motocicleta("Honda", "CBR", 2022, 600)
+print(mi_moto.acelerar(20))
+print(mi_moto.hacer_caballito())
+
+# 3. Importar con alias
+from vehiculos import Vehiculo as VehiculoBase
+
+# Usar con alias
+vehiculo_generico = VehiculoBase("Ford", "Transit", 2021)
+
+# 4. Usar función factory
+nuevo_coche = crear_vehiculo("coche", "BMW", "X3", 2023, puertas=5)
+print(f"Vehículos creados hasta ahora: {vehiculos.VEHICULOS_CREADOS}")
+```
+
+### Creación y estructura de paquetes
+
+#### ¿Qué es un paquete?
+
+Un **paquete** es una colección de módulos organizados en directorios. Permite agrupar módulos relacionados bajo un nombre común.
+
+#### El archivo `__init__.py`
+
+Este archivo especial convierte un directorio en un paquete Python. Puede estar vacío o contener código de inicialización.
+
+#### Estructura de directorios
+
+```
+mi_proyecto/
+├── main.py
+└── transporte/                 # Paquete principal
+    ├── __init__.py
+    ├── vehiculos/              # Subpaquete
+    │   ├── __init__.py
+    │   ├── terrestres.py
+    │   ├── aereos.py
+    │   └── acuaticos.py
+    ├── personas/               # Subpaquete
+    │   ├── __init__.py
+    │   ├── conductores.py
+    │   └── pasajeros.py
+    └── utils/                  # Subpaquete de utilidades
+        ├── __init__.py
+        └── validaciones.py
+```
+
+**Archivo `transporte/__init__.py`**
+
+```python
+# transporte/__init__.py
+"""
+Paquete de transporte
+Contiene clases y funciones para manejar diferentes tipos de transporte
+"""
+
+# Importar clases principales para acceso fácil
+from .vehiculos.terrestres import Coche, Motocicleta, Bicicleta
+from .vehiculos.aereos import Avion, Helicoptero
+from .personas.conductores import Conductor, Piloto
+
+# Metadata del paquete
+__version__ = "1.0.0"
+__author__ = "Tu Nombre"
+
+# Lista de elementos públicos
+__all__ = [
+    'Coche', 'Motocicleta', 'Bicicleta',
+    'Avion', 'Helicoptero',
+    'Conductor', 'Piloto'
+]
+
+print(f"Paquete transporte v{__version__} cargado")
+```
+
+**Archivo `transporte/vehiculos/__init__.py`**
+
+```python
+# transporte/vehiculos/__init__.py
+"""Subpaquete de vehículos"""
+
+from .terrestres import Coche, Motocicleta
+from .aereos import Avion
+from .acuaticos import Barco
+
+__all__ = ['Coche', 'Motocicleta', 'Avion', 'Barco']
+```
+
+**Archivo `transporte/vehiculos/terrestres.py`**
+
+```python
+# transporte/vehiculos/terrestres.py
+"""Vehículos terrestres"""
+
+from ..utils.validaciones import validar_año
+
+class VehiculoTerrestre:
+    """Clase base para vehículos terrestres"""
+    
+    def __init__(self, marca, modelo, año):
+        self.marca = marca
+        self.modelo = modelo
+        self.año = validar_año(año)
+        self.velocidad = 0
+    
+    def acelerar(self, incremento=10):
+        self.velocidad += incremento
+        return f"Acelerando a {self.velocidad} km/h"
+
+
+class Coche(VehiculoTerrestre):
+    """Clase que representa un coche"""
+    
+    def __init__(self, marca, modelo, año, puertas=4):
+        super().__init__(marca, modelo, año)
+        self.puertas = puertas
+    
+    def tocar_claxon(self):
+        return f"¡BEEP BEEP! - {self.marca} {self.modelo}"
+
+
+class Motocicleta(VehiculoTerrestre):
+    """Clase que representa una motocicleta"""
+    
+    def __init__(self, marca, modelo, año, cilindrada):
+        super().__init__(marca, modelo, año)
+        self.cilindrada = cilindrada
+    
+    def rugir_motor(self):
+        return f"¡BRUM BRUM! - {self.marca} {self.modelo} {self.cilindrada}cc"
+
+
+class Bicicleta(VehiculoTerrestre):
+    """Clase que representa una bicicleta"""
+    
+    def __init__(self, marca, modelo, tipo="urbana"):
+        # Las bicicletas no tienen año de fabricación específico
+        super().__init__(marca, modelo, 2023)
+        self.tipo = tipo
+        self.velocidad_maxima = 30  # km/h
+    
+    def acelerar(self, incremento=5):
+        self.velocidad = min(self.velocidad + incremento, self.velocidad_maxima)
+        return f"Pedaleando a {self.velocidad} km/h"
+```
+
+**Archivo `transporte/utils/validaciones.py`**
+
+```python
+# transporte/utils/validaciones.py
+"""Utilidades de validación"""
+
+from datetime import datetime
+
+def validar_año(año):
+    """Valida que el año sea razonable"""
+    año_actual = datetime.now().year
+    
+    if not isinstance(año, int):
+        raise ValueError("El año debe ser un número entero")
+    
+    if año < 1900 or año > año_actual + 1:
+        raise ValueError(f"Año inválido: {año}. Debe estar entre 1900 y {año_actual + 1}")
+    
+    return año
+
+def validar_velocidad(velocidad, velocidad_maxima=200):
+    """Valida que la velocidad sea razonable"""
+    if velocidad < 0:
+        return 0
+    elif velocidad > velocidad_maxima:
+        return velocidad_maxima
+    return velocidad
+```
+
+### Importación avanzada de clases
+
+#### Diferentes formas de importar
+
+**Archivo `main.py`**
+
+```python
+# main.py - Ejemplos de importación
+
+# 1. Importar paquete completo
+import transporte
+mi_coche = transporte.Coche("Toyota", "Prius", 2023)
+
+# 2. Importar subpaquete
+import transporte.vehiculos
+mi_moto = transporte.vehiculos.Motocicleta("Honda", "CBR", 2022, 600)
+
+# 3. Importar módulo específico
+import transporte.vehiculos.terrestres
+bici = transporte.vehiculos.terrestres.Bicicleta("Trek", "FX", "híbrida")
+
+# 4. Importar clases específicas del paquete
+from transporte import Coche, Conductor
+
+# 5. Importar desde subpaquete
+from transporte.vehiculos.terrestres import Motocicleta, Bicicleta
+
+# 6. Importar desde módulo específico
+from transporte.vehiculos.aereos import Avion
+
+# 7. Importar todo (no recomendado para paquetes grandes)
+from transporte.vehiculos.terrestres import *
+```
+
+#### Alias y nombres personalizados
+
+```python
+# Usar alias para nombres largos o conflictos
+from transporte.vehiculos.terrestres import Coche as CocheTerrestre
+from transporte.vehiculos.acuaticos import Coche as CocheAnfibio  # Si existiera
+
+# Alias para paquetes
+import transporte.vehiculos.terrestres as terrestres
+import transporte.vehiculos.aereos as aereos
+
+# Crear instancias
+mi_coche = terrestres.Coche("BMW", "X5", 2023)
+mi_avion = aereos.Avion("Boeing", "747", 1995)
+```
+
+#### Importación condicional
+
+```python
+# Importación condicional según disponibilidad
+try:
+    from transporte.vehiculos.aereos import AvionElectrico
+    AEREO_ELECTRICO_DISPONIBLE = True
+except ImportError:
+    AEREO_ELECTRICO_DISPONIBLE = False
+    print("Avión eléctrico no disponible en esta versión")
+
+# Importación según configuración
+MODO_DESARROLLO = True
+
+if MODO_DESARROLLO:
+    from transporte.utils.debug import DebugVehiculo as Vehiculo
+else:
+    from transporte.vehiculos.terrestres import Coche as Vehiculo
+```
+
+### Buenas prácticas y organización
+
+#### Convenciones de nomenclatura
+
+```python
+# ✅ Buenos nombres
+modulos/
+├── vehiculos.py          # minúsculas, descriptivo
+├── sistemas_navegacion.py # guiones bajos para múltiples palabras
+└── config.py             # corto y claro
+
+# ❌ Malos nombres
+modulos/
+├── Vehiculos.py          # No usar mayúsculas
+├── v.py                  # Muy corto, no descriptivo
+└── sistemasDeNavegacion.py # camelCase no es pythónico
+```
+
+#### Organización por funcionalidad
+
+```python
+# Estructura recomendada para proyecto POO
+mi_app/
+├── main.py                    # Punto de entrada
+├── config.py                  # Configuración global
+├── models/                    # Modelos de datos (clases principales)
+│   ├── __init__.py
+│   ├── usuario.py
+│   ├── producto.py
+│   └── pedido.py
+├── services/                  # Lógica de negocio
+│   ├── __init__.py
+│   ├── autenticacion.py
+│   ├── gestion_productos.py
+│   └── procesamiento_pedidos.py
+├── utils/                     # Utilidades y herramientas
+│   ├── __init__.py
+│   ├── validaciones.py
+│   ├── formateo.py
+│   └── constantes.py
+├── interfaces/               # Interfaces de usuario
+│   ├── __init__.py
+│   ├── cli.py
+│   └── web.py
+└── tests/                   # Pruebas unitarias
+    ├── __init__.py
+    ├── test_models.py
+    ├── test_services.py
+    └── test_utils.py
+```
+
+#### Evitar importaciones circulares
+
+**❌ Importación circular (problema):**
+
+```python
+# archivo_a.py
+from archivo_b import ClaseB
+
+class ClaseA:
+    def usar_b(self):
+        return ClaseB()
+
+# archivo_b.py  
+from archivo_a import ClaseA  # ¡Importación circular!
+
+class ClaseB:
+    def usar_a(self):
+        return ClaseA()
+```
+
+**✅ Soluciones:**
+
+```python
+# Solución 1: Importación local
+# archivo_a.py
+class ClaseA:
+    def usar_b(self):
+        from archivo_b import ClaseB  # Importación dentro de la función
+        return ClaseB()
+
+# Solución 2: Usar un módulo intermedio
+# base.py
+class ClaseBase:
+    pass
+
+# archivo_a.py
+from base import ClaseBase
+
+class ClaseA(ClaseBase):
+    pass
+
+# archivo_b.py
+from base import ClaseBase
+
+class ClaseB(ClaseBase):
+    pass
+
+# Solución 3: Reestructurar el código
+# Mover ambas clases al mismo módulo si están muy relacionadas
+```
+
+#### Ejemplo completo de proyecto estructurado
+
+**Proyecto: Sistema de Biblioteca**
+
+```
+biblioteca/
+├── main.py
+├── config.py
+├── models/
+│   ├── __init__.py
+│   ├── libro.py
+│   ├── usuario.py
+│   └── prestamo.py
+├── services/
+│   ├── __init__.py
+│   ├── gestion_libros.py
+│   ├── gestion_usuarios.py
+│   └── gestion_prestamos.py
+├── utils/
+│   ├── __init__.py
+│   ├── validaciones.py
+│   └── formateo.py
+└── interfaces/
+    ├── __init__.py
+    └── cli.py
+```
+
+**Archivo `models/__init__.py`**
+
+```python
+# models/__init__.py
+"""Modelos de datos del sistema de biblioteca"""
+
+from .libro import Libro, LibroDigital, LibroFisico
+from .usuario import Usuario, Estudiante, Profesor
+from .prestamo import Prestamo, PrestamoDigital
+
+__version__ = "1.0.0"
+
+__all__ = [
+    'Libro', 'LibroDigital', 'LibroFisico',
+    'Usuario', 'Estudiante', 'Profesor', 
+    'Prestamo', 'PrestamoDigital'
+]
+
+# Configuración global para todos los modelos
+CONFIGURACION = {
+    'dias_prestamo_default': 14,
+    'max_renovaciones': 2,
+    'multa_por_dia': 0.50
+}
+```
+
+**Archivo `models/libro.py`**
+
+```python
+# models/libro.py
+"""Modelos relacionados con libros"""
+
+from datetime import datetime
+from ..utils.validaciones import validar_isbn
+
+class Libro:
+    """Clase base para todos los tipos de libros"""
+    
+    def __init__(self, titulo, autor, isbn, año_publicacion):
+        self.titulo = titulo
+        self.autor = autor
+        self.isbn = validar_isbn(isbn)
+        self.año_publicacion = año_publicacion
+        self.disponible = True
+        self.fecha_creacion = datetime.now()
+    
+    def __str__(self):
+        return f"{self.titulo} por {self.autor} ({self.año_publicacion})"
+    
+    def __repr__(self):
+        return f"Libro('{self.titulo}', '{self.autor}', '{self.isbn}')"
+
+
+class LibroFisico(Libro):
+    """Libro físico con ubicación en biblioteca"""
+    
+    def __init__(self, titulo, autor, isbn, año_publicacion, 
+                 seccion, estante, posicion):
+        super().__init__(titulo, autor, isbn, año_publicacion)
+        self.seccion = seccion
+        self.estante = estante  
+        self.posicion = posicion
+        self.estado_fisico = "bueno"  # bueno, regular, malo
+    
+    @property
+    def ubicacion(self):
+        return f"{self.seccion}-{self.estante}-{self.posicion}"
+    
+    def marcar_daño(self, descripcion):
+        """Marca el libro como dañado"""
+        self.estado_fisico = "malo"
+        self.descripcion_daño = descripcion
+        self.disponible = False
+
+
+class LibroDigital(Libro):
+    """Libro en formato digital"""
+    
+    def __init__(self, titulo, autor, isbn, año_publicacion, 
+                 formato, tamaño_mb, url_descarga):
+        super().__init__(titulo, autor, isbn, año_publicacion)
+        self.formato = formato  # pdf, epub, mobi
+        self.tamaño_mb = tamaño_mb
+        self.url_descarga = url_descarga
+        self.descargas_simultaneas = 0
+        self.max_descargas_simultaneas = 5
+    
+    def puede_descargar(self):
+        """Verifica si se puede descargar el libro"""
+        return self.descargas_simultaneas < self.max_descargas_simultaneas
+```
+
+**Archivo `main.py`**
+
+```python
+# main.py
+"""Aplicación principal del sistema de biblioteca"""
+
+# Importar desde nuestros paquetes
+from models import Libro, LibroFisico, Usuario, Estudiante
+from services import GestionLibros, GestionUsuarios, GestionPrestamos
+from interfaces.cli import InterfazCLI
+from config import CONFIGURACION_SISTEMA
+
+def main():
+    """Función principal de la aplicación"""
+    
+    print("=== Sistema de Gestión de Biblioteca ===")
+    print(f"Versión: {CONFIGURACION_SISTEMA['version']}")
+    
+    # Inicializar servicios
+    gestion_libros = GestionLibros()
+    gestion_usuarios = GestionUsuarios()
+    gestion_prestamos = GestionPrestamos()
+    
+    # Crear algunos datos de ejemplo
+    libro1 = LibroFisico(
+        "El Quijote", "Miguel de Cervantes", 
+        "978-84-376-0494-7", 1605,
+        "Literatura", "A", 15
+    )
+    
+    estudiante1 = Estudiante(
+        "Ana García", "ana@universidad.edu",
+        "12345678A", "Ingeniería Informática"
+    )
+    
+    # Registrar en el sistema
+    gestion_libros.agregar_libro(libro1)
+    gestion_usuarios.registrar_usuario(estudiante1)
+    
+    # Iniciar interfaz de usuario
+    interfaz = InterfazCLI(gestion_libros, gestion_usuarios, gestion_prestamos)
+    interfaz.ejecutar()
+
+if __name__ == "__main__":
+    main()
+```
+
+**Ventajas de esta organización:**
+
+1. **Separación clara** de responsabilidades
+2. **Fácil mantenimiento** y extensión
+3. **Reutilización** de componentes
+4. **Pruebas unitarias** más sencillas
+5. **Colaboración** eficiente en equipo
+6. **Escalabilidad** del proyecto
+
+Los módulos y paquetes son fundamentales para crear aplicaciones POO robustas y mantenibles. Permiten organizar el código de manera lógica, facilitando tanto el desarrollo como el mantenimiento a largo plazo.
 
 ---
 

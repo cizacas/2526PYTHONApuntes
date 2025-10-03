@@ -1,6 +1,6 @@
-# MÓDULOS Y PAQUETES EN PYTHON
+# MÓDULOS Y PAQUETES CON FUNCIONES EN PYTHON
 
-- [MÓDULOS Y PAQUETES EN PYTHON](#módulos-y-paquetes-en-python)
+- [MÓDULOS Y PAQUETES CON FUNCIONES EN PYTHON](#módulos-y-paquetes-con-funciones-en-python)
   - [¿QUÉ SON LOS MÓDULOS?](#qué-son-los-módulos)
     - [Definición](#definición)
     - [Ventajas de usar módulos](#ventajas-de-usar-módulos)
