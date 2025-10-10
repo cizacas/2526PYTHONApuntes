@@ -804,6 +804,8 @@ print(resultado)
 ```
 :computer: Actividad 1
 
+:computer: Actividad 2
+
 ## MÓDULOS Y PAQUETES CON FUNCIONES
 
 ### ¿Qué son los módulos?
@@ -1507,7 +1509,7 @@ Este proyecto nos muestra las mejores prácticas:
 - ✅ Trabajo con diccionarios y listas para almacenar datos
 - ✅ Manejo de importaciones entre módulos del paquete
 
-:computer: Actividad 2
+:computer: Actividad 3
 
 ## INTRODUCCIÓN A LAS PRUEBAS UNITARIAS
 
@@ -1905,4 +1907,4 @@ def probar_mi_funcion():
 
 Las pruebas unitarias son una herramienta fundamental para escribir código correcto. En temas posteriores veremos herramientas más avanzadas como `pytest`, pero con `assert` ya podemos verificar que nuestras funciones funcionen correctamente.
 
-:computer: Actividad 3
+:computer: Actividad 4
