@@ -1530,7 +1530,7 @@ for x in frutas:
   if "a" in x:
     nuevalista.append(x)
 print(nuevalista)
-# Salida: ['manzana', 'banana', 'mango']
+# Salida: ['manzana', 'banana','cereza', 'mango']
 ```
 Con la comprensión de listas, podemos lograr lo mismo en una sola línea:
 
@@ -1538,7 +1538,7 @@ Con la comprensión de listas, podemos lograr lo mismo en una sola línea:
 frutas = ["manzana", "banana", "cereza", "kiwi", "mango"]
 nuevalista = [x for x in frutas if "a" in x]
 print(nuevalista)
-# Salida: ['manzana', 'banana', 'mango']
+# Salida: ['manzana', 'banana','cereza', 'mango']
 ```
 **Ordenar listas alfanuméricamente**
 Los objetos de tipo lista tienen un método llamado **sort()** que, por defecto, ordena la lista alfabéticamente de forma ascendente:
