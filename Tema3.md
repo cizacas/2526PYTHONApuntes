@@ -340,7 +340,7 @@ class Persona:
         """Método que devuelve el nombre completo"""
         return f"{self.nombre} {self.apellido}"
     
-    def cumplir_años(self):
+    def cumplir_anios(self):
         """Método para incrementar la edad"""
         self.edad += 1
         print(f"¡Feliz cumpleaños {self.nombre}! Ahora tienes {self.edad} años")
@@ -372,7 +372,7 @@ print(persona2.presentarse())
 # Hola, soy María García, tengo 17 años y soy menor de edad
 
 # Modificar objetos
-persona2.cumplir_años()  # ¡Feliz cumpleaños María! Ahora tienes 18 años
+persona2.cumplir_anios()  # ¡Feliz cumpleaños María! Ahora tienes 18 años
 persona1.cambiar_email("juan.perez@email.com")
 
 # Acceder a atributos de clase
