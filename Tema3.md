@@ -38,11 +38,19 @@
       - [Usar `super()` en el constructor](#usar-super-en-el-constructor)
       - [Usar `super()` en métodos](#usar-super-en-métodos)
       - [Ejemplo completo con `super()`](#ejemplo-completo-con-super)
+  - [CLASES ABSTRACTAS E INTERFACES](#clases-abstractas-e-interfaces)
+    - [Concepto de clases abstractas](#concepto-de-clases-abstractas)
+      - [Crear clases abstractas con `abc`](#crear-clases-abstractas-con-abc)
+      - [Métodos abstractos con implementación parcial](#métodos-abstractos-con-implementación-parcial)
+    - [Interfaces en Python](#interfaces-en-python)
+      - [Interfaces mediante clases abstractas](#interfaces-mediante-clases-abstractas)
+      - [Protocolos (Python 3.8+)](#protocolos-python-38)
+      - [Ejemplo completo: Sistema de pagos](#ejemplo-completo-sistema-de-pagos)
   - [POLIMORFISMO](#polimorfismo)
     - [Concepto de polimorfismo](#concepto-de-polimorfismo)
     - [Uso de métodos sobrescritos en clases derivadas](#uso-de-métodos-sobrescritos-en-clases-derivadas)
       - [Sobrescritura de métodos](#sobrescritura-de-métodos)
-      - [Polimorfismo en acción](#polimorfismo-en-acción)
+      - [Utilización del Polimorfismo](#utilización-del-polimorfismo)
       - [Ejemplo completo de polimorfismo](#ejemplo-completo-de-polimorfismo)
   - [MÉTODOS ESPECIALES](#métodos-especiales)
     - [¿Qué son los métodos mágicos?](#qué-son-los-métodos-mágicos)
@@ -51,7 +59,7 @@
       - [El método `__str__()`](#el-método-__str__)
       - [El método `__repr__()`](#el-método-__repr__)
       - [Otros métodos especiales importantes](#otros-métodos-especiales-importantes)
-      - [Ejemplo completo con métodos especiales](#ejemplo-completo-con-métodos-especiales)
+    - [Ejemplo completo con métodos especiales](#ejemplo-completo-con-métodos-especiales)
   - [MÓDULOS Y PAQUETES EN POO](#módulos-y-paquetes-en-poo)
     - [Organización de clases en módulos](#organización-de-clases-en-módulos)
       - [¿Por qué usar módulos?](#por-qué-usar-módulos)
@@ -69,7 +77,7 @@
       - [Convenciones de nomenclatura](#convenciones-de-nomenclatura)
       - [Organización por funcionalidad](#organización-por-funcionalidad)
       - [Evitar importaciones circulares](#evitar-importaciones-circulares)
-      - [Ejemplo completo de proyecto estructurado](#ejemplo-completo-de-proyecto-estructurado)
+      - [Ejemplo de proyecto estructurado](#ejemplo-de-proyecto-estructurado)
   - [PRUEBAS UNITARIAS PARA CLASES](#pruebas-unitarias-para-clases)
     - [Importancia de probar clases](#importancia-de-probar-clases)
     - [Configuración de pruebas con `unittest`](#configuración-de-pruebas-con-unittest)
@@ -78,13 +86,13 @@
     - [Pruebas de atributos y métodos](#pruebas-de-atributos-y-métodos)
       - [Probar inicialización de objetos](#probar-inicialización-de-objetos)
       - [Probar métodos públicos](#probar-métodos-públicos)
-      - [Probar propiedades y validaciones](#probar-propiedades-y-validaciones)
-    - [Pruebas de herencia y polimorfismo](#pruebas-de-herencia-y-polimorfismo)
-      - [Probar clases derivadas](#probar-clases-derivadas)
-      - [Probar comportamiento polimórfico](#probar-comportamiento-polimórfico)
+      - [Pruebas de herencia y polimorfismo](#pruebas-de-herencia-y-polimorfismo)
     - [Pruebas de métodos especiales](#pruebas-de-métodos-especiales)
       - [Probar métodos mágicos](#probar-métodos-mágicos)
       - [Probar operadores sobrecargados](#probar-operadores-sobrecargados)
+    - [Ejemplo completo de pruebas para el sistema de biblioteca](#ejemplo-completo-de-pruebas-para-el-sistema-de-biblioteca)
+    - [Ejecutar las pruebas](#ejecutar-las-pruebas)
+    - [Cobertura de código](#cobertura-de-código)
 
 ## INTRODUCCIÓN A LA POO
 
@@ -124,8 +132,6 @@ tu_coche = Coche("Ford", "Focus")
 - **Modularidad**: El código se organiza en unidades lógicas
 - **Mantenibilidad**: Fácil modificar y extender el código
 - **Modelado natural**: Representa mejor los problemas del mundo real
-
----
 
 ## CONCEPTOS BÁSICOS DE POO
 
@@ -373,8 +379,6 @@ persona1.cambiar_email("juan.perez@email.com")
 print(f"Especie: {Persona.especie}")           # Especie: Homo sapiens
 print(f"Población total: {Persona.poblacion_total}")  # Población total: 2
 ```
-
----
 
 ## ENCAPSULAMIENTO
 
@@ -628,7 +632,7 @@ class ProductoInventario:
         
         ProductoInventario._productos_creados += 1
     
-    # Propiedades de solo lectura
+    # Propiedades de solo lectura - no tienen setter asociado
     @property
     def codigo(self):
         """Código del producto (solo lectura)"""
@@ -741,8 +745,50 @@ class ProductoInventario:
     def productos_creados(cls):
         return cls._productos_creados
 
-# Ejemplo de uso completo
-try:
+class Usuario:
+    """Clase que representa a un usuario del sistema"""
+    
+    # Atributo de clase
+    tipo_usuario = "Usuario Generico"
+    
+    def __init__(self, nombre, email, dni):
+        """Constructor de la clase Usuario"""
+        self.nombre = nombre
+        self.email = email
+        self.dni = dni
+    
+    def __str__(self):
+        return f"{self.nombre} ({self.tipo_usuario})"
+    
+    def __repr__(self):
+        return f"Usuario('{self.nombre}', '{self.email}', '{self.dni}')"
+
+class Estudiante(Usuario):
+    """Clase que representa a un estudiante"""
+    
+    tipo_usuario = "Estudiante"
+    
+    def __init__(self, nombre, email, dni, carrera):
+        super().__init__(nombre, email, dni)
+        self.carrera = carrera
+    
+    def __str__(self):
+        return f"{self.nombre} - {self.carrera} ({self.tipo_usuario})"
+
+class Profesor(Usuario):
+    """Clase que representa a un profesor"""
+    
+    tipo_usuario = "Profesor"
+    
+    def __init__(self, nombre, email, dni, departamento):
+        super().__init__(nombre, email, dni)
+        self.departamento = departamento
+    
+    def __str__(self):
+        return f"{self.nombre} - {self.departamento} ({self.tipo_usuario})"
+
+# Ejemplo de uso
+if __name__ == "__main__":
     # Crear productos
     producto1 = ProductoInventario("LAP001", "laptop gaming", 1200.50, 10)
     producto2 = ProductoInventario("MOU001", "mouse inalámbrico", 25.99, 50)
@@ -778,13 +824,18 @@ try:
     print(f"Disponible después de desactivar: {producto2.disponible}")  # False
     print(f"Valor inventario después de desactivar: {producto2.valor_inventario}€")  # 0
     
-except ValueError as e:
-    print(f"Error de validación: {e}")
-except RuntimeError as e:
-    print(f"Error de estado: {e}")
+    # Crear usuarios
+    usuario1 = Usuario("Juan Pérez", "juan@email.com", "12345678A")
+    estudiante1 = Estudiante("Ana García", "ana@email.com", "87654321B", "Ingeniería")
+    profesor1 = Profesor("Luis López", "luis@email.com", "11223344C", "Matemáticas")
+    
+    print("\n=== USUARIOS CREADOS ===")
+    print(usuario1)
+    print(estudiante1)
+    print(profesor1)
 ```
 
----
+:computer: Actividad 1
 
 ## HERENCIA
 
@@ -1004,16 +1055,12 @@ class Forma:
     
     def perimetro(self):
         raise NotImplementedError("Este método debe ser implementado por las clases hijas")
-    
-    def info(self):
-        return f"Forma de color {self.color}"
 
 class Rectangulo(Forma):
     def __init__(self, ancho, alto, color="blanco"):
-        super().__init__(color)  # Llamar constructor de la clase base
+        super().__init__(color)  # Llamar al constructor de la clase base
         self.ancho = ancho
         self.alto = alto
-        print(f"Rectángulo de {ancho}x{alto} creado")
     
     def area(self):
         return self.ancho * self.alto
@@ -1022,14 +1069,12 @@ class Rectangulo(Forma):
         return 2 * (self.ancho + self.alto)
     
     def info(self):
-        info_base = super().info()  # Obtener info de la clase base
-        return f"{info_base} - Rectángulo {self.ancho}x{self.alto}"
+        return f"Rectángulo de color {self.color}"
 
 class Cuadrado(Rectangulo):
     def __init__(self, lado, color="blanco"):
         # Un cuadrado es un rectángulo con lados iguales
         super().__init__(lado, lado, color)
-        print(f"Cuadrado de lado {lado} creado")
     
     def info(self):
         info_base = super().info()
@@ -1051,133 +1096,67 @@ print(f"Área cuadrado: {cuadrado.area()}")          # 16
 print(f"Perímetro cuadrado: {cuadrado.perimetro()}")     # 16
 ```
 
----
+## CLASES ABSTRACTAS E INTERFACES
 
-## POLIMORFISMO
+### Concepto de clases abstractas
 
-### Concepto de polimorfismo
+Las **clases abstractas** son clases que no pueden ser instanciadas directamente y están diseñadas para ser heredadas. Definen una interfaz común que las clases derivadas deben implementar.
 
-El **polimorfismo** es la capacidad de objetos de diferentes clases de responder al mismo mensaje (método) de manera específica para cada clase. Permite que el mismo código funcione con objetos de diferentes tipos.
+**Características principales:**
+- No se pueden crear objetos directamente de una clase abstracta
+- Pueden contener métodos abstractos (sin implementación) y métodos concretos (con implementación)
+- Obligan a las clases hijas a implementar ciertos métodos
+- Se implementan usando el módulo `abc` (Abstract Base Classes)
 
-**Tipos de polimorfismo:**
-1. **Polimorfismo de herencia**: Diferentes clases hijas implementan el mismo método de manera diferente
-2. **Polimorfismo de interfaz**: Diferentes clases implementan los mismos métodos sin necesariamente heredar
-
-### Uso de métodos sobrescritos en clases derivadas
-
-#### Sobrescritura de métodos
-
-La **sobrescritura** (override) ocurre cuando una clase hija redefine un método que existe en la clase padre.
+#### Crear clases abstractas con `abc`
 
 ```python
-class Instrumento:
-    def __init__(self, nombre):
-        self.nombre = nombre
+from abc import ABC, abstractmethod
+
+class Figura(ABC):
+    """Clase abstracta para figuras geométricas"""
     
-    def tocar(self):
-        return f"Tocando {self.nombre}"
+    def __init__(self, color="blanco"):
+        self.color = color
     
-    def afinar(self):
-        return f"Afinando {self.nombre}"
-
-class Piano(Instrumento):
-    def __init__(self, nombre, num_teclas=88):
-        super().__init__(nombre)
-        self.num_teclas = num_teclas
-    
-    # Sobrescribir el método tocar
-    def tocar(self):
-        return f"Presionando las teclas del {self.nombre}"
-    
-    def pedales(self):
-        return f"Usando los pedales del {self.nombre}"
-
-class Guitarra(Instrumento):
-    def __init__(self, nombre, num_cuerdas=6):
-        super().__init__(nombre)
-        self.num_cuerdas = num_cuerdas
-    
-    # Sobrescribir el método tocar
-    def tocar(self):
-        return f"Rasguеando las cuerdas de la {self.nombre}"
-    
-    def cambiar_cuerdas(self):
-        return f"Cambiando las cuerdas de la {self.nombre}"
-
-class Bateria(Instrumento):
-    def __init__(self, nombre, num_tambores=5):
-        super().__init__(nombre)
-        self.num_tambores = num_tambores
-    
-    # Sobrescribir el método tocar
-    def tocar(self):
-        return f"Golpeando los tambores de la {self.nombre}"
-    
-    # Sobrescribir el método afinar
-    def afinar(self):
-        return f"Tensando los parches de la {self.nombre}"
-
-# Crear instrumentos
-piano = Piano("Piano de cola")
-guitarra = Guitarra("Guitarra clásica")
-bateria = Bateria("Batería acústica")
-
-# Métodos sobrescritos - cada uno se comporta diferente
-print(piano.tocar())     # Presionando las teclas del Piano de cola
-print(guitarra.tocar())  # Rasguеando las cuerdas de la Guitarra clásica
-print(bateria.tocar())   # Golpeando los tambores de la Batería acústica
-
-# Método heredado (sin sobrescribir)
-print(piano.afinar())    # Afinando Piano de cola
-print(guitarra.afinar()) # Afinando Guitarra clásica
-print(bateria.afinar())  # Tensando los parches de la Batería acústica
-```
-
-#### Polimorfismo en acción
-
-```python
-def concierto(instrumentos):
-    """Función que demuestra polimorfismo"""
-    print("🎵 ¡Comenzando el concierto! 🎵")
-    
-    for instrumento in instrumentos:
-        print(f"- {instrumento.tocar()}")
-        print(f"- {instrumento.afinar()}")
-        print()
-
-# Lista de diferentes instrumentos
-banda = [
-    Piano("Piano eléctrico"),
-    Guitarra("Guitarra eléctrica", 7),
-    Bateria("Batería electrónica"),
-    Guitarra("Bajo eléctrico", 4)
-]
-
-# El mismo código funciona con diferentes tipos de objetos
-concierto(banda)
-```
-
-#### Ejemplo completo de polimorfismo
-
-```python
-class Figura:
-    """Clase base para figuras geométricas"""
-    
-    def __init__(self, nombre):
-        self.nombre = nombre
-    
+    @abstractmethod
     def area(self):
-        raise NotImplementedError("Debe implementarse en la clase derivada")
+        """Método abstracto: debe ser implementado por las clases hijas"""
+        pass
+    
+    @abstractmethod
+    def perimetro(self):
+        """Método abstracto: debe ser implementado por las clases hijas"""
+        pass
+    
+    # Método concreto (con implementación)
+    def describir(self):
+        """Método concreto que pueden usar todas las clases hijas"""
+        return f"Figura de color {self.color}"
+
+# Intentar instanciar la clase abstracta genera error
+# figura = Figura()  # TypeError: Can't instantiate abstract class
+
+class Rectangulo(Figura):
+    """Clase concreta que hereda de Figura"""
+    
+    def __init__(self, ancho, alto, color="blanco"):
+        super().__init__(color)  # Llamar al constructor de la clase base
+        self.ancho = ancho
+        self.alto = alto
+    
+    # Implementar métodos abstractos (obligatorio)
+    def area(self):
+        return self.ancho * self.alto
     
     def perimetro(self):
-        raise NotImplementedError("Debe implementarse en la clase derivada")
-    
-    def descripcion(self):
-        return f"{self.nombre}: Área = {self.area():.2f}, Perímetro = {self.perimetro():.2f}"
+        return 2 * (self.ancho + self.alto)
 
 class Circulo(Figura):
-    def __init__(self, radio):
-        super().__init__("Círculo")
+    """Otra clase concreta"""
+    
+    def __init__(self, radio, color="blanco"):
+        super().__init__(color)  # Llamar al constructor de la clase base
         self.radio = radio
     
     def area(self):
@@ -1186,795 +1165,688 @@ class Circulo(Figura):
     def perimetro(self):
         return 2 * 3.14159 * self.radio
 
-class Rectangulo(Figura):
-    def __init__(self, ancho, alto):
-        super().__init__("Rectángulo")
-        self.ancho = ancho
-        self.alto = alto
+# Ahora sí podemos instanciar las clases concretas
+rect = Rectangulo(5, 3, "azul")
+circ = Circulo(4, "rojo")
+
+print(rect.area())         # 15
+print(rect.describir())    # Figura de color azul - Rectángulo 5x3
+print(circ.perimetro())    # 25.13272
+```
+
+#### Métodos abstractos con implementación parcial
+
+```python
+from abc import ABC, abstractmethod
+
+class Vehiculo(ABC):
+    """Clase abstracta con métodos abstractos y concretos"""
     
+    def __init__(self, marca, modelo):
+        self.marca = marca
+        self.modelo = modelo
+        self.velocidad = 0
+    
+    @abstractmethod
+    def arrancar(self):
+        """Método abstracto con implementación base"""
+        print(f"Arrancando {self.marca} {self.modelo}")
+        # Las clases hijas pueden llamar a super().arrancar()
+    
+    @abstractmethod
+    def detener(self):
+        """Método abstracto puro"""
+    
+    def acelerar(self, incremento=10):
+        """Método concreto"""
+        self.velocidad += incremento
+        return f"Velocidad: {self.velocidad} km/h"
+
+class Coche(Vehiculo):
+    def arrancar(self):
+        super().arrancar()  # Llamar a la implementación base
+        print("Encendiendo motor de gasolina")
+    
+    def detener(self):
+        self.velocidad = 0
+        print("Coche detenido con frenos de disco")
+
+class Motocicleta(Vehiculo):
+    def arrancar(self):
+        super().arrancar()
+        print("Activando motor eléctrico")
+    
+    def detener(self):
+        self.velocidad = 0
+        print("Vehículo eléctrico detenido con frenos regenerativos")
+
+# Ahora sí podemos instanciar las clases concretas
+coche = Coche("Toyota", "Camry", 2023, 4)
+coche.arrancar()
+# Salida:
+# Arrancando Toyota Camry
+# Encendiendo motor de gasolina
+    
+electrico = Motocicleta("Yamaha", "R1", 2023, 1000)
+electrico.arrancar()
+# Salida:
+# Arrancando Yamaha R1
+# Activando motor eléctrico
+```
+
+### Interfaces en Python
+
+Python no tiene una palabra clave específica para interfaces como otros lenguajes (Java, C#), pero se pueden simular usando:
+
+1. **Clases abstractas con solo métodos abstractos**
+2. **Protocolos (desde Python 3.8)**
+
+#### Interfaces mediante clases abstractas
+
+```python
+from abc import ABC, abstractmethod
+
+class Reproducible(ABC):
+    """Interfaz para objetos reproducibles"""
+    
+    @abstractmethod
+    def reproducir(self):
+        """Inicia la reproducción"""
+    
+    @abstractmethod
+    def pausar(self):
+        """Pausa la reproducción"""
+    
+    @abstractmethod
+    def detener(self):
+        """Detiene la reproducción"""
+
+class Descargable(ABC):
+    """Interfaz para objetos descargables"""
+    
+    @abstractmethod
+    def descargar(self, destino):
+        """Descarga el contenido"""
+    
+    @abstractmethod
+    def obtener_tamaño(self):
+        """Retorna el tamaño del archivo"""
+
+# Implementar múltiples interfaces (herencia múltiple)
+class Video(Reproducible, Descargable):
+    """Clase que implementa dos interfaces"""
+    
+    def __init__(self, titulo, url, tamaño_mb):
+        self.titulo = titulo
+        self.url = url
+        self.tamaño_mb = tamaño_mb
+        self.reproduciendo = False
+    
+    # Implementar métodos de Reproducible
+    def reproducir(self):
+        self.reproduciendo = True
+        return f"Reproduciendo video: {self.titulo}"
+    
+    def pausar(self):
+        return f"Video pausado: {self.titulo}"
+    
+    def detener(self):
+        self.reproduciendo = False
+        return f"Video detenido: {self.titulo}"
+    
+    # Implementar métodos de Descargable
+    def descargar(self, destino):
+        return f"Descargando {self.titulo} a {destino}"
+    
+    def obtener_tamaño(self):
+        return self.tamaño_mb
+
+class Audio(Reproducible, Descargable):
+    """Otra clase que implementa las mismas interfaces"""
+    
+    def __init__(self, titulo, artista, url, tamaño_mb):
+        self.titulo = titulo
+        self.artista = artista
+        self.url = url
+        self.tamaño_mb = tamaño_mb
+    
+    def reproducir(self):
+        return f"♪ Reproduciendo: {self.titulo} - {self.artista}"
+    
+    def pausar(self):
+        return f"♪ Pausado: {self.titulo}"
+    
+    def detener(self):
+        return f"♪ Detenido: {self.titulo}"
+    
+    def descargar(self, destino):
+        return f"Descargando {self.titulo} de {self.artista}"
+    
+    def obtener_tamaño(self):
+        return self.tamaño_mb
+
+# Función polimórfica que trabaja con cualquier Reproducible
+def reproducir_multimedia(items):
+    """Reproduce cualquier objeto que implemente Reproducible"""
+    for item in items:
+        if isinstance(item, Reproducible):
+            print(item.reproducir())
+
+# Uso
+video = Video("Tutorial Python", "https://...", 150)
+audio = Audio("Canción", "Artista", "https://...", 5)
+
+reproducir_multimedia([video, audio])
+# Salida:
+# Reproduciendo video: Tutorial Python
+# ♪ Reproduciendo: Canción - Artista
+```
+
+#### Protocolos (Python 3.8+)
+
+Los **protocolos** son una forma más "pythónica" de definir interfaces usando `typing.Protocol`:
+
+```python
+from typing import Protocol
+
+class Volador(Protocol):
+    """Protocolo para objetos que pueden volar"""
+    
+    def despegar(self) -> str:
+        ...
+    
+    def aterrizar(self) -> str:
+        ...
+    
+    def volar_a(self, destino: str) -> str:
+        ...
+
+class Ave:
+    def despegar(self) -> str:
+        return "El ave despega batiendo sus alas"
+    
+    def aterrizar(self) -> str:
+        return "El ave aterriza suavemente"
+    
+    def volar_a(self, destino: str) -> str:
+        return f"El ave vuela hacia {destino}"
+
+class Avion:
+    def despegar(self) -> str:
+        return "El avión despega de la pista"
+    
+    def aterrizar(self) -> str:
+        return "El avión aterriza en el aeropuerto"
+    
+    def volar_a(self, destino: str) -> str:
+        return f"El avión vuela hacia {destino}"
+
+def realizar_vuelo(volador: Volador, destino: str):
+    """Función que trabaja con cualquier objeto que cumpla el protocolo"""
+    print(volador.despegar())
+    print(volador.volar_a(destino))
+    print(volador.aterrizar())
+
+# Uso - duck typing: si camina como pato y grazna como pato...
+ave = Ave()
+avion = Avion()
+
+realizar_vuelo(ave, "sur")
+realizar_vuelo(avion, "Madrid")
+```
+
+#### Ejemplo completo: Sistema de pagos
+
+```python
+from abc import ABC, abstractmethod
+
+# Interfaz para métodos de pago
+class MetodoPago(ABC):
+    """Interfaz abstracta para métodos de pago"""
+    
+    @abstractmethod
+    def procesar_pago(self, cantidad):
+        """Procesa un pago"""
+    
+    @abstractmethod
+    def validar(self):
+        """Valida el método de pago"""
+    
+    @abstractmethod
+    def obtener_descripcion(self):
+        """Obtiene descripción del método"""
+
+class TarjetaCredito(MetodoPago):
+    def __init__(self, numero, titular, cvv):
+        self.numero = numero
+        self.titular = titular
+        self.cvv = cvv
+    
+    def validar(self):
+        # Validación simple
+        return len(self.numero) == 16 and len(self.cvv) == 3
+    
+    def procesar_pago(self, cantidad):
+        if not self.validar():
+            raise ValueError("Tarjeta inválida")
+        return f"Pago de {cantidad}€ procesado con tarjeta ****{self.numero[-4:]}"
+    
+    def obtener_descripcion(self):
+        return f"Tarjeta de crédito ****{self.numero[-4:]}"
+
+class PayPal(MetodoPago):
+    def __init__(self, email):
+        self.email = email
+    
+    def validar(self):
+        return "@" in self.email and len(self.email) > 5
+    
+    def procesar_pago(self, cantidad):
+        if not self.validar():
+            raise ValueError("Email inválido")
+        return f"Pago de {cantidad}€ procesado vía PayPal ({self.email})"
+    
+    def obtener_descripcion(self):
+        return f"PayPal: {self.email}"
+
+class Transferencia(MetodoPago):
+    def __init__(self, iban, banco):
+        self.iban = iban
+        self.banco = banco
+    
+    def validar(self):
+        return len(self.iban) >= 20
+    
+    def procesar_pago(self, cantidad):
+        if not self.validar():
+            raise ValueError("IBAN inválido")
+        return f"Transferencia de {cantidad}€ procesada desde {self.banco}"
+    
+    def obtener_descripcion(self):
+        return f"Transferencia bancaria: {self.iban[:4]}...{self.iban[-4:]}"
+
+# Sistema de procesamiento de pagos
+class SistemaPagos:
+    def __init__(self):
+        self.pagos_procesados = []
+    
+    def realizar_pago(self, metodo_pago: MetodoPago, cantidad: float):
+        """Procesa un pago usando cualquier método que implemente MetodoPago"""
+        try:
+            print(f"\n--- Procesando con {metodo_pago.obtener_descripcion()} ---")
+            resultado = metodo_pago.procesar_pago(cantidad)
+            self.pagos_procesados.append({
+                'metodo': metodo_pago.obtener_descripcion(),
+                'cantidad': cantidad,
+                'resultado': resultado
+            })
+            print(resultado)
+            return True
+        except ValueError as e:
+            print(f"Error: {e}")
+            return False
+    
+    def mostrar_historial(self):
+        """Muestra el historial de pagos"""
+        print("\n=== HISTORIAL DE PAGOS ===")
+        for pago in self.pagos_procesados:
+            print(f"- {pago['metodo']}: {pago['cantidad']}€")
+
+# Uso del sistema
+sistema = SistemaPagos()
+
+# Diferentes métodos de pago
+tarjeta = TarjetaCredito("1234567890123456", "Juan Pérez", "123")
+paypal = PayPal("usuario@email.com")
+transferencia = Transferencia("ES1234567890123456789012", "BBVA")
+
+# Procesar pagos con diferentes métodos
+sistema.realizar_pago(tarjeta, 150.00)
+sistema.realizar_pago(paypal, 75.50)
+sistema.realizar_pago(transferencia, 500.00)
+
+# Mostrar historial
+sistema.mostrar_historial()
+```
+
+## POLIMORFISMO
+
+### Concepto de polimorfismo
+
+El **polimorfismo** es otro de los principios fundamentales de la POO. Permite que objetos de diferentes clases sean tratados como objetos de una clase común a través de una interfaz compartida.
+
+**Tipos de polimorfismo:**
+- **Polimorfismo de inclusión**: Clases diferentes que son tratadas como instancias de una misma clase base (herencia).
+- **Polimorfismo de sobrecarga**: Múltiples métodos con el mismo nombre pero comportamientos diferentes (no soportado nativamente en Python, se logra con argumentos por defecto o `*args`/`**kwargs`).
+- **Polimorfismo de tiempo de ejecución**: Decisión sobre qué método ejecutar en tiempo de ejecución (logrado mediante métodos sobrescritos).
+
+### Uso de métodos sobrescritos en clases derivadas
+
+La **sobrescritura de métodos** (overriding) es una forma de polimorfismo donde una clase derivada proporciona una implementación específica de un método que ya está definido en su clase base.
+
+#### Sobrescritura de métodos
+
+```python
+class Animal:
+    def hacer_sonido(self):
+        return "El animal hace un sonido"
+
+class Perro(Animal):
+    def hacer_sonido(self):
+        return "Guau!"
+
+class Gato(Animal):
+    def hacer_sonido(self):
+        return "Miau"
+
+# Función que recibe un animal y hace que emita su sonido
+def reproducir_sonido(animal: Animal):
+    print(animal.hacer_sonido())
+
+# Uso
+mi_perro = Perro()
+mi_gato = Gato()
+
+reproducir_sonido(mi_perro)  # Guau!
+reproducir_sonido(mi_gato)   # Miau
+```
+
+#### Utilización del Polimorfismo
+
+El polimorfismo permite escribir código más genérico y reutilizable. Por ejemplo, una función puede aceptar cualquier objeto que tenga un método específico, sin importar su clase concreta.
+
+```python
+class Ave:
+    def volar(self):
+        return "El ave vuela en el cielo"
+
+class Pinguino(Ave):
+    def volar(self):
+        return "Los pingüinos no vuelan, nadan en el agua"
+
+# Función que hace que cualquier ave vuele
+def hacer_volar(ave: Ave):
+    print(ave.volar())
+
+# Uso
+mi_ave = Ave()
+mi_pinguino = Pinguino()
+
+hacer_volar(mi_ave)       # El ave vuela en el cielo
+hacer_volar(mi_pinguino)  # Los pingüinos no vuelan, nadan en el agua
+```
+
+#### Ejemplo completo de polimorfismo
+
+```python
+class Forma:
     def area(self):
-        return self.ancho * self.alto
+        raise NotImplementedError("Subclases deben implementar este método")
     
     def perimetro(self):
-        return 2 * (self.ancho + self.alto)
+        raise NotImplementedError("Subclases deben implementar este método")
 
-class Triangulo(Figura):
-    def __init__(self, base, altura, lado1, lado2):
-        super().__init__("Triángulo")
+class Cuadrado(Forma):
+    def __init__(self, lado):
+        self.lado = lado
+    
+    def area(self):
+        return self.lado ** 2
+    
+    def perimetro(self):
+        return 4 * self.lado
+
+class Triangulo(Forma):
+    def __init__(self, base, altura):
         self.base = base
         self.altura = altura
-        self.lado1 = lado1
-        self.lado2 = lado2
     
     def area(self):
         return (self.base * self.altura) / 2
     
     def perimetro(self):
-        return self.base + self.lado1 + self.lado2
+        # Suponiendo triángulo equilátero para simplificar
+        return 3 * self.base
 
-# Función polimórfica
-def analizar_figuras(figuras):
-    """Analiza una lista de figuras de diferentes tipos"""
-    print("=== ANÁLISIS DE FIGURAS ===")
-    
-    area_total = 0
-    perimetro_total = 0
-    
-    for figura in figuras:
-        print(figura.descripcion())
-        area_total += figura.area()
-        perimetro_total += figura.perimetro()
-    
-    print(f"\nÁrea total: {area_total:.2f}")
-    print(f"Perímetro total: {perimetro_total:.2f}")
+# Lista de formas
+formas = [Cuadrado(4), Triangulo(3, 6)]
 
-def figura_mas_grande(figuras):
-    """Encuentra la figura con mayor área"""
-    if not figuras:
-        return None
-    
-    mayor = figuras[0]
-    for figura in figuras[1:]:
-        if figura.area() > mayor.area():
-            mayor = figura
-    
-    return mayor
-
-# Crear diferentes figuras
-figuras = [
-    Circulo(5),
-    Rectangulo(4, 6),
-    Triangulo(8, 6, 7, 9),
-    Circulo(3),
-    Rectangulo(10, 2)
-]
-
-# Polimorfismo: el mismo código funciona con diferentes tipos
-analizar_figuras(figuras)
-
-print(f"\nFigura más grande: {figura_mas_grande(figuras).descripcion()}")
+# Calcular áreas y perímetros
+for forma in formas:
+    print(f"Área: {forma.area()}, Perímetro: {forma.perimetro()}")
 ```
 
 ## MÉTODOS ESPECIALES
 
 ### ¿Qué son los métodos mágicos?
 
-Los **métodos especiales** (también llamados **métodos mágicos** o **dunder methods**) son métodos predefinidos en Python que comienzan y terminan con doble guion bajo (`__`). Permiten que tus objetos se comporten como tipos incorporados de Python.
-
-**Características:**
-- Se llaman automáticamente en situaciones específicas
-- Permiten personalizar el comportamiento de operadores
-- Hacen que los objetos sean más "pythónicos"
-- No se llaman directamente (Python los invoca automáticamente)
+Los **métodos mágicos** (o métodos especiales) son funciones predefinidas en Python que permiten a las clases personalizar su comportamiento en ciertas situaciones. Se les conoce como "mágicos" porque empiezan y terminan con dobles guiones bajos (`__`), como `__init__`, `__str__`, `__add__`, entre otros.
 
 ### Uso de métodos mágicos como `__init__()`, `__str__()`, y `__repr__()`
 
 #### El método `__init__()`
 
-Ya lo hemos usado extensivamente. Es el constructor que se llama al crear un objeto.
+El método `__init__()` es el constructor de la clase. Se llama automáticamente al crear una nueva instancia de la clase.
 
 ```python
-class Punto:
-    def __init__(self, x=0, y=0):
-        self.x = x
-        self.y = y
-        print(f"Punto creado en ({x}, {y})")
+class Persona:
+    def __init__(self, nombre, edad):
+        self.nombre = nombre
+        self.edad = edad
 
-# Se llama automáticamente al crear el objeto
-p = Punto(3, 4)  # Punto creado en (3, 4)
+# Crear objeto
+persona1 = Persona("Juan", 30)
+
+# Acceder a atributos
+print(persona1.nombre)  # Juan
+print(persona1.edad)    # 30
 ```
 
 #### El método `__str__()`
 
-Define la representación "amigable" del objeto cuando se usa `str()` o `print()`.
+El método `__str__()` define la representación en forma de cadena de un objeto, es decir, cómo se muestra el objeto como texto. Se llama automáticamente cuando se usa `print()` con un objeto de esa clase.
 
 ```python
-class Libro:
-    def __init__(self, titulo, autor, paginas):
-        self.titulo = titulo
-        self.autor = autor
-        self.paginas = paginas
+class Persona:
+    def __init__(self, nombre, edad):
+        self.nombre = nombre
+        self.edad = edad
     
     def __str__(self):
-        return f"{self.titulo} por {self.autor} ({self.paginas} páginas)"
+        return f"{self.nombre} tiene {self.edad} años"
 
-libro = Libro("El Quijote", "Cervantes", 1200)
-print(libro)        # El Quijote por Cervantes (1200 páginas)
-print(str(libro))   # El Quijote por Cervantes (1200 páginas)
+# Crear objeto
+persona1 = Persona("Ana", 25)
+
+# Imprimir objeto
+print(persona1)  # Ana tiene 25 años
 ```
 
 #### El método `__repr__()`
 
-Define la representación "técnica" del objeto, idealmente debe ser una expresión válida de Python.
+El método `__repr__()` define una representación más detallada y técnica del objeto, útil para depuración. Se llama automáticamente cuando se usa `repr()` con un objeto de esa clase o en ciertas situaciones de depuración.
 
 ```python
-class Punto:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-    
-    def __str__(self):
-        return f"Punto({self.x}, {self.y})"
+class Persona:
+    def __init__(self, nombre, edad):
+        self.nombre = nombre
+        self.edad = edad
     
     def __repr__(self):
-        return f"Punto(x={self.x}, y={self.y})"
+        return f"Persona(nombre={self.nombre}, edad={self.edad})"
 
-p = Punto(3, 4)
-print(str(p))   # Punto(3, 4)
-print(repr(p))  # Punto(x=3, y=4)
-print(p)        # Punto(3, 4) (usa __str__ si existe, sino __repr__)
+# Crear objeto
+persona1 = Persona("Luis", 28)
 
-# En lista, usa __repr__
-puntos = [Punto(1, 2), Punto(3, 4)]
-print(puntos)   # [Punto(x=1, y=2), Punto(x=3, y=4)]
+# Representación para depuración
+print(repr(persona1))  # Persona(nombre=Luis, edad=28)
 ```
 
 #### Otros métodos especiales importantes
 
-```python
-class Producto:
-    def __init__(self, nombre, precio):
-        self.nombre = nombre
-        self.precio = precio
-    
-    # Representación en string
-    def __str__(self):
-        return f"{self.nombre} - {self.precio}€"
-    
-    def __repr__(self):
-        return f"Producto('{self.nombre}', {self.precio})"
-    
-    # Comparaciones
-    def __eq__(self, other):
-        """Igualdad (==)"""
-        if isinstance(other, Producto):
-            return self.precio == other.precio
-        return False
-    
-    def __lt__(self, other):
-        """Menor que (<)"""
-        if isinstance(other, Producto):
-            return self.precio < other.precio
-        return NotImplemented
-    
-    def __le__(self, other):
-        """Menor o igual (<=)"""
-        return self < other or self == other
-    
-    def __gt__(self, other):
-        """Mayor que (>)"""
-        if isinstance(other, Producto):
-            return self.precio > other.precio
-        return NotImplemented
-    
-    def __ge__(self, other):
-        """Mayor o igual (>=)"""
-        return self > other or self == other
-    
-    # Operaciones aritméticas
-    def __add__(self, other):
-        """Suma (+)"""
-        if isinstance(other, Producto):
-            return self.precio + other.precio
-        elif isinstance(other, (int, float)):
-            return Producto(self.nombre, self.precio + other)
-        return NotImplemented
-    
-    def __mul__(self, other):
-        """Multiplicación (*)"""
-        if isinstance(other, (int, float)):
-            return Producto(self.nombre, self.precio * other)
-        return NotImplemented
-    
-    # Longitud y contenido
-    def __len__(self):
-        """Longitud del nombre del producto"""
-        return len(self.nombre)
-    
-    def __contains__(self, item):
-        """Operador 'in' """
-        return item.lower() in self.nombre.lower()
-    
-    # Conversión a bool
-    def __bool__(self):
-        """Verdadero si tiene precio positivo"""
-        return self.precio > 0
-    
-    # Hacer el objeto iterable
-    def __iter__(self):
-        """Hacer el producto iterable"""
-        return iter([self.nombre, self.precio])
+- `__add__(self, other)`: Sobrecarga del operador `+`
+- `__sub__(self, other)`: Sobrecarga del operador `-`
+- `__mul__(self, other)`: Sobrecarga del operador `*`
+- `__truediv__(self, other)`: Sobrecarga del operador `/`
+- `__len__(self)`: Define el comportamiento de la función `len()` para la clase
+- `__getitem__(self, key)`: Sobrecarga del acceso a elementos, como `objeto[key]`
+- `__setitem__(self, key, value)`: Sobrecarga de la asignación de elementos, como `objeto[key] = value`
+- `__delitem__(self, key)`: Sobrecarga de la eliminación de elementos, como `del objeto[key]`
+- `__iter__(self)`: Devuelve un iterador para la clase
+- `__next__(self)`: Devuelve el siguiente elemento del iterador
+- `__contains__(self, item)`: Sobrecarga del operador `in` para verificar pertenencia
 
-# Ejemplos de uso
-producto1 = Producto("Laptop", 800)
-producto2 = Producto("Mouse", 25)
-producto3 = Producto("Laptop", 800)
-
-print("=== REPRESENTACIONES ===")
-print(str(producto1))    # Laptop - 800€
-print(repr(producto1))   # Producto('Laptop', 800)
-
-print("\n=== COMPARACIONES ===")
-print(producto1 == producto3)  # True (mismo precio)
-print(producto1 > producto2)   # True (800 > 25)
-print(producto2 < producto1)   # True (25 < 800)
-
-print("\n=== OPERACIONES ARITMÉTICAS ===")
-suma = producto1 + producto2   # Suma de precios
-print(suma)                    # 825
-
-descuento = producto1 * 0.9    # 10% descuento
-print(descuento)               # Laptop - 720.0€
-
-print("\n=== OTROS MÉTODOS ===")
-print(len(producto1))          # 6 (longitud de "Laptop")
-print("lap" in producto1)      # True
-print(bool(producto1))         # True (precio > 0)
-
-# Iteración
-for elemento in producto1:
-    print(elemento)            # Laptop, luego 800
-```
-
-#### Ejemplo completo con métodos especiales
+### Ejemplo completo con métodos especiales
 
 ```python
 class Vector:
-    """Clase Vector con múltiples métodos especiales"""
-    
     def __init__(self, x, y):
         self.x = x
         self.y = y
     
-    # Representaciones
-    def __str__(self):
-        return f"({self.x}, {self.y})"
+    def __add__(self, otro):
+        return Vector(self.x + otro.x, self.y + otro.y)
+    
+    def __sub__(self, otro):
+        return Vector(self.x - otro.x, self.y - otro.y)
+    
+    def __mul__(self, escalar):
+        return Vector(self.x * escalar, self.y * escalar)
+    
+    def __truediv__(self, escalar):
+        return Vector(self.x / escalar, self.y / escalar)
     
     def __repr__(self):
         return f"Vector({self.x}, {self.y})"
-    
-    # Operaciones aritméticas
-    def __add__(self, other):
-        """Suma de vectores"""
-        if isinstance(other, Vector):
-            return Vector(self.x + other.x, self.y + other.y)
-        return NotImplemented
-    
-    def __sub__(self, other):
-        """Resta de vectores"""
-        if isinstance(other, Vector):
-            return Vector(self.x - other.x, self.y - other.y)
-        return NotImplemented
-    
-    def __mul__(self, scalar):
-        """Multiplicación por escalar"""
-        if isinstance(scalar, (int, float)):
-            return Vector(self.x * scalar, self.y * scalar)
-        return NotImplemented
-    
-    def __rmul__(self, scalar):
-        """Multiplicación por escalar (orden inverso)"""
-        return self * scalar
-    
-    def __truediv__(self, scalar):
-        """División por escalar"""
-        if isinstance(scalar, (int, float)) and scalar != 0:
-            return Vector(self.x / scalar, self.y / scalar)
-        return NotImplemented
-    
-    # Operaciones unarias
-    def __neg__(self):
-        """Vector negativo"""
-        return Vector(-self.x, -self.y)
-    
-    def __abs__(self):
-        """Magnitud del vector"""
-        return (self.x ** 2 + self.y ** 2) ** 0.5
-    
-    # Comparaciones
-    def __eq__(self, other):
-        """Igualdad"""
-        if isinstance(other, Vector):
-            return self.x == other.x and self.y == other.y
-        return False
-    
-    def __lt__(self, other):
-        """Comparación por magnitud"""
-        if isinstance(other, Vector):
-            return abs(self) < abs(other)
-        return NotImplemented
-    
-    # Acceso como secuencia
-    def __getitem__(self, index):
-        """Acceso por índice"""
-        if index == 0:
-            return self.x
-        elif index == 1:
-            return self.y
-        else:
-            raise IndexError("Vector solo tiene índices 0 y 1")
-    
-    def __setitem__(self, index, value):
-        """Asignación por índice"""
-        if index == 0:
-            self.x = value
-        elif index == 1:
-            self.y = value
-        else:
-            raise IndexError("Vector solo tiene índices 0 y 1")
-    
-    def __len__(self):
-        """Longitud del vector (siempre 2)"""
-        return 2
-    
-    def __iter__(self):
-        """Hacer iterable"""
-        return iter([self.x, self.y])
-    
-    # Métodos de contexto
-    def __enter__(self):
-        """Entrada del contexto"""
-        print(f"Trabajando con vector {self}")
-        return self
-    
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        """Salida del contexto"""
-        print(f"Finalizando trabajo con vector {self}")
-        return False
-    
-    # Métodos adicionales
-    def magnitud(self):
-        return abs(self)
-    
-    def producto_punto(self, other):
-        """Producto punto con otro vector"""
-        if isinstance(other, Vector):
-            return self.x * other.x + self.y * other.y
-        return NotImplemented
 
-# Ejemplo de uso completo
-print("=== CREACIÓN Y REPRESENTACIÓN ===")
-v1 = Vector(3, 4)
-v2 = Vector(1, 2)
-print(f"v1: {v1}")       # (3, 4)
-print(f"v2: {repr(v2)}")  # Vector(1, 2)
+# Crear vectores
+v1 = Vector(2, 3)
+v2 = Vector(4, 5)
 
-print("\n=== OPERACIONES ARITMÉTICAS ===")
-suma = v1 + v2
-print(f"v1 + v2 = {suma}")      # (4, 6)
-
-resta = v1 - v2
-print(f"v1 - v2 = {resta}")     # (2, 2)
-
-escalar = v1 * 2
-print(f"v1 * 2 = {escalar}")    # (6, 8)
-
-division = v1 / 2
-print(f"v1 / 2 = {division}")   # (1.5, 2.0)
-
-negativo = -v1
-print(f"-v1 = {negativo}")      # (-3, -4)
-
-print("\n=== MAGNITUDES Y COMPARACIONES ===")
-print(f"|v1| = {abs(v1)}")      # 5.0
-print(f"|v2| = {abs(v2)}")      # 2.23606797749979
-print(f"v1 > v2: {v1 > v2}")    # True (mayor magnitud)
-
-print("\n=== ACCESO COMO SECUENCIA ===")
-print(f"v1[0] = {v1[0]}")       # 3
-print(f"v1[1] = {v1[1]}")       # 4
-print(f"len(v1) = {len(v1)}")   # 2
-
-v1[0] = 5
-print(f"Después de v1[0] = 5: {v1}")  # (5, 4)
-
-print("\n=== ITERACIÓN ===")
-for componente in v1:
-    print(f"Componente: {componente}")  # 5, luego 4
-
-print("\n=== CONTEXTO (with) ===")
-with Vector(2, 3) as v:
-    resultado = v * 4
-    print(f"Resultado en contexto: {resultado}")
-
-print("\n=== MÉTODOS ADICIONALES ===")
-print(f"Magnitud de v1: {v1.magnitud()}")
-print(f"Producto punto v1·v2: {v1.producto_punto(v2)}")
-
+# Operaciones con vectores
+print(v1 + v2)  # Vector(6, 8)
+print(v1 - v2)  # Vector(-2, -2)
+print(v1 * 3)   # Vector(6, 9)
+print(v2 / 2)   # Vector(2.0, 2.5)
 ```
 
 ## MÓDULOS Y PAQUETES EN POO
-
-A medida que nuestros programas orientados a objetos crecen, es fundamental saber cómo organizar las clases de manera eficiente. Los **módulos** y **paquetes** nos permiten estructurar el código de forma modular, reutilizable y mantenible.
 
 ### Organización de clases en módulos
 
 #### ¿Por qué usar módulos?
 
-Los módulos ofrecen varios beneficios importantes:
+Los **módulos** son archivos que contienen definiciones y declaraciones de Python. Permiten organizar el código en partes más manejables y reutilizables. Usar módulos tiene varias ventajas:
 
-- **Reutilización**: Las clases pueden usarse en múltiples programas
-- **Organización**: Código más limpio y estructurado
-- **Mantenimiento**: Fácil localizar y modificar código específico
-- **Colaboración**: Diferentes desarrolladores pueden trabajar en módulos separados
-- **Namespace**: Evita conflictos de nombres entre clases
+- **Organización**: Mantiene el código organizado y separado por funcionalidades.
+- **Reutilización**: Permite reutilizar código en diferentes partes de un programa o en diferentes programas.
+- **Mantenibilidad**: Facilita la actualización y mantenimiento del código.
+- **Namespace**: Proporciona un espacio de nombres separado para evitar colisiones de nombres.
 
 #### Crear un módulo con clases
 
-Un **módulo** es simplemente un archivo `.py` que contiene definiciones de clases, funciones y variables.
-
-**Ejemplo: Archivo `vehiculos.py`**
+Para crear un módulo, simplemente se define un archivo Python con las clases y funciones deseadas. Por ejemplo, un archivo `matematicas.py` con:
 
 ```python
-# vehiculos.py
-"""
-Módulo que contiene clases relacionadas con vehículos
-"""
+# matematicas.py
 
-class Vehiculo:
-    """Clase base para todos los vehículos"""
+class Calculadora:
+    def sumar(self, a, b):
+        return a + b
     
-    def __init__(self, marca, modelo, año):
-        self.marca = marca
-        self.modelo = modelo
-        self.año = año
-        self.velocidad = 0
-    
-    def acelerar(self, incremento=10):
-        """Aumenta la velocidad del vehículo"""
-        self.velocidad += incremento
-        return f"{self.marca} {self.modelo} acelera a {self.velocidad} km/h"
-    
-    def frenar(self, decremento=10):
-        """Reduce la velocidad del vehículo"""
-        self.velocidad = max(0, self.velocidad - decremento)
-        return f"{self.marca} {self.modelo} frena a {self.velocidad} km/h"
-    
-    def __str__(self):
-        return f"{self.marca} {self.modelo} ({self.año})"
-
-
-class Coche(Vehiculo):
-    """Clase que representa un coche"""
-    
-    def __init__(self, marca, modelo, año, puertas=4):
-        super().__init__(marca, modelo, año)
-        self.puertas = puertas
-        self.maletero_abierto = False
-    
-    def abrir_maletero(self):
-        """Abre el maletero del coche"""
-        self.maletero_abierto = True
-        return f"Maletero de {self} abierto"
-    
-    def cerrar_maletero(self):
-        """Cierra el maletero del coche"""
-        self.maletero_abierto = False
-        return f"Maletero de {self} cerrado"
-
-
-class Motocicleta(Vehiculo):
-    """Clase que representa una motocicleta"""
-    
-    def __init__(self, marca, modelo, año, cilindrada):
-        super().__init__(marca, modelo, año)
-        self.cilindrada = cilindrada
-        self.caballito = False
-    
-    def hacer_caballito(self):
-        """Hace un caballito con la motocicleta"""
-        if self.velocidad > 0:
-            self.caballito = True
-            return f"¡{self} haciendo caballito!"
-        return "Necesitas velocidad para hacer caballito"
-    
-    def parar_caballito(self):
-        """Para el caballito"""
-        self.caballito = False
-        return f"{self} vuelve a las dos ruedas"
-
-
-# Variables del módulo
-VEHICULOS_CREADOS = 0
-
-def crear_vehiculo(tipo, marca, modelo, año, **kwargs):
-    """Función factory para crear vehículos"""
-    global VEHICULOS_CREADOS
-    VEHICULOS_CREADOS += 1
-    
-    if tipo.lower() == 'coche':
-        return Coche(marca, modelo, año, kwargs.get('puertas', 4))
-    elif tipo.lower() == 'motocicleta':
-        return Motocicleta(marca, modelo, año, kwargs.get('cilindrada', 125))
-    else:
-        return Vehiculo(marca, modelo, año)
+    def restar(self, a, b):
+        return a - b
 ```
 
 #### Importar clases desde módulos
 
-**Archivo principal: `main.py`**
+Para usar las clases de un módulo, se debe importar el módulo en el script principal. Por ejemplo:
 
 ```python
 # main.py
+from matematicas import Calculadora
 
-# 1. Importar todo el módulo
-import vehiculos
-
-# Usar clases con notación de punto
-mi_coche = vehiculos.Coche("Toyota", "Corolla", 2023)
-print(mi_coche.acelerar())
-
-# 2. Importar clases específicas
-from vehiculos import Coche, Motocicleta, crear_vehiculo
-
-# Usar clases directamente
-mi_moto = Motocicleta("Honda", "CBR", 2022, 600)
-print(mi_moto.acelerar(20))
-print(mi_moto.hacer_caballito())
-
-# 3. Importar con alias
-from vehiculos import Vehiculo as VehiculoBase
-
-# Usar con alias
-vehiculo_generico = VehiculoBase("Ford", "Transit", 2021)
-
-# 4. Usar función factory
-nuevo_coche = crear_vehiculo("coche", "BMW", "X3", 2023, puertas=5)
-print(f"Vehículos creados hasta ahora: {vehiculos.VEHICULOS_CREADOS}")
+calc = Calculadora()
+print(calc.sumar(5, 3))
 ```
 
 ### Creación y estructura de paquetes
 
 #### ¿Qué es un paquete?
 
-Un **paquete** es una colección de módulos organizados en directorios. Permite agrupar módulos relacionados bajo un nombre común.
+Un **paquete** es una forma de organizar módulos relacionados en un solo directorio. Un paquete es simplemente un directorio que contiene un archivo especial llamado `__init__.py` (puede estar vacío) y uno o más módulos.
 
 #### El archivo `__init__.py`
 
-Este archivo especial convierte un directorio en un paquete Python. Puede estar vacío o contener código de inicialización.
+El archivo `__init__.py` indica a Python que el directorio debe ser tratado como un paquete. Puede estar vacío o contener código de inicialización para el paquete.
 
 #### Estructura de directorios
 
 ```
 mi_proyecto/
-├── main.py
-└── transporte/                 # Paquete principal
-    ├── __init__.py
-    ├── vehiculos/              # Subpaquete
-    │   ├── __init__.py
-    │   ├── terrestres.py
-    │   ├── aereos.py
-    │   └── acuaticos.py
-    ├── personas/               # Subpaquete
-    │   ├── __init__.py
-    │   ├── conductores.py
-    │   └── pasajeros.py
-    └── utils/                  # Subpaquete de utilidades
-        ├── __init__.py
-        └── validaciones.py
-```
-
-**Archivo `transporte/__init__.py`**
-
-```python
-# transporte/__init__.py
-"""
-Paquete de transporte
-Contiene clases y funciones para manejar diferentes tipos de transporte
-"""
-
-# Importar clases principales para acceso fácil
-from .vehiculos.terrestres import Coche, Motocicleta, Bicicleta
-from .vehiculos.aereos import Avion, Helicoptero
-from .personas.conductores import Conductor, Piloto
-
-# Metadata del paquete
-__version__ = "1.0.0"
-__author__ = "Tu Nombre"
-
-# Lista de elementos públicos
-__all__ = [
-    'Coche', 'Motocicleta', 'Bicicleta',
-    'Avion', 'Helicoptero',
-    'Conductor', 'Piloto'
-]
-
-print(f"Paquete transporte v{__version__} cargado")
-```
-
-**Archivo `transporte/vehiculos/__init__.py`**
-
-```python
-# transporte/vehiculos/__init__.py
-"""Subpaquete de vehículos"""
-
-from .terrestres import Coche, Motocicleta
-from .aereos import Avion
-from .acuaticos import Barco
-
-__all__ = ['Coche', 'Motocicleta', 'Avion', 'Barco']
-```
-
-**Archivo `transporte/vehiculos/terrestres.py`**
-
-```python
-# transporte/vehiculos/terrestres.py
-"""Vehículos terrestres"""
-
-from ..utils.validaciones import validar_año
-
-class VehiculoTerrestre:
-    """Clase base para vehículos terrestres"""
-    
-    def __init__(self, marca, modelo, año):
-        self.marca = marca
-        self.modelo = modelo
-        self.año = validar_año(año)
-        self.velocidad = 0
-    
-    def acelerar(self, incremento=10):
-        self.velocidad += incremento
-        return f"Acelerando a {self.velocidad} km/h"
-
-
-class Coche(VehiculoTerrestre):
-    """Clase que representa un coche"""
-    
-    def __init__(self, marca, modelo, año, puertas=4):
-        super().__init__(marca, modelo, año)
-        self.puertas = puertas
-    
-    def tocar_claxon(self):
-        return f"¡BEEP BEEP! - {self.marca} {self.modelo}"
-
-
-class Motocicleta(VehiculoTerrestre):
-    """Clase que representa una motocicleta"""
-    
-    def __init__(self, marca, modelo, año, cilindrada):
-        super().__init__(marca, modelo, año)
-        self.cilindrada = cilindrada
-    
-    def rugir_motor(self):
-        return f"¡BRUM BRUM! - {self.marca} {self.modelo} {self.cilindrada}cc"
-
-
-class Bicicleta(VehiculoTerrestre):
-    """Clase que representa una bicicleta"""
-    
-    def __init__(self, marca, modelo, tipo="urbana"):
-        # Las bicicletas no tienen año de fabricación específico
-        super().__init__(marca, modelo, 2023)
-        self.tipo = tipo
-        self.velocidad_maxima = 30  # km/h
-    
-    def acelerar(self, incremento=5):
-        self.velocidad = min(self.velocidad + incremento, self.velocidad_maxima)
-        return f"Pedaleando a {self.velocidad} km/h"
-```
-
-**Archivo `transporte/utils/validaciones.py`**
-
-```python
-# transporte/utils/validaciones.py
-"""Utilidades de validación"""
-
-from datetime import datetime
-
-def validar_anio(anio):
-    """Valida que el año sea razonable"""
-    anio_actual = datetime.now().year
-    
-    if not isinstance(anio, int):
-        raise ValueError("El año debe ser un número entero")
-    
-    if anio < 1900 or anio > anio_actual + 1:
-        raise ValueError(f"Año inválido: {anio}. Debe estar entre 1900 y {anio_actual + 1}")
-    
-    return año
-
-def validar_velocidad(velocidad, velocidad_maxima=200):
-    """Valida que la velocidad sea razonable"""
-    if velocidad < 0:
-        return 0
-    elif velocidad > velocidad_maxima:
-        return velocidad_maxima
-    return velocidad
+│
+├── matematicas/
+│   ├── __init__.py
+│   ├── basicas.py
+│   └── avanzadas.py
+│
+└── main.py
 ```
 
 ### Importación avanzada de clases
 
 #### Diferentes formas de importar
 
-**Archivo `main.py`**
+Existen varias formas de importar clases y módulos en Python:
 
+- Importar todo el módulo:
 ```python
-# main.py - Ejemplos de importación
+import matematicas
+```
 
-# 1. Importar paquete completo
-import transporte
-mi_coche = transporte.Coche("Toyota", "Prius", 2023)
+- Importar una clase específica de un módulo:
+```python
+from matematicas.basicas import Calculadora
+```
 
-# 2. Importar subpaquete
-import transporte.vehiculos
-mi_moto = transporte.vehiculos.Motocicleta("Honda", "CBR", 2022, 600)
+- Importar múltiples clases o funciones:
+```python
+from matematicas.basicas import Calculadora, sumar
+```
 
-# 3. Importar módulo específico
-import transporte.vehiculos.terrestres
-bici = transporte.vehiculos.terrestres.Bicicleta("Trek", "FX", "híbrida")
-
-# 4. Importar clases específicas del paquete
-from transporte import Coche, Conductor
-
-# 5. Importar desde subpaquete
-from transporte.vehiculos.terrestres import Motocicleta, Bicicleta
-
-# 6. Importar desde módulo específico
-from transporte.vehiculos.aereos import Avion
-
-# 7. Importar todo (no recomendado para paquetes grandes)
-from transporte.vehiculos.terrestres import *
+- Importar con alias:
+```python
+from matematicas.basicas import Calculadora as Calc
 ```
 
 #### Alias y nombres personalizados
 
+Se pueden usar alias para acortar nombres de módulos o clases al importarlos. Por ejemplo:
+
 ```python
-# Usar alias para nombres largos o conflictos
-from transporte.vehiculos.terrestres import Coche as CocheTerrestre
-from transporte.vehiculos.acuaticos import Coche as CocheAnfibio  # Si existiera
+from matematicas.basicas import Calculadora as Calc
 
-# Alias para paquetes
-import transporte.vehiculos.terrestres as terrestres
-import transporte.vehiculos.aereos as aereos
-
-# Crear instancias
-mi_coche = terrestres.Coche("BMW", "X5", 2023)
-mi_avion = aereos.Avion("Boeing", "747", 1995)
+calc = Calc()
 ```
 
 #### Importación condicional
 
+También es posible importar módulos de forma condicional, dentro de funciones o métodos, según sea necesario.
+
 ```python
-# Importación condicional según disponibilidad
-try:
-    from transporte.vehiculos.aereos import AvionElectrico
-    AEREO_ELECTRICO_DISPONIBLE = True
-except ImportError:
-    AEREO_ELECTRICO_DISPONIBLE = False
-    print("Avión eléctrico no disponible en esta versión")
-
-# Importación según configuración
-MODO_DESARROLLO = True
-
-if MODO_DESARROLLO:
-    from transporte.utils.debug import DebugVehiculo as Vehiculo
-else:
-    from transporte.vehiculos.terrestres import Coche as Vehiculo
+def usar_calculadora():
+    from matematicas.basicas import Calculadora
+    calc = Calculadora()
+    return calc.sumar(5, 3)
 ```
 
 ### Buenas prácticas y organización
 
 #### Convenciones de nomenclatura
+
+- Usar nombres en minúsculas para módulos y paquetes.
+- Usar guiones bajos para separar palabras en nombres de módulos.
+- Usar nombres descriptivos y significativos.
 
 ```python
 # ✅ Buenos nombres
@@ -1988,9 +1860,11 @@ modulos/
 ├── Vehiculos.py          # No usar mayúsculas
 ├── v.py                  # Muy corto, no descriptivo
 └── sistemasDeNavegacion.py # camelCase no es pythónico
-```
 
+```
 #### Organización por funcionalidad
+
+Organizar módulos y paquetes por funcionalidad relacionada. Por ejemplo, todos los módulos relacionados con matemáticas en un paquete `matematicas`, módulos de manejo de archivos en un paquete `archivos`, etc.
 
 ```python
 # Estructura recomendada para proyecto POO
@@ -2021,10 +1895,14 @@ mi_app/
     ├── test_models.py
     ├── test_services.py
     └── test_utils.py
-```
 
+```
 #### Evitar importaciones circulares
 
+Las **importaciones circulares** ocurren cuando dos o más módulos se importan entre sí. Esto puede causar problemas de dependencia y errores de importación. Para evitarlo:
+
+- Reorganizar el código para eliminar dependencias circulares.
+- Usar importaciones locales (dentro de funciones) en lugar de importaciones globales.
 **❌ Importación circular (problema):**
 
 ```python
@@ -2074,71 +1952,86 @@ class ClaseB(ClaseBase):
 # Mover ambas clases al mismo módulo si están muy relacionadas
 ```
 
-#### Ejemplo completo de proyecto estructurado
+#### Ejemplo de proyecto estructurado
 
-**Proyecto: Sistema de Biblioteca**
-
+**Proyecto: Sistema de Biblioteca** 
 ```
 biblioteca/
 ├── main.py
 ├── config.py
-├── models/
+├── modelos/
 │   ├── __init__.py
-│   ├── libro.py
-│   ├── usuario.py
-│   └── prestamo.py
-├── services/
+│   └── libro.py
+├── servicios/
 │   ├── __init__.py
-│   ├── gestion_libros.py
-│   ├── gestion_usuarios.py
-│   └── gestion_prestamos.py
-├── utils/
+│   └── gestion_libros.py
+├── utilidades/
 │   ├── __init__.py
 │   ├── validaciones.py
 │   └── formateo.py
-└── interfaces/
-    ├── __init__.py
-    └── cli.py
+├── interfaces/
+│   ├── __init__.py
+│   └── cli.py
 ```
-
-**Archivo `models/__init__.py`**
+**main.py**
+Script principal que inicia el sistema y muestra un menú básico usando la interfaz CLI.
 
 ```python
-# models/__init__.py
-"""Modelos de datos del sistema de biblioteca"""
+# filepath: biblioteca/main.py
+from config import CONFIGURACION
+from modelos import Libro
+from servicios.gestion_libros import Biblioteca
+from interfaces.cli import menu_principal
 
-from .libro import Libro, LibroDigital, LibroFisico
-from .usuario import Usuario, Estudiante, Profesor
-from .prestamo import Prestamo, PrestamoDigital
+def main():
+    biblioteca = Biblioteca()
+    menu_principal(biblioteca)
 
-__version__ = "1.0.0"
+if __name__ == "__main__":
+    main()
+```
+**config.py**
+Configuración global del sistema.
 
-__all__ = [
-    'Libro', 'LibroDigital', 'LibroFisico',
-    'Usuario', 'Estudiante', 'Profesor', 
-    'Prestamo', 'PrestamoDigital'
-]
-
-# Configuración global para todos los modelos
+```python
+# filepath: biblioteca/config.py
 CONFIGURACION = {
     'dias_prestamo_default': 14,
     'max_renovaciones': 2,
     'multa_por_dia': 0.50
 }
 ```
-
-**Archivo `models/libro.py`**
+**modelos/`__init__.py`**
+Expone las clases principales del paquete modelos.
 
 ```python
-# models/libro.py
-"""Modelos relacionados con libros"""
+# filepath: biblioteca/modelos/__init__.py
+from .libro import Libro, LibroFisico, LibroDigital, LibroAudio
+
+__all__ = [
+    'Libro', 'LibroFisico', 'LibroDigital', 'LibroAudio'
+]
+```
+**modelos/libro.py**
+Clases relacionadas con libros. La validación de ISBN se importa de utilidades.
+```python
+# filepath: biblioteca/modelos/libro.py
+"""
+Recomendación sobre organización de clases en ficheros:
+- Si el número de clases relacionadas con libros es pequeño y sus definiciones son cortas, puedes mantenerlas todas en este fichero para facilitar la gestión y la lectura.
+- Si el fichero empieza a crecer demasiado, las clases tienen muchas líneas de código, o cada tipo de libro tiene lógica específica compleja, es recomendable separar cada clase principal en su propio fichero (por ejemplo: libro_fisico.py, libro_digital.py, libro_audio.py).
+- También puedes agrupar clases muy relacionadas en un mismo fichero y dejar utilidades o funciones auxiliares en otros módulos.
+- El objetivo es mantener el código organizado, fácil de mantener y evitar ficheros excesivamente largos.
+"""
 
 from datetime import datetime
-from ..utils.validaciones import validar_isbn
+from utilidades.validaciones import validar_isbn
+
+# ...existing code...
+from datetime import datetime
+from utilidades.validaciones import validar_isbn
 
 class Libro:
-    """Clase base para todos los tipos de libros"""
-    
     def __init__(self, titulo, autor, isbn, año_publicacion):
         self.titulo = titulo
         self.autor = autor
@@ -2146,509 +2039,217 @@ class Libro:
         self.año_publicacion = año_publicacion
         self.disponible = True
         self.fecha_creacion = datetime.now()
-    
-    def __str__(self):
-        return f"{self.titulo} por {self.autor} ({self.año_publicacion})"
-    
-    def __repr__(self):
-        return f"Libro('{self.titulo}', '{self.autor}', '{self.isbn}')"
 
+    def marcar_no_disponible(self):
+        self.disponible = False
+
+    def marcar_disponible(self):
+        self.disponible = True
+
+    def __str__(self):
+        estado = "Disponible" if self.disponible else "No disponible"
+        return f"{self.titulo} por {self.autor} ({self.año_publicacion}) - {estado}"
 
 class LibroFisico(Libro):
-    """Libro físico con ubicación en biblioteca"""
-    
-    def __init__(self, titulo, autor, isbn, año_publicacion, 
-                 seccion, estante, posicion):
+    def __init__(self, titulo, autor, isbn, año_publicacion, seccion, estante, posicion):
         super().__init__(titulo, autor, isbn, año_publicacion)
         self.seccion = seccion
-        self.estante = estante  
+        self.estante = estante
         self.posicion = posicion
-        self.estado_fisico = "bueno"  # bueno, regular, malo
-    
+        self.estado_fisico = "bueno"
+        self.prestado_a = None
+
     @property
     def ubicacion(self):
         return f"{self.seccion}-{self.estante}-{self.posicion}"
-    
-    def marcar_daño(self, descripcion):
-        """Marca el libro como dañado"""
-        self.estado_fisico = "malo"
-        self.descripcion_daño = descripcion
-        self.disponible = False
-
 
 class LibroDigital(Libro):
-    """Libro en formato digital"""
-    
-    def __init__(self, titulo, autor, isbn, año_publicacion, 
-                 formato, tamaño_mb, url_descarga):
+    FORMATOS_PERMITIDOS = ['pdf', 'epub', 'mobi', 'azw3']
+
+    def __init__(self, titulo, autor, isbn, año_publicacion, formato, tamaño_mb, url_descarga):
         super().__init__(titulo, autor, isbn, año_publicacion)
-        self.formato = formato  # pdf, epub, mobi
+        if formato.lower() not in self.FORMATOS_PERMITIDOS:
+            raise ValueError(f"Formato no permitido. Use: {', '.join(self.FORMATOS_PERMITIDOS)}")
+        self.formato = formato.lower()
         self.tamaño_mb = tamaño_mb
         self.url_descarga = url_descarga
-        self.descargas_simultaneas = 0
-        self.max_descargas_simultaneas = 5
-    
-    def puede_descargar(self):
-        """Verifica si se puede descargar el libro"""
-        return self.descargas_simultaneas < self.max_descargas_simultaneas
-```
 
-**Archivo `main.py`**
+class LibroAudio(Libro):
+    def __init__(self, titulo, autor, isbn, año_publicacion, duracion_minutos, narrador, formato_audio='mp3'):
+        super().__init__(titulo, autor, isbn, año_publicacion)
+        self.duracion_minutos = duracion_minutos
+        self.narrador = narrador
+        self.formato_audio = formato_audio
+```
+**servicios/`__init__.py`**
+Inicializa el paquete servicios.
 
 ```python
-# main.py
-"""Aplicación principal del sistema de biblioteca"""
+# filepath: biblioteca/servicios/__init__.py
+# ...existing code...
+```
+**servicios/gestion_libros.py**
+```python
+# filepath: biblioteca/servicios/gestion_libros.py
+from modelos import Libro, LibroFisico, LibroDigital, LibroAudio
 
-# Importar desde nuestros paquetes
-from models import Libro, LibroFisico, Usuario, Estudiante
-from services import GestionLibros, GestionUsuarios, GestionPrestamos
-from interfaces.cli import InterfazCLI
-from config import CONFIGURACION_SISTEMA
+class Biblioteca:
+    def __init__(self):
+        self.libros = []
 
-def main():
-    """Función principal de la aplicación"""
-    
-    print("=== Sistema de Gestión de Biblioteca ===")
-    print(f"Versión: {CONFIGURACION_SISTEMA['version']}")
-    
-    # Inicializar servicios
-    gestion_libros = GestionLibros()
-    gestion_usuarios = GestionUsuarios()
-    gestion_prestamos = GestionPrestamos()
-    
-    # Crear algunos datos de ejemplo
-    libro1 = LibroFisico(
-        "El Quijote", "Miguel de Cervantes", 
-        "978-84-376-0494-7", 1605,
-        "Literatura", "A", 15
-    )
-    
-    estudiante1 = Estudiante(
-        "Ana García", "ana@universidad.edu",
-        "12345678A", "Ingeniería Informática"
-    )
-    
-    # Registrar en el sistema
-    gestion_libros.agregar_libro(libro1)
-    gestion_usuarios.registrar_usuario(estudiante1)
-    
-    # Iniciar interfaz de usuario
-    interfaz = InterfazCLI(gestion_libros, gestion_usuarios, gestion_prestamos)
-    interfaz.ejecutar()
+    def agregar_libro(self, libro):
+        self.libros.append(libro)
 
-if __name__ == "__main__":
-    main()
+    def buscar_libro(self, titulo):
+        return [libro for libro in self.libros if titulo.lower() in libro.titulo.lower()]
+
+    def listar_libros(self):
+        return self.libros
+```
+**utilidades/`__init__.py`**
+Inicializa el paquete utilidades.
+
+```python
+# filepath: biblioteca/utilidades/__init__.py
+# ...existing code...
+```
+**utilidades/validaciones.py**
+Validación de ISBN para libros.
+
+```python
+# filepath: biblioteca/utilidades/validaciones.py
+def validar_isbn(isbn):
+    isbn_limpio = isbn.replace("-", "").replace(" ", "")
+    if len(isbn_limpio) not in [10, 13]:
+        raise ValueError(f"ISBN inválido: {isbn}")
+    return isbn
+```
+**utilidades/formateo.py**
+Funciones de formateo para libros.
+
+```python
+# filepath: biblioteca/utilidades/formateo.py
+def formatear_libro(libro):
+    return str(libro)
+```
+**interfaces/`__init__.py`**
+Inicializa el paquete interfaces.
+
+```python
+# filepath: biblioteca/interfaces/__init__.py
+# ...existing code...
+```
+**interfaces/cli.py**
+Interfaz de línea de comandos para interactuar con la biblioteca.
+```python
+# filepath: biblioteca/interfaces/cli.py
+def menu_principal(biblioteca):
+    salir = False
+    while not salir:
+        print("\n--- Menú Biblioteca ---")
+        print("1. Listar libros")
+        print("2. Buscar libro")
+        print("3. Salir")
+        try:
+            opcion = input("Seleccione opción: ")
+            if opcion == "1":
+                for libro in biblioteca.listar_libros():
+                    print(libro)
+            elif opcion == "2":
+                titulo = input("Título a buscar: ")
+                resultados = biblioteca.buscar_libro(titulo)
+                for libro in resultados:
+                    print(libro)
+            elif opcion == "3":
+                print("¡Hasta luego!")
+                salir = True
+            else:
+                print("Opción no válida.")
+        except Exception as e:
+            print(f"Error: {e}")
 ```
 
-**Ventajas de esta organización:**
-
-1. **Separación clara** de responsabilidades
-2. **Fácil mantenimiento** y extensión
-3. **Reutilización** de componentes
-4. **Pruebas unitarias** más sencillas
-5. **Colaboración** eficiente en equipo
-6. **Escalabilidad** del proyecto
-
-Los módulos y paquetes son fundamentales para crear aplicaciones POO robustas y mantenibles. Permiten organizar el código de manera lógica, facilitando tanto el desarrollo como el mantenimiento a largo plazo.
-
+:computer: Actividad 2
 
 ## PRUEBAS UNITARIAS PARA CLASES
 
 ### Importancia de probar clases
 
-Las **pruebas unitarias** son esenciales al trabajar con clases porque:
+Las **pruebas unitarias** son fundamentales para asegurar que las clases y módulos funcionan correctamente. Permiten detectar errores y problemas de lógica en etapas tempranas del desarrollo.
 
-- **Verifican el comportamiento**: Aseguran que los métodos funcionan correctamente
-- **Validan la inicialización**: Comprueban que los objetos se crean correctamente
-- **Detectan regresiones**: Evitan que cambios futuros rompan funcionalidad existente
-- **Documentan el uso**: Muestran cómo usar la clase correctamente
-- **Facilitan refactoring**: Permiten cambiar implementación con confianza
+**Beneficios de las pruebas unitarias:**
+- Detectar errores rápidamente
+- Asegurar el correcto funcionamiento del código
+- Facilitar el mantenimiento y refactorización
+- Proporcionar documentación adicional sobre el comportamiento del código
 
 ### Configuración de pruebas con `unittest`
+
+El módulo `unittest` proporciona un marco de trabajo para crear y ejecutar pruebas unitarias en Python.
 
 #### Estructura básica de pruebas para clases
 
 ```python
 import unittest
+from mi_modulo import MiClase
 
-# Clase a probar
-class Calculadora:
-    def sumar(self, a, b):
-        return a + b
+class TestMiClase(unittest.TestCase):
+    def setUp(self):
+        """Método que se ejecuta antes de cada prueba"""
+        self.objeto = MiClase()
     
-    def dividir(self, a, b):
-        if b == 0:
-            raise ValueError("No se puede dividir por cero")
-        return a / b
-
-# Clase de pruebas
-class TestCalculadora(unittest.TestCase):
+    def tearDown(self)
+        """Método que se ejecuta después de cada prueba"""
+        del self.objeto
     
-    def test_sumar_numeros_positivos(self):
-        """Probar suma de números positivos"""
-        calc = Calculadora()
-        resultado = calc.sumar(2, 3)
-        self.assertEqual(resultado, 5)
+    def test_metodo1(self):
+        """Prueba para el método 1"""
+        resultado = self.objeto.metodo1()
+        self.assertEqual(resultado, "valor esperado")
     
-    def test_dividir_numeros_validos(self):
-        """Probar división de números válidos"""
-        calc = Calculadora()
-        resultado = calc.dividir(10, 2)
-        self.assertEqual(resultado, 5.0)
-    
-    def test_dividir_por_cero_lanza_excepcion(self):
-        """Probar que dividir por cero lanza excepción"""
-        calc = Calculadora()
+    def test_metodo2(self):
+        """Prueba para el método 2"""
         with self.assertRaises(ValueError):
-            calc.dividir(10, 0)
+            self.objeto.metodo2("entrada no válida")
 
-# Ejecutar pruebas
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
 ```
 
 #### Métodos `setUp()` y `tearDown()`
 
-```python
-class TestCuentaBancaria(unittest.TestCase):
-    
-    def setUp(self):
-        """Se ejecuta antes de cada prueba"""
-        self.cuenta = CuentaBancaria("Juan Pérez", 1000)
-        print("Configurando cuenta para prueba")
-    
-    def tearDown(self):
-        """Se ejecuta después de cada prueba"""
-        print("Limpiando después de la prueba")
-        # Aquí podrías limpiar archivos, cerrar conexiones, etc.
-    
-    def test_saldo_inicial(self):
-        """Probar saldo inicial"""
-        self.assertEqual(self.cuenta.consultar_saldo(), 1000)
-    
-    def test_deposito_valido(self):
-        """Probar depósito válido"""
-        self.cuenta.depositar(200)
-        self.assertEqual(self.cuenta.consultar_saldo(), 1200)
-    
-    def test_retiro_valido(self):
-        """Probar retiro válido"""
-        self.cuenta.retirar(300)
-        self.assertEqual(self.cuenta.consultar_saldo(), 700)
-```
+- `setUp()`: Se ejecuta antes de cada método de prueba. Se usa para preparar el entorno de la prueba, como crear objetos o establecer conexiones.
+- `tearDown()`: Se ejecuta después de cada método de prueba. Se usa para limpiar el entorno de la prueba, como cerrar archivos o eliminar objetos.
 
 ### Pruebas de atributos y métodos
 
 #### Probar inicialización de objetos
 
 ```python
-class Persona:
-    def __init__(self, nombre, edad, email=""):
-        if not nombre or not isinstance(nombre, str):
-            raise ValueError("Nombre debe ser una cadena no vacía")
-        if not isinstance(edad, int) or edad < 0:
-            raise ValueError("Edad debe ser un entero no negativo")
-        
-        self.nombre = nombre
-        self.edad = edad
-        self.email = email
-
-class TestPersona(unittest.TestCase):
-    
-    def test_inicializacion_correcta(self):
-        """Probar inicialización con datos válidos"""
-        persona = Persona("Ana", 25, "ana@email.com")
-        
-        self.assertEqual(persona.nombre, "Ana")
-        self.assertEqual(persona.edad, 25)
-        self.assertEqual(persona.email, "ana@email.com")
-    
-    def test_inicializacion_sin_email(self):
-        """Probar inicialización sin email (opcional)"""
-        persona = Persona("Carlos", 30)
-        
-        self.assertEqual(persona.nombre, "Carlos")
-        self.assertEqual(persona.edad, 30)
-        self.assertEqual(persona.email, "")
-    
-    def test_nombre_invalido_lanza_excepcion(self):
-        """Probar que nombre inválido lanza excepción"""
-        with self.assertRaises(ValueError):
-            Persona("", 25)
-        
-        with self.assertRaises(ValueError):
-            Persona(123, 25)
-    
-    def test_edad_invalida_lanza_excepcion(self):
-        """Probar que edad inválida lanza excepción"""
-        with self.assertRaises(ValueError):
-            Persona("Juan", -5)
-        
-        with self.assertRaises(ValueError):
-            Persona("Juan", "veinticinco")
-    
-    def test_tipo_de_instancia(self):
-        """Probar que el objeto es del tipo correcto"""
-        persona = Persona("María", 28)
-        self.assertIsInstance(persona, Persona)
+def test_inicializacion(self):
+    objeto = MiClase("valor1", "valor2")
+    self.assertEqual(objeto.atributo1, "valor1")
+    self.assertEqual(objeto.atributo2, "valor2")
 ```
 
 #### Probar métodos públicos
 
 ```python
-class Rectangulo:
-    def __init__(self, ancho, alto):
-        self.ancho = ancho
-        self.alto = alto
-    
-    def area(self):
-        return self.ancho * self.alto
-    
-    def perimetro(self):
-        return 2 * (self.ancho + self.alto)
-    
-    def es_cuadrado(self):
-        return self.ancho == self.alto
-    
-    def redimensionar(self, factor):
-        self.ancho *= factor
-        self.alto *= factor
-
-class TestRectangulo(unittest.TestCase):
-    
-    def setUp(self):
-        self.rect = Rectangulo(4, 6)
-    
-    def test_area_calculo_correcto(self):
-        """Probar cálculo del área"""
-        self.assertEqual(self.rect.area(), 24)
-    
-    def test_perimetro_calculo_correcto(self):
-        """Probar cálculo del perímetro"""
-        self.assertEqual(self.rect.perimetro(), 20)
-    
-    def test_es_cuadrado_false(self):
-        """Probar detección de no-cuadrado"""
-        self.assertFalse(self.rect.es_cuadrado())
-    
-    def test_es_cuadrado_true(self):
-        """Probar detección de cuadrado"""
-        cuadrado = Rectangulo(5, 5)
-        self.assertTrue(cuadrado.es_cuadrado())
-    
-    def test_redimensionar(self):
-        """Probar redimensionamiento"""
-        self.rect.redimensionar(2)
-        self.assertEqual(self.rect.ancho, 8)
-        self.assertEqual(self.rect.alto, 12)
-        self.assertEqual(self.rect.area(), 96)
-    
-    def test_redimensionar_con_decimal(self):
-        """Probar redimensionamiento con factor decimal"""
-        self.rect.redimensionar(0.5)
-        self.assertEqual(self.rect.ancho, 2.0)
-        self.assertEqual(self.rect.alto, 3.0)
+def test_metodo_publico(self):
+    resultado = self.objeto.metodo_publico()
+    self.assertTrue(resultado)
 ```
 
-#### Probar propiedades y validaciones
+#### Pruebas de herencia y polimorfismo
 
 ```python
-class Temperatura:
-    def __init__(self, celsius=0):
-        self._celsius = None
-        self.celsius = celsius  # Usar el setter
-    
-    @property
-    def celsius(self):
-        return self._celsius
-    
-    @celsius.setter
-    def celsius(self, valor):
-        if valor < -273.15:
-            raise ValueError("Temperatura no puede ser menor que el cero absoluto")
-        self._celsius = valor
-    
-    @property
-    def fahrenheit(self):
-        return (self._celsius * 9/5) + 32
-    
-    @property
-    def kelvin(self):
-        return self._celsius + 273.15
-
-class TestTemperatura(unittest.TestCase):
-    
-    def test_celsius_valido(self):
-        """Probar asignación de temperatura válida"""
-        temp = Temperatura(25)
-        self.assertEqual(temp.celsius, 25)
-    
-    def test_celsius_cero_absoluto_invalido(self):
-        """Probar que temperatura menor a cero absoluto es inválida"""
-        with self.assertRaises(ValueError):
-            Temperatura(-300)
-    
-    def test_setter_celsius_invalido(self):
-        """Probar setter con valor inválido"""
-        temp = Temperatura(20)
-        with self.assertRaises(ValueError):
-            temp.celsius = -300
-    
-    def test_conversion_fahrenheit(self):
-        """Probar conversión a Fahrenheit"""
-        temp = Temperatura(0)
-        self.assertEqual(temp.fahrenheit, 32)
-        
-        temp.celsius = 100
-        self.assertEqual(temp.fahrenheit, 212)
-    
-    def test_conversion_kelvin(self):
-        """Probar conversión a Kelvin"""
-        temp = Temperatura(0)
-        self.assertEqual(temp.kelvin, 273.15)
-        
-        temp.celsius = -273.15  # Cero absoluto
-        self.assertEqual(temp.kelvin, 0)
-    
-    def test_propiedad_solo_lectura(self):
-        """Probar que Fahrenheit y Kelvin son solo lectura"""
-        temp = Temperatura(25)
-        
-        # Estas asignaciones no deberían funcionar
-        with self.assertRaises(AttributeError):
-            temp.fahrenheit = 100
-        
-        with self.assertRaises(AttributeError):
-            temp.kelvin = 300
-```
-
-### Pruebas de herencia y polimorfismo
-
-#### Probar clases derivadas
-
-```python
-class Animal:
-    def __init__(self, nombre, edad):
-        self.nombre = nombre
-        self.edad = edad
-    
-    def hacer_sonido(self):
-        return "Sonido genérico"
-    
-    def dormir(self):
-        return f"{self.nombre} está durmiendo"
-
-class Perro(Animal):
-    def __init__(self, nombre, edad, raza):
-        super().__init__(nombre, edad)
-        self.raza = raza
-    
-    def hacer_sonido(self):
-        return "¡Guau!"
-    
-    def mover_cola(self):
-        return f"{self.nombre} mueve la cola"
-
-class TestHerencia(unittest.TestCase):
-    
+class TestClaseDerivada(unittest.TestCase):
     def setUp(self):
-        self.animal = Animal("Genérico", 5)
-        self.perro = Perro("Buddy", 3, "Labrador")
+        self.objeto = ClaseDerivada()
     
-    def test_herencia_correcta(self):
-        """Probar que la herencia funciona correctamente"""
-        # El perro es una instancia de Animal
-        self.assertIsInstance(self.perro, Animal)
-        self.assertIsInstance(self.perro, Perro)
-        
-        # El animal no es una instancia de Perro
-        self.assertIsInstance(self.animal, Animal)
-        self.assertNotIsInstance(self.animal, Perro)
-    
-    def test_atributos_heredados(self):
-        """Probar que los atributos se heredan correctamente"""
-        self.assertEqual(self.perro.nombre, "Buddy")
-        self.assertEqual(self.perro.edad, 3)
-        self.assertEqual(self.perro.raza, "Labrador")
-    
-    def test_metodos_heredados(self):
-        """Probar que los métodos se heredan correctamente"""
-        # Método heredado sin sobrescribir
-        self.assertEqual(self.perro.dormir(), "Buddy está durmiendo")
-    
-    def test_sobrescritura_metodos(self):
-        """Probar que la sobrescritura funciona"""
-        # Método sobrescrito
-        self.assertEqual(self.animal.hacer_sonido(), "Sonido genérico")
-        self.assertEqual(self.perro.hacer_sonido(), "¡Guau!")
-    
-    def test_metodos_especificos_clase_derivada(self):
-        """Probar métodos específicos de la clase derivada"""
-        self.assertEqual(self.perro.mover_cola(), "Buddy mueve la cola")
-        
-        # El animal no tiene este método
-        with self.assertRaises(AttributeError):
-            self.animal.mover_cola()
-```
-
-#### Probar comportamiento polimórfico
-
-```python
-class Forma:
-    def area(self):
-        raise NotImplementedError
-    
-    def descripcion(self):
-        return f"Área: {self.area()}"
-
-class Circulo(Forma):
-    def __init__(self, radio):
-        self.radio = radio
-    
-    def area(self):
-        return 3.14159 * self.radio ** 2
-
-class Cuadrado(Forma):
-    def __init__(self, lado):
-        self.lado = lado
-    
-    def area(self):
-        return self.lado ** 2
-
-def calcular_area_total(formas):
-    """Función polimórfica"""
-    return sum(forma.area() for forma in formas)
-
-class TestPolimorfismo(unittest.TestCase):
-    
-    def setUp(self):
-        self.circulo = Circulo(5)
-        self.cuadrado = Cuadrado(4)
-        self.formas = [self.circulo, self.cuadrado]
-    
-    def test_polimorfismo_area(self):
-        """Probar que diferentes formas calculan área correctamente"""
-        self.assertAlmostEqual(self.circulo.area(), 78.54, places=2)
-        self.assertEqual(self.cuadrado.area(), 16)
-    
-    def test_funcion_polimorfica(self):
-        """Probar función que trabaja con diferentes tipos"""
-        area_total = calcular_area_total(self.formas)
-        area_esperada = self.circulo.area() + self.cuadrado.area()
-        self.assertAlmostEqual(area_total, area_esperada, places=2)
-    
-    def test_comportamiento_uniforme(self):
-        """Probar que todas las formas responden al mismo mensaje"""
-        for forma in self.formas:
-            # Todas las formas pueden calcular su área
-            area = forma.area()
-            self.assertIsInstance(area, (int, float))
-            self.assertGreater(area, 0)
-            
-            # Todas las formas pueden dar su descripción
-            desc = forma.descripcion()
-            self.assertIsInstance(desc, str)
-            self.assertIn("Área:", desc)
+    def test_metodo_sobrescrito(self):
+        resultado = self.objeto.metodo()
+        self.assertEqual(resultado, "comportamiento esperado")
 ```
 
 ### Pruebas de métodos especiales
@@ -2656,144 +2257,247 @@ class TestPolimorfismo(unittest.TestCase):
 #### Probar métodos mágicos
 
 ```python
-class Punto:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-    
-    def __str__(self):
-        return f"({self.x}, {self.y})"
-    
-    def __repr__(self):
-        return f"Punto({self.x}, {self.y})"
-    
-    def __eq__(self, other):
-        if isinstance(other, Punto):
-            return self.x == other.x and self.y == other.y
-        return False
-    
-    def __add__(self, other):
-        if isinstance(other, Punto):
-            return Punto(self.x + other.x, self.y + other.y)
-        return NotImplemented
-    
-    def __len__(self):
-        return 2
-    
-    def __getitem__(self, index):
-        if index == 0:
-            return self.x
-        elif index == 1:
-            return self.y
-        else:
-            raise IndexError("Punto solo tiene índices 0 y 1")
-
-class TestMetodosEspeciales(unittest.TestCase):
-    
-    def setUp(self):
-        self.p1 = Punto(3, 4)
-        self.p2 = Punto(1, 2)
-        self.p3 = Punto(3, 4)  # Igual a p1
-    
-    def test_str_representation(self):
-        """Probar representación con __str__"""
-        self.assertEqual(str(self.p1), "(3, 4)")
-    
-    def test_repr_representation(self):
-        """Probar representación con __repr__"""
-        self.assertEqual(repr(self.p1), "Punto(3, 4)")
-    
-    def test_equality(self):
-        """Probar igualdad con __eq__"""
-        self.assertEqual(self.p1, self.p3)  # Puntos iguales
-        self.assertNotEqual(self.p1, self.p2)  # Puntos diferentes
-        
-        # Comparar con tipo diferente
-        self.assertNotEqual(self.p1, (3, 4))
-        self.assertNotEqual(self.p1, "punto")
-    
-    def test_addition(self):
-        """Probar suma con __add__"""
-        resultado = self.p1 + self.p2
-        self.assertEqual(resultado.x, 4)
-        self.assertEqual(resultado.y, 6)
-        self.assertIsInstance(resultado, Punto)
-    
-    def test_length(self):
-        """Probar longitud con __len__"""
-        self.assertEqual(len(self.p1), 2)
-    
-    def test_indexing(self):
-        """Probar acceso por índice con __getitem__"""
-        self.assertEqual(self.p1[0], 3)  # x
-        self.assertEqual(self.p1[1], 4)  # y
-        
-        # Índice inválido
-        with self.assertRaises(IndexError):
-            _ = self.p1[2]
+def test_str(self):
+    resultado = str(self.objeto)
+    self.assertEqual(resultado, "representación en cadena esperada")
 ```
 
 #### Probar operadores sobrecargados
 
 ```python
-class Vector:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-    
-    def __add__(self, other):
-        return Vector(self.x + other.x, self.y + other.y)
-    
-    def __sub__(self, other):
-        return Vector(self.x - other.x, self.y - other.y)
-    
-    def __mul__(self, scalar):
-        return Vector(self.x * scalar, self.y * scalar)
-    
-    def __eq__(self, other):
-        return self.x == other.x and self.y == other.y
-    
-    def __lt__(self, other):
-        return self.magnitud() < other.magnitud()
-    
-    def magnitud(self):
-        return (self.x ** 2 + self.y ** 2) ** 0.5
+def test_suma(self):
+    resultado = self.objeto1 + self.objeto2
+    self.assertEqual(resultado, valor_esperado)
+```
 
-class TestOperadoresSobrecargados(unittest.TestCase):
+### Ejemplo completo de pruebas para el sistema de biblioteca
+
+```python
+# tests/test_libro.py
+import unittest
+from datetime import datetime
+from modelos.libro import Libro, LibroFisico, LibroDigital, LibroAudio
+
+
+class TestLibro(unittest.TestCase):
+    """Pruebas para la clase Libro"""
     
     def setUp(self):
-        self.v1 = Vector(3, 4)
-        self.v2 = Vector(1, 2)
+        """Preparar objetos de prueba"""
+        self.libro = Libro("El Quijote", "Cervantes", "978-84-376-0494-7", 1605)
     
-    def test_suma_vectores(self):
-        """Probar suma de vectores"""
-        resultado = self.v1 + self.v2
-        self.assertEqual(resultado.x, 4)
-        self.assertEqual(resultado.y, 6)
+    def test_inicializacion(self):
+        """Probar inicialización correcta"""
+        self.assertEqual(self.libro.titulo, "El Quijote")
+        self.assertEqual(self.libro.autor, "Cervantes")
+        self.assertEqual(self.libro.año_publicacion, 1605)
+        self.assertTrue(self.libro.disponible)
     
-    def test_resta_vectores(self):
-        """Probar resta de vectores"""
-        resultado = self.v1 - self.v2
-        self.assertEqual(resultado.x, 2)
-        self.assertEqual(resultado.y, 2)
+    def test_validacion_isbn(self):
+        """Probar validación de ISBN"""
+        with self.assertRaises(ValueError):
+            Libro("Título", "Autor", "123", 2020)
     
-    def test_multiplicacion_escalar(self):
-        """Probar multiplicación por escalar"""
-        resultado = self.v1 * 2
-        self.assertEqual(resultado.x, 6)
-        self.assertEqual(resultado.y, 8)
-    
-    def test_comparacion_magnitud(self):
-        """Probar comparación por magnitud"""
-        v_pequeño = Vector(1, 1)
-        v_grande = Vector(5, 5)
+    def test_marcar_disponible(self):
+        """Probar cambio de disponibilidad"""
+        self.libro.marcar_no_disponible()
+        self.assertFalse(self.libro.disponible)
         
-        self.assertTrue(v_pequeño < v_grande)
-        self.assertFalse(v_grande < v_pequeño)
+        self.libro.marcar_disponible()
+        self.assertTrue(self.libro.disponible)
     
-    def test_operadores_encadenados(self):
-        """Probar operaciones encadenadas"""
-        resultado = (self.v1 + self.v2) * 2
-        self.assertEqual(resultado.x, 8)  # (3+1)*2
-        self.assertEqual(resultado.y, 12)  # (4+2)*2
+    def test_str(self):
+        """Probar representación en cadena"""
+        resultado = str(self.libro)
+        self.assertIn("El Quijote", resultado)
+        self.assertIn("Cervantes", resultado)
+        self.assertIn("Disponible", resultado)
+
+
+class TestLibroFisico(unittest.TestCase):
+    """Pruebas para la clase LibroFisico"""
+    
+    def setUp(self):
+        """Preparar objetos de prueba"""
+        self.libro = LibroFisico(
+            "El Quijote", "Cervantes",
+            "978-84-376-0494-7", 1605,
+            "Literatura", "A", 15
+        )
+    
+    def test_ubicacion(self):
+        """Probar propiedad de ubicación"""
+        self.assertEqual(self.libro.ubicacion, "Literatura-A-15")
+    
+    def test_prestamo_exitoso(self):
+        """Probar préstamo de libro"""
+        self.libro.prestar("Juan Pérez")
+        
+        self.assertEqual(self.libro.prestado_a, "Juan Pérez")
+        self.assertFalse(self.libro.disponible)
+        self.assertEqual(len(self.libro.historial_prestamos), 1)
+    
+    def test_prestamo_libro_no_disponible(self):
+        """Probar préstamo de libro no disponible"""
+        self.libro.marcar_no_disponible()
+        
+        with self.assertRaises(RuntimeError):
+            self.libro.prestar("Juan Pérez")
+    
+    def test_devolucion_exitosa(self):
+        """Probar devolución de libro"""
+        self.libro.prestar("Juan Pérez")
+        self.libro.devolver()
+        
+        self.assertIsNone(self.libro.prestado_a)
+        self.assertTrue(self.libro.disponible)
+        self.assertIsNotNone(self.libro.historial_prestamos[0]['fecha_devolucion'])
+    
+    def test_marcar_daño(self):
+        """Probar marcado de daño"""
+        self.libro.marcar_daño("Páginas rotas", "grave")
+        
+        self.assertEqual(self.libro.estado_fisico, "grave")
+        self.assertFalse(self.libro.disponible)
+
+
+class TestLibroDigital(unittest.TestCase):
+    """Pruebas para la clase LibroDigital"""
+    
+    def setUp(self):
+        """Preparar objetos de prueba"""
+        self.libro = LibroDigital(
+            "Python para todos", "Guido van Rossum",
+            "978-0-13-216993-6", 2020,
+            "pdf", 5.2, "https://ejemplo.com/python.pdf"
+        )
+    
+    def test_formato_invalido(self):
+        """Probar formato no permitido"""
+        with self.assertRaises(ValueError):
+            LibroDigital("Título", "Autor", "978-0-13-216993-6", 2020,
+                        "txt", 1.0, "https://ejemplo.com")
+    
+    def test_puede_descargar(self):
+        """Probar límite de descargas"""
+        self.assertTrue(self.libro.puede_descargar())
+        
+        # Simular 5 descargas simultáneas
+        for _ in range(5):
+            self.libro.iniciar_descarga()
+        
+        self.assertFalse(self.libro.puede_descargar())
+    
+    def test_iniciar_descarga(self):
+        """Probar inicio de descarga"""
+        url = self.libro.iniciar_descarga()
+        
+        self.assertEqual(url, "https://ejemplo.com/python.pdf")
+        self.assertEqual(self.libro.descargas_simultaneas, 1)
+        self.assertEqual(self.libro.total_descargas, 1)
+    
+    def test_finalizar_descarga(self):
+        """Probar finalización de descarga"""
+        self.libro.iniciar_descarga()
+        self.libro.finalizar_descarga()
+        
+        self.assertEqual(self.libro.descargas_simultaneas, 0)
+    
+    def test_tamaño_formato(self):
+        """Probar formato de tamaño"""
+        # KB
+        libro_pequeño = LibroDigital("T", "A", "978-0-13-216993-6", 2020,
+                                     "pdf", 0.5, "url")
+        self.assertIn("KB", libro_pequeño.obtener_tamaño_formato())
+        
+        # MB
+        self.assertIn("MB", self.libro.obtener_tamaño_formato())
+        
+        # GB
+        libro_grande = LibroDigital("T", "A", "978-0-13-216993-6", 2020,
+                                    "pdf", 1500, "url")
+        self.assertIn("GB", libro_grande.obtener_tamaño_formato())
+
+
+class TestLibroAudio(unittest.TestCase):
+    """Pruebas para la clase LibroAudio"""
+    
+    def setUp(self):
+        """Preparar objetos de prueba"""
+        self.libro = LibroAudio(
+            "Cien años de soledad", "Gabriel García Márquez",
+            "978-84-376-0494-8", 1967,
+            850, "José Sacristán"
+        )
+    
+    def test_duracion_formato(self):
+        """Probar formato de duración"""
+        self.assertEqual(self.libro.duracion_formato, "14:10")
+    
+    def test_reproducir(self):
+        """Probar reproducción"""
+        resultado = self.libro.reproducir()
+        
+        self.assertIn("Cien años de soledad", resultado)
+        self.assertIn("José Sacristán", resultado)
+        self.assertEqual(self.libro.reproducciones, 1)
+
+
+class TestContadorLibros(unittest.TestCase):
+    """Pruebas para el contador de libros"""
+    
+    def test_contador_incrementa(self):
+        """Probar que el contador se incrementa"""
+        total_inicial = Libro.total_libros()
+        
+        Libro("Título 1", "Autor 1", "978-0-13-216993-6", 2020)
+        Libro("Título 2", "Autor 2", "978-0-13-216993-7", 2021)
+        
+        self.assertEqual(Libro.total_libros(), total_inicial + 2)
+
+
+# Ejecutar pruebas
+if __name__ == '__main__':
+    unittest.main(verbosity=2)
 ```
+
+### Ejecutar las pruebas
+
+Para ejecutar las pruebas, desde la terminal:
+
+```bash
+# Ejecutar todas las pruebas
+python -m unittest tests/test_libro.py
+
+# Ejecutar con más detalle
+python -m unittest tests/test_libro.py -v
+
+# Ejecutar una clase de prueba específica
+python -m unittest tests.test_libro.TestLibroFisico
+
+# Ejecutar un método de prueba específico
+python -m unittest tests.test_libro.TestLibroFisico.test_prestamo_exitoso
+```
+
+### Cobertura de código
+
+Para medir la cobertura de las pruebas, puedes usar la librería `coverage`:
+
+```bash
+# Instalar coverage
+pip install coverage
+
+# Ejecutar pruebas con coverage
+coverage run -m unittest tests/test_libro.py
+
+# Generar reporte
+coverage report
+
+# Generar reporte HTML
+coverage html
+```
+
+:computer: Actividad 3
+
+
+
