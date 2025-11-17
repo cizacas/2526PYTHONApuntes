@@ -1719,7 +1719,7 @@ def probar_casos_normales():
     """Probar casos típicos de uso."""
     assert dividir(10, 2) == 5.0
     assert dividir(9, 3) == 3.0
-    assert dividir(1, 4) == 0.25
+    assert dividir(-10, 2) == -5.0
 ```
 
 #### 2. Casos límite (edge cases)
