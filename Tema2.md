@@ -62,6 +62,7 @@
       - [El archivo `__init__.py`](#el-archivo-__init__py)
       - [Importación desde paquetes](#importación-desde-paquetes)
       - [Sub-paquetes](#sub-paquetes)
+    - [Ejecución de un módulo dentro de un paquete](#ejecución-de-un-módulo-dentro-de-un-paquete)
     - [Algunos módulos básicos](#algunos-módulos-básicos)
       - [math - Funciones matemáticas básicas](#math---funciones-matemáticas-básicas)
       - [random - Números aleatorios básicos](#random---números-aleatorios-básicos)
@@ -1238,6 +1239,54 @@ mi_proyecto/
 from aplicacion.core.validaciones import validar_email
 from aplicacion.utils.formateo import formatear_fecha
 ```
+
+### Ejecución de un módulo dentro de un paquete
+
+Cuando trabajas con paquetes y quieres ejecutar un módulo que está dentro de ese paquete, es recomendable usar la opción:
+
+```bash
+python -m paquete.modulo
+```
+
+Esto tiene varias ventajas:
+
+- Permite que las **importaciones relativas** (por ejemplo, `from .facturacion import ...`) funcionen correctamente dentro del paquete.
+- Python trata la carpeta como un paquete solo si contiene un archivo `__init__.py`.
+- Las rutas de acceso a archivos deben considerarse relativas a la raíz del paquete.
+
+**Pasos para ejecutar correctamente un módulo dentro de un paquete:**
+
+1. Asegúrate de que la carpeta del paquete tenga un archivo `__init__.py` (puede estar vacío).
+2. Usa importaciones relativas dentro de los módulos del paquete:
+    ```python
+    from .facturacion import alguna_funcion
+    from .utilidades import otra_funcion
+    ```
+3. Sitúate en la carpeta que contiene el paquete (no dentro del propio paquete) y ejecuta:
+    ```bash
+    python -m paquete.modulo
+    ```
+
+**Ejemplo de estructura:**
+
+```
+mi_paquete/
+│
+├── __init__.py
+├── main.py
+├── facturacion.py
+└── utilidades.py
+```
+
+**Ejemplo de ejecución:**
+
+```bash
+cd ruta/del/proyecto
+python -m mi_paquete.main
+```
+
+Esto asegura que las importaciones relativas funcionen y que el código sea portable y mantenible.
+
 
 ### Algunos módulos básicos
 
