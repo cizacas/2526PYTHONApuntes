@@ -80,20 +80,114 @@ print(sys.version)            # Versión de Python
 
 ### Introducción a `requests` para hacer solicitudes HTTP
 Permite hacer peticiones a páginas web o APIs:
+
+
+| Función                | Descripción                                         | Ejemplo de uso                                      |
+|------------------------|-----------------------------------------------------|-----------------------------------------------------|
+| `requests.get()`       | Realiza una petición HTTP GET                       | `requests.get('https://api.example.com')`           |
+| `requests.post()`      | Realiza una petición HTTP POST                      | `requests.post('https://api.example.com', data={})` |
+| `requests.put()`       | Realiza una petición HTTP PUT                       | `requests.put('https://api.example.com', data={})`  |
+| `requests.delete()`    | Realiza una petición HTTP DELETE                    | `requests.delete('https://api.example.com')`        |
+| `requests.head()`      | Realiza una petición HTTP HEAD                      | `requests.head('https://api.example.com')`          |
+| `requests.patch()`     | Realiza una petición HTTP PATCH                     | `requests.patch('https://api.example.com', data={})`|
+| `requests.options()`   | Realiza una petición HTTP OPTIONS                   | `requests.options('https://api.example.com')`       |
+| `response.status_code` | Devuelve el código de estado de la respuesta        | `r = requests.get(url); r.status_code`              |
+| `response.text`        | Devuelve el contenido de la respuesta como texto    | `r = requests.get(url); r.text`                     |
+| `response.json()`      | Devuelve la respuesta en formato JSON (si aplica)   | `r = requests.get(url); r.json()`                   |
+| `requests.headers`     | Permite enviar cabeceras personalizadas             | `requests.get(url, headers={'User-Agent': 'my-app'})`|
+| `requests.params`      | Permite enviar parámetros en la URL                 | `requests.get(url, params={'q': 'python'})`         |
+
+Los métodos HTTP más comunes y su uso principal:
+| Método  | Uso principal                                 | ¿Modifica datos? | Ejemplo típico                        |
+|---------|-----------------------------------------------|------------------|---------------------------------------|
+| GET     | Obtener datos                                 | No               | Consultar información de un usuario   |
+| POST    | Crear un nuevo recurso                        | Sí               | Registrar un nuevo usuario           |
+| PUT     | Reemplazar completamente un recurso existente | Sí               | Actualizar todos los datos de un usuario |
+| PATCH   | Modificar parcialmente un recurso existente   | Sí               | Cambiar solo el email de un usuario  |
+| DELETE  | Eliminar un recurso                           | Sí               | Borrar un usuario                    |
+| HEAD    | Obtener solo las cabeceras de la respuesta    | No               | Comprobar si un archivo existe       |
+| OPTIONS | Consultar los métodos y opciones permitidos   | No               | Saber qué métodos acepta un recurso  |
+
+```python
+# Ejemplo de petición GET
+import requests
+# suponemos que accedemos a una api a recuperar los datos de un usuario con id igual a 1
+url = "https://api.ejemplo.com/usuarios/1"
+
+# Realizamos la petición GET
+respuesta = requests.get(url)
+
+# Mostramos el código de estado y el contenido recibido
+print("Código de estado:", respuesta.status_code)
+print("Contenido:", respuesta.text)
+```
+
 ```python
 import requests
-respuesta = requests.get('https://api.github.com')
-print(respuesta.status_code)
-print(respuesta.json())
+# Ejemplo de petición POST
+# enviamos los datos de un usuario para que la api los procese
+url = "https://api.ejemplo.com/usuarios"
+datos = {"nombre": "Ana", "email": "ana@ejemplo.com"}
+
+# Primero, hacemos una petición OPTIONS
+respuesta_options = requests.options(url)
+
+# Mostramos los métodos permitidos por el servidor
+print("Métodos permitidos:", respuesta_options.headers.get("Allow"))
+
+# Comprobamos si POST está permitido
+if "POST" in respuesta_options.headers.get("Allow", ""):
+    # Realizamos la petición POST
+    respuesta_post = requests.post(url, json=datos)
+    if respuesta_post.status_code == 201:
+        print("Usuario creado correctamente.")
+    else:
+        print("Error al crear usuario:", respuesta_post.status_code)
+else:
+    print("El método POST no está permitido en este recurso.")
+
 ```
 
 ### Uso básico de `numpy` para cálculos numéricos
 Ideal para trabajar con arrays y operaciones matemáticas rápidas:
+
+| Función           | Descripción                                                                                                   | Ejemplo de uso                                  |
+|-------------------|---------------------------------------------------------------------------------------------------------------|-------------------------------------------------|
+| `np.array()`      | Crea un arreglo de NumPy a partir de una lista                                                                | `np.array([1, 2, 3])`                           |
+| `np.arange()`     | Crea un arreglo con valores en un rango                                                                       | `np.arange(0, 10, 2)`                           |
+| `np.zeros()`      | Crea un arreglo lleno de ceros                                                                                | `np.zeros((2, 3))`                              |
+| `np.ones()`       | Crea un arreglo lleno de unos                                                                                 | `np.ones((3, 2))`                               |
+| `np.eye()`        | Crea una matriz identidad (matriz cuadrada con unos en la diagonal principal y ceros en el resto)             | `np.eye(3)`                                     |
+| `np.linspace()`   | Crea un arreglo con números espaciados linealmente                                                            | `np.linspace(0, 1, 5)`                          |
+| `np.reshape()`    | Cambia la forma de un arreglo                                                                                 | `np.reshape(np.arange(6), (2, 3))`              |
+| `np.sum()`        | Suma los elementos de un arreglo                                                                              | `np.sum([1, 2, 3])`                             |
+| `np.mean()`       | Calcula la media de los elementos                                                                             | `np.mean([1, 2, 3])`                            |
+| `np.var()`        | Calcula la varianza de los elementos                                                                          | `np.var([1, 2, 3])`                             |
+| `np.std()`        | Calcula la desviación estándar de los elementos                                                               | `np.std([1, 2, 3])`                             |
+| `np.sqrt()`       | Calcula la raíz cuadrada de cada elemento del array                                                           | `np.sqrt([4, 9, 16])`                           |
+| `np.max()`        | Devuelve el valor máximo                                                                                      | `np.max([1, 2, 3])`                             |
+| `np.min()`        | Devuelve el valor mínimo                                                                                      | `np.min([1, 2, 3])`                             |
+| `np.dot()`        | Producto escalar (suma de productos de dos vectores) o producto matricial (multiplicación de dos matrices)    | `np.dot([1, 2], [3, 4])`                        |
+| `np.transpose()`  | Transpone una matriz                                                                                          | `np.transpose([[1, 2], [3, 4]])`                |
+| `np.random.rand()`| Genera números aleatorios entre 0 y 1                                                                         | `np.random.rand(2, 3)`                          |
+| `np.sort()`       | Ordena los elementos de un arreglo                                                                            | `np.sort([3, 1, 2])`                            |
+| `np.unique()`     | Devuelve los valores únicos de un array                                                                       | `np.unique([1, 2, 2, 3, 1])`                    |
+
+
 ```python
 import numpy as np
 arr = np.array([1, 2, 3, 4])
 print(np.mean(arr))           # Media
 print(np.sqrt(arr))           # Raíz cuadrada de cada elemento
+
+# ejemplo producto Matricial
+A = np.array([[1, 2], [3, 4]])
+B = np.array([[5, 6], [7, 8]])
+print(np.dot(A, B))
+# Resultado:
+# [[19 22]
+#  [43 50]]
+# cada elemento de la matriz resultado es la suma de productos de filas por columnas.
 ```
 
 ## 4. Documentación de librerías
