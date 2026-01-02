@@ -410,6 +410,7 @@ def procesar_archivo(nombre_archivo):
             archivo.close()
             print("Archivo cerrado")
 ```
+:computer: Actividad 1,  Actividad 2 
 
 ## FORMATOS ESPECÍFICOS DE ARCHIVOS
 
