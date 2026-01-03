@@ -10,7 +10,7 @@
     - [Uso de `sys`](#uso-de-sys)
   - [3. Librerías de terceros](#3-librerías-de-terceros)
     - [Introducción a `requests` para hacer solicitudes HTTP](#introducción-a-requests-para-hacer-solicitudes-http)
-    - [Uso básico de `numpy` para cálculos numéricos](#uso-básico-de-numpy-para-cálculos-numéricos)
+    - [Uso básico de `NumPy` para cálculos numéricos](#uso-básico-de-numpy-para-cálculos-numéricos)
   - [4. Documentación de librerías](#4-documentación-de-librerías)
     - [Cómo leer la documentación de las librerías](#cómo-leer-la-documentación-de-las-librerías)
   - [5. Comparación y elección de librerías](#5-comparación-y-elección-de-librerías)
@@ -147,8 +147,9 @@ else:
     print("El método POST no está permitido en este recurso.")
 
 ```
+[Documentación oficial de la librería](https://requests.readthedocs.io/)
 
-### Uso básico de `numpy` para cálculos numéricos
+### Uso básico de `NumPy` para cálculos numéricos
 Ideal para trabajar con arrays y operaciones matemáticas rápidas:
 
 | Función           | Descripción                                                                                                   | Ejemplo de uso                                  |
@@ -190,10 +191,13 @@ print(np.dot(A, B))
 # cada elemento de la matriz resultado es la suma de productos de filas por columnas.
 ```
 
+[Documentación oficial de la librería NumPy](https://numpy.org/doc/)
+
 ## 4. Documentación de librerías
 
 ### Cómo leer la documentación de las librerías
-Consultar la documentación oficial es fundamental. Ejemplo: https://docs.python.org/3/library/
+
+Consultar la documentación oficial es fundamental. [Documentación de librerías Python 3](https://docs.python.org/3/library/)
 
 En Python, puedes usar la función `help()`:
 ```python
@@ -204,7 +208,7 @@ help(math.sqrt)
 ## 5. Comparación y elección de librerías
 
 ### Comparar eficiencia y adecuación
-Ejemplo: suma de una lista con Python estándar vs. `numpy`:
+Ejemplo: suma de una lista con Python estándar vs. `NumPy`:
 ```python
 import time
 import numpy as np
@@ -219,11 +223,11 @@ print('Lista:', time.time() - start)
 arr = np.array(lista)
 start = time.time()
 suma = np.sum(arr)
-print('Numpy:', time.time() - start)
+print('NumPy:', time.time() - start)
 ```
 
 ### Justificación de la elección
-`numpy` es mucho más rápido para operaciones numéricas con grandes volúmenes de datos.
+`NumPy` es mucho más rápido para operaciones numéricas con grandes volúmenes de datos.
 
 ## 6. Gestión de dependencias en un proyecto
 El archivo `requirements.txt` se utiliza principalmente para listar las librerías de terceros que necesita tu proyecto, de modo que otros puedan instalarlas fácilmente con pip.
