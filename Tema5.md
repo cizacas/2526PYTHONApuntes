@@ -18,7 +18,7 @@
     - [Justificación de la elección](#justificación-de-la-elección)
   - [6. Gestión de dependencias en un proyecto](#6-gestión-de-dependencias-en-un-proyecto)
     - [Uso de `requirements.txt`](#uso-de-requirementstxt)
-  - [7. Ejemplos prácticos y limitaciones](#7-ejemplos-prácticos-y-limitaciones)
+  - [7. Limitaciones](#7-limitaciones)
   - [8. Requisitos para crear y publicar una librería de terceros](#8-requisitos-para-crear-y-publicar-una-librería-de-terceros)
 
 ## 1. Introducción a las librerías
@@ -149,6 +149,8 @@ else:
 ```
 [Documentación oficial de la librería](https://requests.readthedocs.io/)
 
+:computer: Actividad 1
+
 ### Uso básico de `NumPy` para cálculos numéricos
 Ideal para trabajar con arrays y operaciones matemáticas rápidas:
 
@@ -192,6 +194,8 @@ print(np.dot(A, B))
 ```
 
 [Documentación oficial de la librería NumPy](https://numpy.org/doc/)
+
+:computer: Actividad 2
 
 ## 4. Documentación de librerías
 
@@ -244,11 +248,10 @@ Instalación:
 pip install -r requirements.txt
 ```
 
-## 7. Ejemplos prácticos y limitaciones
+## 7. Limitaciones
 
 - Cada ejemplo anterior muestra un caso de uso real.
 - **Limitaciones:** Algunas librerías pueden no estar disponibles en todos los sistemas, pueden requerir permisos o tener problemas de compatibilidad.
-
 
 ## 8. Requisitos para crear y publicar una librería de terceros
 

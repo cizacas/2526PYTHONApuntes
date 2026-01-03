@@ -588,6 +588,8 @@ Miguel,35,Doctor
 Sofia,24,Diseñadora
 ```
 
+: computer: Actividad 3 
+
 ### Archivos JSON
 
 JSON (JavaScript Object Notation) es un formato popular para intercambio de datos.
@@ -683,6 +685,7 @@ nueva_configuracion = {
 actualizar_configuracion('config.json', nueva_configuracion)
 ```
 
+:computer: Actividad 4
 
 ## BUENAS PRÁCTICAS
 
