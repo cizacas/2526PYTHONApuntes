@@ -2497,7 +2497,4 @@ coverage report
 coverage html
 ```
 
-:computer: Actividad 3
-
-
-
+:computer: Actividad 3 y Actividad 4
