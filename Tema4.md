@@ -416,9 +416,9 @@ def procesar_archivo(nombre_archivo):
 
 ### Archivos CSV
 
-CSV (Comma-Separated Values) es un formato común para datos tabulares.
+**CSV (Comma-Separated Values)** es un formato común para datos tabulares.
 Vamos a utilizar la librería estándar de Python `csv`, este módulo viene incluido en Python, es parte del núcleo del lenguaje. 
-* Facilita la lectura y escritura de archivos CSV(Comma Separated Values).
+* Facilita la lectura y escritura de archivos CSV.
 * Maneja automáticamente aspectos complejos como:
     * Comillas en los datos
     * Comas dentro de los campos
