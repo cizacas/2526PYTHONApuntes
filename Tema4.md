@@ -177,9 +177,12 @@ for i, linea in enumerate(todas_las_lineas, 1):
 ```
 Ventajas:
 
-✅ Más legible 
+✅ Más legible
+
 ✅ Evita errores de índice
+
 ✅ No necesitas calcular range(len(lista))
+
 ✅ Más eficiente
 
 ### Lectura línea por línea con bucle
@@ -266,8 +269,11 @@ with open('archivo.txt', 'r') as archivo:
 #### 5. **Ventajas de este sistema automático**
 
 ✅ **Sin errores de índice**: No necesitas saber cuántas líneas tiene el archivo
+
 ✅ **Eficiente en memoria**: Lee línea por línea, no todo el archivo de una vez
+
 ✅ **Código limpio**: No necesitas verificar manualmente el final
+
 ✅ **Robusto**: Funciona con archivos de cualquier tamaño
 
 #### 6. **Comparación con `readlines()`**
