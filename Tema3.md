@@ -490,6 +490,26 @@ print(cuenta.consultar_saldo())  # 900
 # El name mangling permite acceso (no recomendado)
 print(cuenta._CuentaBancaria__saldo)  # 900 (acceso técnicamente posible)
 ```
+**Name mangling** significa que Python cambia el nombre de los atributos y métodos privados agregando el nombre de la clase como prefijo. Por ejemplo, `self.__saldo` en la clase `CuentaBancaria` realmente se almacena como `self._CuentaBancaria__saldo`.
+
+Esto tiene implicaciones importantes: si intentas acceder a un atributo privado usando `self.__atributo` fuera de la clase o en métodos especiales como `__str__`, Python no lo encontrará directamente, porque el nombre ha sido modificado internamente.
+
+**Ejemplo:**
+
+```python
+class Persona:
+    def __init__(self, nombre):
+        self.__nombre = nombre  # Privado
+    def __str__(self):
+        # Esto da error:
+        # return f"Nombre: {self.__nombre}"
+        # Solución:
+        return f"Nombre: {self._Persona__nombre}"
+```
+
+En métodos como `__str__`, `__repr__`, etc., si necesitas mostrar un atributo privado, debes usar el nombre modificado (`_Clase__atributo`).
+
+**No se recomienda acceder a atributos privados fuera de la clase, pero es posible usando el nombre mangled.**
 
 ### Métodos getters y setters
 
