@@ -12,6 +12,8 @@ Apuntes de Fundamentos de Python del CFGS de Desarrollo de Aplicaciones Multipla
 
 [**UNIDAD 4. Gestión de archivos en Python**](Tema4.md)
 
+[**UNIDAD 5. Librerías standard y de terceros en Python**](Tema5.md)
+
 
 ## Referencias
 - [Documentación oficial de Python](https://docs.python.org/3/)

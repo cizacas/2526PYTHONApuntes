@@ -17,6 +17,8 @@
       - [Atributos de clase](#atributos-de-clase)
       - [Métodos](#métodos)
       - [El método constructor `__init__()`](#el-método-constructor-__init__)
+      - [Métodos de clase](#métodos-de-clase)
+      - [Métodos estáticos](#métodos-estáticos)
       - [Ejemplo completo: Clase Persona](#ejemplo-completo-clase-persona)
   - [ENCAPSULAMIENTO](#encapsulamiento)
     - [Concepto de encapsulamiento](#concepto-de-encapsulamiento)
@@ -238,7 +240,7 @@ Los **atributos de clase** son variables compartidas por todas las instancias de
 
 ```python
 class Vehiculo:
-    # Atributo de clase
+    # Atributo de clase (estático)
     numero_de_vehiculos = 0
     tipo_transporte = "Terrestre"
     
@@ -312,6 +314,34 @@ libro1 = Libro("El Quijote", "Cervantes", 1200)
 libro1.abrir()   # Se ha abierto el libro El Quijote
 libro1.cerrar()  # Se ha cerrado el libro El Quijote
 ```
+#### Métodos de clase
+En Python, cuando defines un método de clase usando `@classmethod`, el primer parámetro del método es convencionalmente llamado `cls`. Esto es similar a cómo self se usa en los métodos de instancia, pero `cls` hace referencia a la propia clase, no a una instancia específica.
+
+```java
+class Animal:
+    @classmethod
+    def obtener_nombre_clase(cls):
+        return f"El nombre de la clase es: {cls.__name__}"
+print(Animal.obtener_nombre_clase())
+```
+
+Este método devuelve el nombre de la clase (en esta caso `Animal`). **name** es un atributo especial que todas las clases en Python tienen automáticamente, y que contiene el nombre de la clase como cadena.
+
+#### Métodos estáticos
+Un método estático es una función definida dentro de una clase que no accede ni a la instancia (self) ni a la clase (cls). Se declara con el decorador `@staticmethod` y se puede llamar desde la clase o desde una instancia.
+
+```java
+class Calculadora:
+    @staticmethod
+    def sumar(a, b):
+        return a + b
+
+# Uso del método estático
+print(Calculadora.sumar(3, 5))  # 8
+calc = Calculadora()
+print(calc.sumar(10, 7))        # 17
+```
+Los métodos estáticos son útiles para funciones relacionadas con la clase pero que no necesitan acceder ni a los datos de instancia ni de clase.
 
 #### Ejemplo completo: Clase Persona
 
@@ -359,6 +389,10 @@ class Persona:
         """Método para presentarse"""
         estado = "mayor" if self.es_mayor_de_edad() else "menor"
         return f"Hola, soy {self.nombre_completo()}, tengo {self.edad} años y soy {estado} de edad"
+    
+    @classmethod
+    def mostrar_especie_y_poblacion(cls):
+        return f"Especie: {cls.especie}, Población total: {cls.poblacion_total}"
 
 # Crear objetos
 persona1 = Persona("Juan", "Pérez", 25, "juan@email.com")
@@ -378,6 +412,8 @@ persona1.cambiar_email("juan.perez@email.com")
 # Acceder a atributos de clase
 print(f"Especie: {Persona.especie}")           # Especie: Homo sapiens
 print(f"Población total: {Persona.poblacion_total}")  # Población total: 2
+print(Persona.mostrar_especie_y_poblacion())
+# Especie: Homo sapiens, Población total: 2
 ```
 
 ## ENCAPSULAMIENTO
@@ -492,24 +528,16 @@ print(cuenta._CuentaBancaria__saldo)  # 900 (acceso técnicamente posible)
 ```
 **Name mangling** significa que Python cambia el nombre de los atributos y métodos privados agregando el nombre de la clase como prefijo. Por ejemplo, `self.__saldo` en la clase `CuentaBancaria` realmente se almacena como `self._CuentaBancaria__saldo`.
 
-Esto tiene implicaciones importantes: si intentas acceder a un atributo privado usando `self.__atributo` fuera de la clase o en métodos especiales como `__str__`, Python no lo encontrará directamente, porque el nombre ha sido modificado internamente.
+Esto tiene implicaciones importantes: si intentas acceder a un atributo privado usando `self.__atributo` **fuera de la clase (o desde una subclase)**, Python no lo encontrará directamente, porque el nombre ha sido modificado internamente. Sin embargo, dentro de la propia clase, incluyendo métodos especiales como `__str__`, sí puedes usar `self.__atributo` normalmente.
 
-**Ejemplo:**
-
-```python
-class Persona:
-    def __init__(self, nombre):
-        self.__nombre = nombre  # Privado
-    def __str__(self):
-        # Esto da error:
-        # return f"Nombre: {self.__nombre}"
-        # Solución:
-        return f"Nombre: {self._Persona__nombre}"
-```
-
-En métodos como `__str__`, `__repr__`, etc., si necesitas mostrar un atributo privado, debes usar el nombre modificado (`_Clase__atributo`).
+Recuerda: solo fuera de la clase (o desde una subclase) necesitas usar el nombre modificado (`_Clase__atributo`).
 
 **No se recomienda acceder a atributos privados fuera de la clase, pero es posible usando el nombre mangled.**
+
+>**Recomendación:**
+- Usa `__atributo` (privado) solo para datos muy sensibles o críticos.
+- Usa `_atributo` (protegido) para atributos internos que pueden ser usados por subclases.
+- Usa `atributo` (público) si no hay problema en que se acceda desde fuera.
 
 ### Métodos getters y setters
 
@@ -889,46 +917,52 @@ class ClaseDerivada(ClaseBase):
 # Clase base
 class Animal:
     def __init__(self, nombre, edad):
-        self.nombre = nombre
-        self.edad = edad
+        self.__nombre = nombre  # Atributo privado
+        self.__edad = edad      # Atributo privado
     
     def hacer_sonido(self):
         return "El animal hace un sonido"
     
     def dormir(self):
-        return f"{self.nombre} está durmiendo"
+        return f"{self.__nombre} está durmiendo"
     
     def comer(self):
-        return f"{self.nombre} está comiendo"
+        return f"{self.__nombre} está comiendo"
+    
+    def __str__(self):
+        return f"Animal: {self.__nombre}, Edad: {self.__edad}"
 
 # Clase derivada
 class Perro(Animal):
     def __init__(self, nombre, edad, raza):
-        # Llamar al constructor de la clase base
         super().__init__(nombre, edad)
-        self.raza = raza
+        self.__raza = raza  # Atributo privado
     
-    # Sobrescribir método de la clase base
     def hacer_sonido(self):
-        return f"{self.nombre} dice: ¡Guau! ¡Guau!"
+        return f"{self._Animal__nombre} dice: ¡Guau! ¡Guau!"
     
-    # Método específico de Perro
     def mover_cola(self):
-        return f"{self.nombre} está moviendo la cola alegremente"
+        return f"{self._Animal__nombre} está moviendo la cola alegremente"
+    
+    def __str__(self):
+        return f"Perro: {super().__str__()}, Raza: {self.__raza}"
 
 # Clase derivada
 class Gato(Animal):
     def __init__(self, nombre, edad, color):
         super().__init__(nombre, edad)
-        self.color = color
+        self.__color = color  # Atributo privado
     
-    # Sobrescribir método de la clase base
     def hacer_sonido(self):
-        return f"{self.nombre} dice: ¡Miau!"
+        return f"{self._Animal__nombre} dice: ¡Miau!"
     
-    # Método específico de Gato
     def ronronear(self):
-        return f"{self.nombre} está ronroneando"
+        return f"{self._Animal__nombre} está ronroneando"
+    
+    def __str__(self):
+        #Name mangling
+        return f"Gato: {self._Animal__nombre}, Edad: {self._Animal__edad}, Color: {self.__color}"
+        # crear y utilizar los métodos públicos get
 
 # Uso de herencia
 perro = Perro("Buddy", 3, "Golden Retriever")
@@ -945,6 +979,10 @@ print(gato.hacer_sonido())   # Whiskers dice: ¡Miau!
 # Métodos específicos
 print(perro.mover_cola())    # Buddy está moviendo la cola alegremente
 print(gato.ronronear())      # Whiskers está ronroneando
+
+# Métodos mágicos __str__
+print(perro)  # Perro: Buddy, Edad: 3, Raza: Golden Retriever
+print(gato)   # Gato: Whiskers, Edad: 2, Color: Negro
 
 # Verificar herencia
 print(isinstance(perro, Animal))  # True
@@ -967,10 +1005,10 @@ print(isinstance(gato, Gato))     # True
 ```python
 class Vehiculo:
     def __init__(self, marca, modelo, anio):
-        self.marca = marca
-        self.modelo = modelo
-        self.anio = anio
-        self.kilometraje = 0
+        self.__marca = marca
+        self.__modelo = modelo
+        self.__anio = anio
+        self.__kilometraje = 0
         print(f"Vehículo creado: {marca} {modelo} ({anio})")
     
     def acelerar(self):
@@ -980,16 +1018,16 @@ class Coche(Vehiculo):
     def __init__(self, marca, modelo, anio, num_puertas):
         # Llamar al constructor de la clase base
         super().__init__(marca, modelo, anio)
-        self.num_puertas = num_puertas
+        self.__num_puertas = num_puertas
         print(f"Coche con {num_puertas} puertas creado")
     
     def abrir_puertas(self):
-        return f"Abriendo las {self.num_puertas} puertas del coche"
+        return f"Abriendo las {self.__num_puertas} puertas del coche"
 
 class Motocicleta(Vehiculo):
     def __init__(self, marca, modelo, anio, cilindrada):
         super().__init__(marca, modelo, anio)
-        self.cilindrada = cilindrada
+        self.__cilindrada = cilindrada
         print(f"Motocicleta de {cilindrada}cc creada")
     
     def hacer_caballito(self):
@@ -1012,42 +1050,53 @@ moto = Motocicleta("Yamaha", "R1", 2023, 1000)
 ```python
 class Empleado:
     def __init__(self, nombre, salario):
-        self.nombre = nombre
-        self.salario = salario
+        self._nombre = nombre
+        self._salario = salario
     
     def trabajar(self):
-        return f"{self.nombre} está trabajando"
+        return f"{self._nombre} está trabajando"
     
     def calcular_bonus(self):
-        return self.salario * 0.1  # 10% de bonus base
+        return self._salario * 0.1  # 10% de bonus base
+    
+    def __str__(self):
+            return f"Empleado: {self._nombre}, Salario: {self._salario}€"
 
 class Desarrollador(Empleado):
+        
     def __init__(self, nombre, salario, lenguaje):
         super().__init__(nombre, salario)
-        self.lenguaje = lenguaje
+        self._lenguaje = lenguaje
     
     def trabajar(self):
         # Llamar al método de la clase base y extenderlo
         trabajo_base = super().trabajar()
-        return f"{trabajo_base} programando en {self.lenguaje}"
+        return f"{trabajo_base} programando en {self._lenguaje}"
     
     def calcular_bonus(self):
         # Llamar al método base y modificarlo
         bonus_base = super().calcular_bonus()
         return bonus_base * 1.5  # 50% más de bonus para desarrolladores
+    
+    def __str__(self):
+            return f"Desarrollador: {self._nombre}, Salario: {self._salario}€, Lenguaje: {self._lenguaje}"
 
 class Gerente(Empleado):
+        
     def __init__(self, nombre, salario, equipo_size):
         super().__init__(nombre, salario)
-        self.equipo_size = equipo_size
+        self._equipo_size = equipo_size
     
     def trabajar(self):
         trabajo_base = super().trabajar()
-        return f"{trabajo_base} gestionando un equipo de {self.equipo_size} personas"
+        return f"{trabajo_base} gestionando un equipo de {self._equipo_size} personas"
     
     def calcular_bonus(self):
         bonus_base = super().calcular_bonus()
-        return bonus_base * (1 + self.equipo_size * 0.1)  # Bonus según tamaño del equipo
+        return bonus_base * (1 + self._equipo_size * 0.1)  # Bonus según tamaño del equipo
+    
+    def __str__(self):
+            return f"Gerente: {self._nombre}, Salario: {self._salario}€, Equipo: {self._equipo_size} personas"
 
 # Uso
 dev = Desarrollador("Ana", 50000, "Python")
@@ -1069,7 +1118,8 @@ class Forma:
     def __init__(self, color="blanco"):
         self.color = color
         print(f"Forma creada con color {color}")
-    
+    #Indicas explícitamente que todas las subclases deben implementar ese método.
+    #Es útil para crear una “interfaz” o clase abstracta.
     def area(self):
         raise NotImplementedError("Este método debe ser implementado por las clases hijas")
     
