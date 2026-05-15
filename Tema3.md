@@ -2542,24 +2542,6 @@ if __name__ == '__main__':
 2. verbosity=1: salida normal (aparecen puntos . por test, y F/E si fallan).
 3. verbosity=2: salida detallada (muestra el nombre de cada test y si pasa o falla).
 
-Ejemplo rápido:
-
-```python
-import unittest
-
-class TestSuma(unittest.TestCase):
-    def test_ok(self):
-        self.assertEqual(1 + 1, 2)
-
-unittest.main(verbosity=2)
-```
-
-`verbosity` controla cuánto detalle muestra en pantalla al ejecutar los tests:
-
-* verbosity=0: salida mínima (casi silenciosa).
-* verbosity=1: salida normal (aparecen puntos . por test, y F/E si fallan).
-* verbosity=2: salida detallada (muestra el nombre de cada test y si pasa o falla).
-
 ### Ejecutar las pruebas
 
 Para ejecutar las pruebas, desde la terminal:
