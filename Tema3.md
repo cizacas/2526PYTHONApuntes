@@ -592,9 +592,13 @@ Python ofrece un decorador `@property` que permite crear getters y setters más 
 ```python
 class Persona:
     def __init__(self, nombre, edad):
-        self.__nombre = nombre
+        self.__nombre = nombre # se asignan los valores de los parámetros sin validación
         self.__edad = edad
-    
+    # si queremos que se validen los valores pasados por parámetros entonces ponemos
+        self.nombre=nombre # utiliza el setter de nombre
+        self.edad = edad ## utiliza el setter de edad
+
+
     # Getter para nombre
     @property
     def nombre(self):
@@ -630,7 +634,7 @@ class Persona:
 persona = Persona("juan pérez", 25)
 
 # Getters (acceso como atributo)
-print(persona.nombre)     # Juan Pérez (capitalizado automáticamente)
+print(persona.nombre)     # Juan Pérez (saldrá capitalizado si utiliza la segunda opción)
 print(persona.edad)       # 25
 print(persona.es_adulto)  # True
 
